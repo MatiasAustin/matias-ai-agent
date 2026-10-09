@@ -2385,8 +2385,8 @@ app.post("/api/seed/reset", (req, res) => {
   }
 });
 
-// api/index.ts
-var index_default = app;
+// server/serverless.ts
+var serverless_default = app;
 export {
-  index_default as default
+  serverless_default as default
 };
