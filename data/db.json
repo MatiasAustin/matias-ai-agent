@@ -20,7 +20,7 @@
       "name": "Matias Austin",
       "platform_role": "USER",
       "status": "active",
-      "last_active_at": "2026-10-09T07:31:24.593Z",
+      "last_active_at": "2026-10-09T07:42:17.883Z",
       "created_at": "2026-10-04T07:31:24.593Z",
       "updated_at": "2026-10-09T07:31:24.593Z"
     },
@@ -75,7 +75,16 @@
       "updated_at": "2026-10-09T07:31:24.593Z"
     }
   ],
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "sess_1791531737883_yp9z4",
+      "token": "1f4ad0b16e41a86fecaae22d2f69bf8be93cab3c6320753b1d599d1e6409cb63",
+      "user_id": "user_owner",
+      "active_organization_id": "org_matias_studio",
+      "expires_at": "2026-10-16T07:42:17.883Z",
+      "created_at": "2026-10-09T07:42:17.883Z"
+    }
+  ],
   "invitations": [],
   "feature_flags": [
     {
@@ -328,6 +337,17 @@
     }
   ],
   "activities": [
+    {
+      "id": "act_1791531737883_5k41l",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "LOGIN_SUCCESS",
+      "entity_type": "auth",
+      "entity_id": "user_owner",
+      "result": "Authenticated as USER (Org: Matias Studio)",
+      "created_at": "2026-10-09T07:42:17.883Z"
+    },
     {
       "id": "act-demo-1",
       "organization_id": "org_matias_studio",

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && esbuild api/index.ts --bundle --platform=node --format=esm --packages=external --outfile=api/index.js",
     "lint": "oxlint",
     "preview": "vite preview"
   },
@@ -30,6 +30,7 @@
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "autoprefixer": "^10.6.1",
+    "esbuild": "^0.28.2",
     "oxlint": "^1.81.0",
     "postcss": "^8.5.29",
     "tailwindcss": "^3.4.17",

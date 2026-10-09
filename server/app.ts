@@ -33,6 +33,14 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
+// Normalize URL: ensure /api prefix is present when invoked via serverless rewrite
+app.use((req, res, next) => {
+  if (req.url && !req.url.startsWith('/api') && req.url !== '/') {
+    req.url = '/api' + req.url;
+  }
+  next();
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'Matias Studio OS API', timestamp: new Date().toISOString() });

@@ -11,6 +11,16 @@ class Database {
     const isServerless = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined;
     if (isServerless) {
       this.dbPath = path.join('/tmp', 'matias_studio_db.json');
+      if (!fs.existsSync(this.dbPath)) {
+        try {
+          const repoDbPath = path.resolve(process.cwd(), 'data', 'db.json');
+          if (fs.existsSync(repoDbPath)) {
+            fs.copyFileSync(repoDbPath, this.dbPath);
+          }
+        } catch (e) {
+          console.warn('Failed to copy initial data/db.json to /tmp:', e);
+        }
+      }
     } else {
       const dataDir = path.resolve(process.cwd(), 'data');
       if (!fs.existsSync(dataDir)) {
