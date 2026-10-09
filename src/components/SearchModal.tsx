@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Search, X, Users, Briefcase, BrainCircuit, ArrowRight, CornerDownLeft } from 'lucide-react';
-import { Client, Project, NavigationTab } from '../types';
+import { Search, X, Users, Briefcase, ArrowRight } from 'lucide-react';
+import { ClientRecord, ProjectRecord } from '../../server/db/types';
+import { NavigationTab } from '../types';
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  clients: Client[];
-  projects: Project[];
-  onSelectClient: (client: Client) => void;
+  clients: ClientRecord[];
+  projects: ProjectRecord[];
+  onSelectClient: (clientId: string) => void;
   onNavigate: (tab: NavigationTab) => void;
 }
 
@@ -32,13 +33,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   if (!isOpen) return null;
 
   const matchedClients = clients.filter(c => 
-    c.name.toLowerCase().includes(query.toLowerCase()) || 
+    c.company_name.toLowerCase().includes(query.toLowerCase()) || 
     c.industry.toLowerCase().includes(query.toLowerCase())
   );
 
   const matchedProjects = projects.filter(p => 
-    p.title.toLowerCase().includes(query.toLowerCase()) || 
-    p.client.toLowerCase().includes(query.toLowerCase())
+    p.project_name.toLowerCase().includes(query.toLowerCase()) || 
+    p.project_type.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -76,7 +77,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             <div className="grid grid-cols-3 gap-2 p-2">
               {[
                 { label: 'Dashboard' as NavigationTab },
-                { label: 'Approvals' as NavigationTab },
+                { label: 'Clients' as NavigationTab },
                 { label: 'Memory' as NavigationTab },
               ].map(t => (
                 <button
@@ -103,14 +104,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 <div
                   key={c.id}
                   onClick={() => {
-                    onSelectClient(c);
+                    onSelectClient(c.id);
                     onClose();
                   }}
                   className="flex items-center justify-between p-3 rounded-card hover:bg-surface-secondary/60 cursor-pointer transition-colors text-xs"
                 >
                   <div className="flex items-center gap-2.5">
                     <Users size={14} className="text-ink-muted" />
-                    <span className="font-medium text-ink">{c.name}</span>
+                    <span className="font-medium text-ink">{c.company_name}</span>
                     <span className="text-[11px] text-ink-muted font-light">({c.industry})</span>
                   </div>
                   <span className="text-[10px] text-ink-muted flex items-center gap-1">
@@ -129,7 +130,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               </span>
               {matchedProjects.map(p => (
                 <div
-                  key={p.id}
+                  key={p.project_id}
                   onClick={() => {
                     onNavigate('Projects');
                     onClose();
@@ -138,8 +139,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 >
                   <div className="flex items-center gap-2.5">
                     <Briefcase size={14} className="text-ink-muted" />
-                    <span className="font-medium text-ink">{p.title}</span>
-                    <span className="text-[11px] text-ink-muted font-light">· {p.client}</span>
+                    <span className="font-medium text-ink">{p.project_name}</span>
+                    <span className="text-[11px] text-ink-muted font-light">· {p.project_type}</span>
                   </div>
                   <span className="text-[10px] text-ink-muted flex items-center gap-1">
                     View <ArrowRight size={11} />

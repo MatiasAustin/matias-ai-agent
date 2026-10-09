@@ -1,31 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Plus, 
   ArrowUpRight, 
   Search, 
   Sparkles, 
-  Layers,
-  Cpu,
-  BrainCircuit,
-  SlidersHorizontal
+  Building2,
+  Clock,
+  ExternalLink,
+  AlertCircle
 } from 'lucide-react';
-import { Client } from '../../types';
+import { ClientRecord, ProjectRecord } from '../../../server/db/types';
+import { api } from '../../api/client';
 
 interface ClientsViewProps {
-  clients: Client[];
-  onSelectClient: (client: Client) => void;
+  onSelectClient: (clientId: string) => void;
+  onOnboardClient: () => void;
 }
 
 export const ClientsView: React.FC<ClientsViewProps> = ({
-  clients,
-  onSelectClient
+  onSelectClient,
+  onOnboardClient
 }) => {
+  const [clients, setClients] = useState<ClientRecord[]>([]);
+  const [projects, setProjects] = useState<ProjectRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const [clientsData, projectsData] = await Promise.all([
+        api.getClients(),
+        api.getProjects()
+      ]);
+      setClients(clientsData);
+      setProjects(projectsData);
+    } catch (err) {
+      console.error('Failed to load clients:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const filteredClients = clients.filter(c => {
-    const matchesFilter = filter === 'All' || c.status === filter;
-    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesFilter = filter === 'All' || c.status.toLowerCase() === filter.toLowerCase();
+    const matchesSearch = c.company_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           c.industry.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
@@ -47,7 +71,10 @@ export const ClientsView: React.FC<ClientsViewProps> = ({
         </div>
 
         {/* Action button */}
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-pill bg-ink text-white text-xs font-medium hover:bg-neutral-800 transition-colors shadow-subtle self-start md:self-auto">
+        <button 
+          onClick={onOnboardClient}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-pill bg-ink text-white text-xs font-medium hover:bg-neutral-800 transition-colors shadow-subtle self-start md:self-auto"
+        >
           <Plus size={14} />
           <span>Onboard Client</span>
         </button>
@@ -83,131 +110,158 @@ export const ClientsView: React.FC<ClientsViewProps> = ({
         </div>
       </div>
 
-      {/* 1. Large Editorial Client Preview Cards (Top tier) */}
-      <section className="space-y-4">
-        <div className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-          Active Workspaces
+      {isLoading ? (
+        <div className="py-20 text-center text-xs text-ink-secondary">
+          Loading client database...
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredClients.slice(0, 2).map((client) => (
-            <div
-              key={client.id}
-              onClick={() => onSelectClient(client)}
-              className="bg-surface rounded-card-lg p-8 border border-border shadow-float hover:border-ink/25 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <div>
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-ink-muted block mb-1">
-                      {client.industry}
-                    </span>
-                    <h3 className="text-2xl font-normal tracking-tight text-ink group-hover:text-neutral-700 transition-colors">
-                      {client.name}
-                    </h3>
-                  </div>
+      ) : clients.length === 0 ? (
+        <div className="p-16 text-center bg-surface rounded-card-lg border border-border shadow-float space-y-4">
+          <Building2 size={28} className="mx-auto text-ink-muted" />
+          <h3 className="text-xl font-normal text-ink">No clients yet</h3>
+          <p className="text-xs text-ink-secondary max-w-sm mx-auto font-light">
+            Create your first client partner using the guided multi-step onboarding wizard.
+          </p>
+          <button
+            onClick={onOnboardClient}
+            className="px-6 py-2.5 rounded-pill bg-ink text-white text-xs font-medium inline-flex items-center gap-2"
+          >
+            <Plus size={13} />
+            <span>Onboard Client</span>
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* 1. Large Editorial Client Preview Cards */}
+          <section className="space-y-4">
+            <div className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              Active Workspaces
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredClients.slice(0, 2).map((client) => {
+                const clientProjects = projects.filter(p => p.client_id === client.id);
+                const currentProj = clientProjects[0]?.project_name || 'No active project initialized yet';
 
-                  <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-pill border border-emerald-200 flex items-center gap-1.5 shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    {client.aiMemoryStatus}
-                  </span>
-                </div>
+                return (
+                  <div
+                    key={client.id}
+                    onClick={() => onSelectClient(client.id)}
+                    className="bg-surface rounded-card-lg p-8 border border-border shadow-float hover:border-ink/25 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <div>
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-ink-muted block mb-1">
+                            {client.industry}
+                          </span>
+                          <h3 className="text-2xl font-normal tracking-tight text-ink group-hover:text-neutral-700 transition-colors">
+                            {client.company_name}
+                          </h3>
+                        </div>
 
-                <div className="bg-surface-secondary/50 rounded-card p-4 border border-border/80 my-5">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted block mb-1">
-                    Current Focus
-                  </span>
-                  <p className="text-sm font-medium text-ink">
-                    {client.currentProject}
-                  </p>
-                </div>
+                        <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-pill border border-emerald-200 flex items-center gap-1.5 shrink-0">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          {client.status.toUpperCase()}
+                        </span>
+                      </div>
 
-                {/* Brand Personality preview chips */}
-                <div className="space-y-1.5">
-                  <span className="text-[10px] text-ink-muted block">Brand Memory DNA</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {client.brandPersonality.map((trait, i) => (
-                      <span key={i} className="text-[11px] px-2.5 py-0.5 rounded-pill bg-canvas text-ink-secondary border border-border">
-                        {trait}
+                      <div className="bg-surface-secondary/50 rounded-card p-4 border border-border/80 my-5">
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted block mb-1">
+                          Current Focus
+                        </span>
+                        <p className="text-sm font-medium text-ink">
+                          {currentProj}
+                        </p>
+                      </div>
+
+                      <p className="text-xs text-ink-secondary line-clamp-2 font-light">
+                        {client.company_description || client.positioning || 'Dedicated client workspace active in studio ledger.'}
+                      </p>
+                    </div>
+
+                    {/* Bottom bar */}
+                    <div className="pt-6 mt-6 border-t border-border flex items-center justify-between text-xs text-ink-secondary">
+                      <span className="font-mono text-ink-muted">
+                        Updated {new Date(client.updated_at).toLocaleDateString()}
                       </span>
-                    ))}
+                      <span className="font-medium text-ink flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                        Enter Dedicated Workspace <ArrowUpRight size={13} />
+                      </span>
+                    </div>
                   </div>
-                </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* 2. Spacious Editorial List Rows for All Clients */}
+          <section className="space-y-4">
+            <div className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              All Studio Accounts ({filteredClients.length})
+            </div>
+
+            <div className="bg-surface rounded-card-lg border border-border shadow-float overflow-hidden">
+              <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-3.5 border-b border-border text-[11px] uppercase tracking-wider text-ink-muted font-medium bg-canvas/30">
+                <span className="col-span-4">Company & Industry</span>
+                <span className="col-span-4">Current Project</span>
+                <span className="col-span-2">Status</span>
+                <span className="col-span-2 text-right">Created</span>
               </div>
 
-              {/* Bottom bar */}
-              <div className="pt-6 mt-6 border-t border-border flex items-center justify-between text-xs text-ink-secondary">
-                <span className="font-mono text-ink-muted">Active {client.lastActivity}</span>
-                <span className="font-medium text-ink flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                  Enter Dedicated Workspace <ArrowUpRight size={13} />
-                </span>
+              <div className="divide-y divide-border/70">
+                {filteredClients.map((client) => {
+                  const clientProjects = projects.filter(p => p.client_id === client.id);
+                  const currentProj = clientProjects[0]?.project_name || 'No projects yet';
+
+                  return (
+                    <div
+                      key={client.id}
+                      onClick={() => onSelectClient(client.id)}
+                      className="grid grid-cols-1 md:grid-cols-12 gap-4 px-8 py-5 hover:bg-surface-secondary/40 transition-colors cursor-pointer group items-center text-xs"
+                    >
+                      {/* Company Name & Industry */}
+                      <div className="col-span-4">
+                        <h4 className="text-sm font-semibold text-ink group-hover:text-neutral-700 transition-colors">
+                          {client.company_name}
+                        </h4>
+                        <p className="text-xs text-ink-secondary mt-0.5 font-light">
+                          {client.industry}
+                        </p>
+                      </div>
+
+                      {/* Current Project */}
+                      <div className="col-span-4">
+                        <p className="font-medium text-ink">
+                          {currentProj}
+                        </p>
+                        <span className="text-[11px] text-ink-muted">
+                          {clientProjects.length} active initiatives
+                        </span>
+                      </div>
+
+                      {/* Status */}
+                      <div className="col-span-2">
+                        <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-pill border border-emerald-200 inline-flex items-center gap-1.5 uppercase">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          {client.status}
+                        </span>
+                      </div>
+
+                      {/* Created date & Arrow */}
+                      <div className="col-span-2 text-left md:text-right flex items-center md:justify-end gap-2">
+                        <span className="font-mono text-xs text-ink-muted">
+                          {new Date(client.created_at).toLocaleDateString()}
+                        </span>
+                        <ArrowUpRight size={14} className="text-ink-muted group-hover:text-ink transition-colors opacity-0 group-hover:opacity-100" />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 2. Spacious Editorial List Rows for All Clients */}
-      <section className="space-y-4">
-        <div className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-          All Studio Accounts
-        </div>
-
-        <div className="bg-surface rounded-card-lg border border-border shadow-float overflow-hidden">
-          <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-3.5 border-b border-border text-[11px] uppercase tracking-wider text-ink-muted font-medium bg-canvas/30">
-            <span className="col-span-4">Company & Industry</span>
-            <span className="col-span-4">Current Mandate</span>
-            <span className="col-span-2">Memory Status</span>
-            <span className="col-span-2 text-right">Last Action</span>
-          </div>
-
-          <div className="divide-y divide-border/70">
-            {filteredClients.map((client) => (
-              <div
-                key={client.id}
-                onClick={() => onSelectClient(client)}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 px-8 py-5 hover:bg-surface-secondary/40 transition-colors cursor-pointer group items-center"
-              >
-                {/* Company Name & Industry */}
-                <div className="col-span-4">
-                  <h4 className="text-sm font-semibold text-ink group-hover:text-neutral-700 transition-colors">
-                    {client.name}
-                  </h4>
-                  <p className="text-xs text-ink-secondary mt-0.5 font-light">
-                    {client.industry}
-                  </p>
-                </div>
-
-                {/* Current Project */}
-                <div className="col-span-4">
-                  <p className="text-xs text-ink font-medium">
-                    {client.currentProject}
-                  </p>
-                  <span className="text-[11px] text-ink-muted">
-                    {client.status} · Retainer active
-                  </span>
-                </div>
-
-                {/* AI Memory Status */}
-                <div className="col-span-2">
-                  <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-pill border border-emerald-200 inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    {client.aiMemoryStatus}
-                  </span>
-                </div>
-
-                {/* Last Activity & Arrow */}
-                <div className="col-span-2 text-left md:text-right flex items-center md:justify-end gap-2">
-                  <span className="font-mono text-xs text-ink-muted">
-                    {client.lastActivity}
-                  </span>
-                  <ArrowUpRight size={14} className="text-ink-muted group-hover:text-ink transition-colors opacity-0 group-hover:opacity-100" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          </section>
+        </>
+      )}
     </div>
   );
 };
