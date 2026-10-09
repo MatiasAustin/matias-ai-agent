@@ -31,7 +31,19 @@ app.use(cors({
   credentials: true
 }));
 app.use(cookieParser());
-app.use(express.json());
+// Safely handle pre-parsed bodies on Vercel while supporting express.json() locally
+app.use((req, res, next) => {
+  if (typeof req.body === 'string') {
+    try {
+      req.body = JSON.parse(req.body);
+    } catch {}
+    return next();
+  }
+  if (req.body !== undefined && typeof req.body === 'object') {
+    return next();
+  }
+  express.json()(req, res, next);
+});
 
 // Normalize URL: ensure /api prefix is present when invoked via serverless rewrite
 app.use((req, res, next) => {

@@ -1918,7 +1918,19 @@ app.use(cors({
   credentials: true
 }));
 app.use(cookieParser());
-app.use(express.json());
+app.use((req, res, next) => {
+  if (typeof req.body === "string") {
+    try {
+      req.body = JSON.parse(req.body);
+    } catch {
+    }
+    return next();
+  }
+  if (req.body !== void 0 && typeof req.body === "object") {
+    return next();
+  }
+  express.json()(req, res, next);
+});
 app.use((req, res, next) => {
   if (req.url && !req.url.startsWith("/api") && req.url !== "/") {
     req.url = "/api" + req.url;
