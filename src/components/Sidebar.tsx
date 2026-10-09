@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
   LayoutGrid, 
+  Inbox,
   Users, 
   Briefcase, 
   CheckSquare, 
@@ -26,6 +27,7 @@ interface SidebarProps {
 
 const baseNavItems: { label: NavigationTab; icon: React.ElementType }[] = [
   { label: 'Dashboard', icon: LayoutGrid },
+  { label: 'Inbox', icon: Inbox },
   { label: 'Clients', icon: Users },
   { label: 'Projects', icon: Briefcase },
   { label: 'Tasks', icon: CheckSquare },

@@ -123,6 +123,32 @@ export class ToolRegistryService {
         output_schema: { type: 'object', properties: { documents: { type: 'array' } } },
         required_permissions: ['documents.read']
       },
+      {
+        id: 'communication.read',
+        name: 'Read Slack Channel Communication',
+        provider: 'slack',
+        description: 'Retrieves messages and conversation history from a connected Slack channel.',
+        category: 'communication',
+        version: '1.0.0',
+        risk_level: 'LOW',
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: 'object',
+          required: ['channel_id'],
+          properties: {
+            channel_id: { type: 'string' },
+            limit: { type: 'number' }
+          }
+        },
+        output_schema: {
+          type: 'object',
+          properties: {
+            messages: { type: 'array' }
+          }
+        },
+        required_permissions: ['communication.read']
+      },
 
       // ----------------------------------------------------
       // MEDIUM RISK (Internal mutations with reversible effects)
@@ -372,9 +398,9 @@ export class ToolRegistryService {
       },
       {
         id: 'communication.send',
-        name: 'Send Client Communication',
-        provider: 'core',
-        description: 'Sends external message to client via Slack, Email, or WhatsApp.',
+        name: 'Send Slack Message',
+        provider: 'slack',
+        description: 'Dispatches message to client communication channel via Slack Web API.',
         category: 'communication',
         version: '1.0.0',
         risk_level: 'HIGH',
@@ -382,15 +408,25 @@ export class ToolRegistryService {
         enabled: true,
         input_schema: {
           type: 'object',
-          required: ['clientId', 'channel', 'message'],
+          required: ['message'],
           properties: {
-            clientId: { type: 'string' },
+            channel_id: { type: 'string' },
             channel: { type: 'string' },
-            recipient: { type: 'string' },
-            message: { type: 'string' }
+            thread_ts: { type: 'string' },
+            message: { type: 'string' },
+            clientId: { type: 'string' },
+            recipient: { type: 'string' }
           }
         },
-        output_schema: { type: 'object', properties: { sent: { type: 'boolean' }, messageId: { type: 'string' } } },
+        output_schema: {
+          type: 'object',
+          properties: {
+            sent: { type: 'boolean' },
+            external_message_id: { type: 'string' },
+            channel_id: { type: 'string' },
+            timestamp: { type: 'string' }
+          }
+        },
         required_permissions: ['communication.send']
       },
       {

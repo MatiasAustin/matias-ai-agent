@@ -20,7 +20,11 @@ import {
   Wrench,
   Play,
   Terminal,
-  Activity
+  Activity,
+  MessageSquare,
+  Settings2,
+  RefreshCw,
+  Hash
 } from 'lucide-react';
 
 type SettingsTab = 'profile' | 'organization' | 'members' | 'security' | 'tools' | 'ai' | 'integrations' | 'billing';
@@ -41,6 +45,20 @@ export const SettingsView: React.FC = () => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<OrganizationRole>('MEMBER');
+
+  // Slack Integration state
+  const [slackIntegration, setSlackIntegration] = useState<any>(null);
+  const [slackChannels, setSlackChannels] = useState<any[]>([]);
+  const [slackContacts, setSlackContacts] = useState<any[]>([]);
+  const [showSlackConfigModal, setShowSlackConfigModal] = useState(false);
+  const [slackConfigTab, setSlackConfigTab] = useState<'connection' | 'channels' | 'contacts' | 'permissions'>('connection');
+  const [newChannelId, setNewChannelId] = useState('');
+  const [newChannelName, setNewChannelName] = useState('');
+  const [newChannelClientId, setNewChannelClientId] = useState('');
+  const [newContactUserId, setNewContactUserId] = useState('');
+  const [newContactClientId, setNewContactClientId] = useState('');
+  const [allClientsList, setAllClientsList] = useState<any[]>([]);
+  const [connectingSlack, setConnectingSlack] = useState(false);
 
   const canManageMembers = role === 'OWNER' || role === 'ADMIN';
   const isOwner = role === 'OWNER';
@@ -80,11 +98,99 @@ export const SettingsView: React.FC = () => {
     }
   };
 
+  const loadSlackData = async () => {
+    try {
+      const [intg, chans, contacts, cls] = await Promise.all([
+        api.getSlackIntegration(),
+        api.getSlackChannels().catch(() => []),
+        api.getSlackContacts().catch(() => []),
+        api.getClients().catch(() => [])
+      ]);
+      setSlackIntegration(intg);
+      setSlackChannels(chans);
+      setSlackContacts(contacts);
+      setAllClientsList(cls);
+    } catch (err: any) {
+      console.warn('Failed to load Slack integration:', err);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'members') loadMembersAndInvites();
     if (activeTab === 'tools') loadTools();
     if (activeTab === 'ai') loadGovernance();
+    if (activeTab === 'integrations') loadSlackData();
   }, [activeTab, organization?.id]);
+
+  const handleConnectSlack = async () => {
+    if (!slackIntegration?.isConfigured) {
+      setNotification({
+        type: 'error',
+        message: 'Slack is not configured. Set SLACK_CLIENT_ID and SLACK_CLIENT_SECRET environment variables.'
+      });
+      return;
+    }
+    setConnectingSlack(true);
+    try {
+      const res = await api.getSlackConnectUrl();
+      if (res?.url) {
+        window.location.href = res.url;
+      }
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message });
+    } finally {
+      setConnectingSlack(false);
+    }
+  };
+
+  const handleDisconnectSlack = async () => {
+    if (!confirm('Disconnect Slack workspace from this organization?')) return;
+    try {
+      await api.disconnectSlack();
+      setNotification({ type: 'success', message: 'Slack disconnected.' });
+      loadSlackData();
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message });
+    }
+  };
+
+  const handleSaveChannelMapping = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newChannelId || !newChannelName) return;
+    try {
+      await api.saveSlackChannelMapping({
+        channel_id: newChannelId,
+        channel_name: newChannelName,
+        client_id: newChannelClientId || undefined,
+        enabled: true
+      });
+      setNewChannelId('');
+      setNewChannelName('');
+      setNewChannelClientId('');
+      setNotification({ type: 'success', message: 'Channel mapped successfully.' });
+      loadSlackData();
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message });
+    }
+  };
+
+  const handleSaveContactLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newContactUserId || !newContactClientId) return;
+    try {
+      await api.saveSlackContactLink({
+        external_user_id: newContactUserId,
+        client_id: newContactClientId,
+        confidence: 1.0
+      });
+      setNewContactUserId('');
+      setNewContactClientId('');
+      setNotification({ type: 'success', message: 'Contact mapped successfully.' });
+      loadSlackData();
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message });
+    }
+  };
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -448,10 +554,98 @@ export const SettingsView: React.FC = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          {/* Real Slack Integration Card */}
+          <div className="p-6 rounded-[24px] border border-[#E5E5E1] bg-white space-y-4 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-2xl bg-[#111111] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                  <MessageSquare className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-medium text-sm text-[#111111]">Slack Integration</h3>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                      slackIntegration?.status === 'connected'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : connectingSlack
+                        ? 'bg-amber-50 text-amber-700 border-amber-200 animate-pulse'
+                        : 'bg-[#F5F5F3] text-[#6F6F6B] border-[#E5E5E1]'
+                    }`}>
+                      {slackIntegration?.status === 'connected' ? 'Connected' : connectingSlack ? 'Connecting...' : 'Not connected'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#6F6F6B] mt-1 max-w-xl">
+                    Client communication gateway. Ingests Slack messages, loads client memory, drafts editorial responses, requires human approval, and synchronizes deliverables.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                {slackIntegration?.status === 'connected' ? (
+                  <>
+                    <button
+                      onClick={() => setShowSlackConfigModal(true)}
+                      className="px-3.5 py-1.5 rounded-xl border border-[#E5E5E1] bg-[#F5F5F3] hover:bg-[#E5E5E1] text-xs font-medium text-[#111111] flex items-center gap-1.5 transition-colors"
+                    >
+                      <Settings2 className="w-3.5 h-3.5" />
+                      Configure
+                    </button>
+                    <button
+                      onClick={handleDisconnectSlack}
+                      className="px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-xs font-medium text-rose-700 transition-colors"
+                    >
+                      Disconnect
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={handleConnectSlack}
+                    disabled={connectingSlack}
+                    className="px-4 py-2 rounded-xl bg-[#111111] text-white text-xs font-medium hover:bg-neutral-800 disabled:opacity-40 transition-colors flex items-center gap-2"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>Connect Slack</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* If Connected Details */}
+            {slackIntegration?.status === 'connected' && (
+              <div className="pt-3 border-t border-[#E5E5E1] grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div>
+                  <span className="text-[10px] text-[#6F6F6B] uppercase font-mono block">Workspace Name</span>
+                  <span className="font-medium text-[#111111]">{slackIntegration.metadata?.team_name || slackIntegration.display_name}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-[#6F6F6B] uppercase font-mono block">Connected Bot Account</span>
+                  <span className="font-mono text-[#111111]">{slackIntegration.metadata?.bot_user_id || 'Active'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-[#6F6F6B] uppercase font-mono block">Connected Since</span>
+                  <span className="text-[#111111]">{new Date(slackIntegration.created_at).toLocaleDateString()}</span>
+                </div>
+              </div>
+            )}
+
+            {/* If Not Configured in Server Env */}
+            {slackIntegration && !slackIntegration.isConfigured && slackIntegration.status !== 'connected' && (
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="font-medium">Slack OAuth credentials not configured:</strong>
+                  <p className="text-[11px] text-amber-800 mt-0.5">
+                    To enable live Slack connections, provide <code>SLACK_CLIENT_ID</code> and <code>SLACK_CLIENT_SECRET</code> in your environment variables.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Other External Tools Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             {[
               { name: 'Figma', desc: 'Design token publisher & component sync pipeline', status: 'Not connected' },
-              { name: 'Slack', desc: 'Client channel messaging gateway with approval gates', status: 'Not connected' },
               { name: 'Linear', desc: 'Task coordination and milestone issue tracking', status: 'Not connected' },
               { name: 'Google Workspace', desc: 'Drive and Docs brief ingestion gateway', status: 'Not connected' },
             ].map((intg, i) => (
@@ -470,6 +664,222 @@ export const SettingsView: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Slack Configuration Modal */}
+      {showSlackConfigModal && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E5E5E1] rounded-[24px] p-6 max-w-2xl w-full shadow-xl space-y-5 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E1]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#111111] text-white flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-sm text-[#111111]">Slack Configuration</h3>
+                  <p className="text-[11px] text-[#6F6F6B]">Manage channel routing, user mappings, and autonomous behaviors</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowSlackConfigModal(false)}
+                className="text-xs text-[#6F6F6B] hover:text-[#111111]"
+              >
+                Close
+              </button>
+            </div>
+
+            {/* Modal Subtabs */}
+            <div className="flex items-center gap-2 border-b border-[#E5E5E1] pb-2 text-xs">
+              {[
+                { id: 'connection', label: 'Connection' },
+                { id: 'channels', label: 'Channel Mappings' },
+                { id: 'contacts', label: 'Contact Links' },
+                { id: 'permissions', label: 'Scopes & Security' }
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setSlackConfigTab(t.id as any)}
+                  className={`px-3 py-1.5 rounded-xl font-medium transition-colors ${
+                    slackConfigTab === t.id
+                      ? 'bg-[#111111] text-white'
+                      : 'text-[#6F6F6B] hover:text-[#111111] hover:bg-[#F5F5F3]'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab: Connection */}
+            {slackConfigTab === 'connection' && (
+              <div className="space-y-4 text-xs">
+                <div className="p-4 rounded-xl bg-[#F5F5F3] border border-[#E5E5E1] space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-[#6F6F6B]">Workspace Name:</span>
+                    <span className="font-medium text-[#111111]">{slackIntegration?.metadata?.team_name || 'Connected Workspace'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#6F6F6B]">Team ID:</span>
+                    <span className="font-mono text-[#111111]">{slackIntegration?.external_account_id || 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#6F6F6B]">Bot User ID:</span>
+                    <span className="font-mono text-[#111111]">{slackIntegration?.metadata?.bot_user_id || 'Active'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#6F6F6B]">Secret Token Storage:</span>
+                    <span className="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">AES-256-GCM Encrypted</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tab: Channels */}
+            {slackConfigTab === 'channels' && (
+              <div className="space-y-4 text-xs">
+                <form onSubmit={handleSaveChannelMapping} className="p-4 rounded-xl bg-[#F5F5F3] border border-[#E5E5E1] space-y-3">
+                  <h4 className="font-medium text-[#111111]">Map Slack Channel to Client / Project</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Channel ID (e.g. C08123456)"
+                      value={newChannelId}
+                      onChange={(e) => setNewChannelId(e.target.value)}
+                      required
+                      className="bg-white border border-[#E5E5E1] rounded-lg px-2.5 py-1.5 text-xs text-[#111111]"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Channel Name (e.g. #xyz-ai)"
+                      value={newChannelName}
+                      onChange={(e) => setNewChannelName(e.target.value)}
+                      required
+                      className="bg-white border border-[#E5E5E1] rounded-lg px-2.5 py-1.5 text-xs text-[#111111]"
+                    />
+                    <select
+                      value={newChannelClientId}
+                      onChange={(e) => setNewChannelClientId(e.target.value)}
+                      className="bg-white border border-[#E5E5E1] rounded-lg px-2.5 py-1.5 text-xs text-[#111111]"
+                    >
+                      <option value="">Select Client (Optional)...</option>
+                      {allClientsList.map((c) => (
+                        <option key={c.id} value={c.id}>{c.company_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-3.5 py-1.5 rounded-lg bg-[#111111] text-white text-xs font-medium hover:bg-neutral-800"
+                  >
+                    Add Channel Mapping
+                  </button>
+                </form>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium text-[#111111]">Configured Channels ({slackChannels.length})</h4>
+                  {slackChannels.length === 0 ? (
+                    <p className="text-[#6F6F6B] text-[11px] italic">No channels mapped yet.</p>
+                  ) : (
+                    slackChannels.map((c) => (
+                      <div key={c.id} className="p-3 rounded-xl border border-[#E5E5E1] flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-[#111111]">{c.channel_name} ({c.channel_id})</div>
+                          <div className="text-[10px] text-[#6F6F6B]">
+                            Client: {allClientsList.find(cl => cl.id === c.client_id)?.company_name || 'Unassigned'}
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Active</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Tab: Contacts */}
+            {slackConfigTab === 'contacts' && (
+              <div className="space-y-4 text-xs">
+                <form onSubmit={handleSaveContactLink} className="p-4 rounded-xl bg-[#F5F5F3] border border-[#E5E5E1] space-y-3">
+                  <h4 className="font-medium text-[#111111]">Map Slack User to Client</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Slack User ID (e.g. U0998877)"
+                      value={newContactUserId}
+                      onChange={(e) => setNewContactUserId(e.target.value)}
+                      required
+                      className="bg-white border border-[#E5E5E1] rounded-lg px-2.5 py-1.5 text-xs text-[#111111]"
+                    />
+                    <select
+                      value={newContactClientId}
+                      onChange={(e) => setNewContactClientId(e.target.value)}
+                      required
+                      className="bg-white border border-[#E5E5E1] rounded-lg px-2.5 py-1.5 text-xs text-[#111111]"
+                    >
+                      <option value="">Select Client...</option>
+                      {allClientsList.map((c) => (
+                        <option key={c.id} value={c.id}>{c.company_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-3.5 py-1.5 rounded-lg bg-[#111111] text-white text-xs font-medium hover:bg-neutral-800"
+                  >
+                    Link Contact
+                  </button>
+                </form>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium text-[#111111]">Linked Contacts ({slackContacts.length})</h4>
+                  {slackContacts.length === 0 ? (
+                    <p className="text-[#6F6F6B] text-[11px] italic">No contacts linked yet.</p>
+                  ) : (
+                    slackContacts.map((ct) => (
+                      <div key={ct.id} className="p-3 rounded-xl border border-[#E5E5E1] flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-[#111111]">Slack User: {ct.external_user_id}</div>
+                          <div className="text-[10px] text-[#6F6F6B]">
+                            Linked Client: {allClientsList.find(cl => cl.id === ct.client_id)?.company_name || ct.client_id}
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Confidence: 100%</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Tab: Permissions */}
+            {slackConfigTab === 'permissions' && (
+              <div className="space-y-3 text-xs">
+                <h4 className="font-medium text-[#111111]">Least Privilege Permissions</h4>
+                <p className="text-[#6F6F6B] text-[11px]">
+                  Matias AI Studio OS requests only essential scopes needed for communication:
+                </p>
+                <div className="divide-y divide-[#E5E5E1] border border-[#E5E5E1] rounded-xl overflow-hidden">
+                  {[
+                    { scope: 'channels:history', desc: 'Read conversation history in public channels' },
+                    { scope: 'channels:read', desc: 'List public channels in workspace' },
+                    { scope: 'chat:write', desc: 'Send approved responses to authorized channels' },
+                    { scope: 'chat:write.public', desc: 'Post to authorized channels without joining first' },
+                    { scope: 'users:read', desc: 'Identify sender display names and match client contacts' }
+                  ].map((s) => (
+                    <div key={s.scope} className="p-3 flex items-center justify-between bg-white">
+                      <div>
+                        <div className="font-mono font-medium text-[#111111]">{s.scope}</div>
+                        <div className="text-[11px] text-[#6F6F6B]">{s.desc}</div>
+                      </div>
+                      <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Granted</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       )}

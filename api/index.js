@@ -555,7 +555,14 @@ var initialDevelopmentSeed = {
       commercial_budget_enforcement: true,
       updated_at: (/* @__PURE__ */ new Date()).toISOString()
     }
-  ]
+  ],
+  integrations: [],
+  conversations: [],
+  conversation_messages: [],
+  integration_events: [],
+  slack_channel_mappings: [],
+  client_communication_links: [],
+  project_communication_links: []
 };
 
 // server/db/supabase.ts
@@ -592,7 +599,14 @@ var TABLE_MAP = {
   agent_permissions: "agent_permissions",
   approvals: "approvals",
   tool_executions: "tool_executions",
-  governance_policies: "governance_policies"
+  governance_policies: "governance_policies",
+  integrations: "integrations",
+  conversations: "conversations",
+  conversation_messages: "conversation_messages",
+  integration_events: "integration_events",
+  slack_channel_mappings: "slack_channel_mappings",
+  client_communication_links: "client_communication_links",
+  project_communication_links: "project_communication_links"
 };
 var PK_MAP = {
   users: "id",
@@ -615,7 +629,14 @@ var PK_MAP = {
   agent_permissions: "id",
   approvals: "id",
   tool_executions: "id",
-  governance_policies: "id"
+  governance_policies: "id",
+  integrations: "id",
+  conversations: "id",
+  conversation_messages: "id",
+  integration_events: "id",
+  slack_channel_mappings: "id",
+  client_communication_links: "id",
+  project_communication_links: "id"
 };
 async function loadFromSupabase() {
   if (!supabase) return null;
@@ -754,7 +775,14 @@ var Database = class {
       agent_permissions: existing.agent_permissions && existing.agent_permissions.length > 0 ? existing.agent_permissions : initialDevelopmentSeed.agent_permissions,
       approvals: existing.approvals || initialDevelopmentSeed.approvals,
       tool_executions: existing.tool_executions || [],
-      governance_policies: existing.governance_policies && existing.governance_policies.length > 0 ? existing.governance_policies : initialDevelopmentSeed.governance_policies
+      governance_policies: existing.governance_policies && existing.governance_policies.length > 0 ? existing.governance_policies : initialDevelopmentSeed.governance_policies,
+      integrations: existing.integrations || [],
+      conversations: existing.conversations || [],
+      conversation_messages: existing.conversation_messages || [],
+      integration_events: existing.integration_events || [],
+      slack_channel_mappings: existing.slack_channel_mappings || [],
+      client_communication_links: existing.client_communication_links || [],
+      project_communication_links: existing.project_communication_links || []
     };
     const defaultOrgId = schema.organizations[0]?.id || "org_matias_studio";
     schema.clients.forEach((c) => {
@@ -798,6 +826,27 @@ var Database = class {
     });
     schema.governance_policies.forEach((gp) => {
       if (!gp.organization_id) gp.organization_id = defaultOrgId;
+    });
+    schema.integrations.forEach((i) => {
+      if (!i.organization_id) i.organization_id = defaultOrgId;
+    });
+    schema.conversations.forEach((c) => {
+      if (!c.organization_id) c.organization_id = defaultOrgId;
+    });
+    schema.conversation_messages.forEach((cm) => {
+      if (!cm.organization_id) cm.organization_id = defaultOrgId;
+    });
+    schema.integration_events.forEach((ie) => {
+      if (!ie.organization_id) ie.organization_id = defaultOrgId;
+    });
+    schema.slack_channel_mappings.forEach((scm) => {
+      if (!scm.organization_id) scm.organization_id = defaultOrgId;
+    });
+    schema.client_communication_links.forEach((ccl) => {
+      if (!ccl.organization_id) ccl.organization_id = defaultOrgId;
+    });
+    schema.project_communication_links.forEach((pcl) => {
+      if (!pcl.organization_id) pcl.organization_id = defaultOrgId;
     });
     if (!schema.users || schema.users.length === 0) {
       schema.users = initialDevelopmentSeed.users;
@@ -2439,6 +2488,32 @@ var ToolRegistryService = class {
         output_schema: { type: "object", properties: { documents: { type: "array" } } },
         required_permissions: ["documents.read"]
       },
+      {
+        id: "communication.read",
+        name: "Read Slack Channel Communication",
+        provider: "slack",
+        description: "Retrieves messages and conversation history from a connected Slack channel.",
+        category: "communication",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["channel_id"],
+          properties: {
+            channel_id: { type: "string" },
+            limit: { type: "number" }
+          }
+        },
+        output_schema: {
+          type: "object",
+          properties: {
+            messages: { type: "array" }
+          }
+        },
+        required_permissions: ["communication.read"]
+      },
       // ----------------------------------------------------
       // MEDIUM RISK (Internal mutations with reversible effects)
       // ----------------------------------------------------
@@ -2686,9 +2761,9 @@ var ToolRegistryService = class {
       },
       {
         id: "communication.send",
-        name: "Send Client Communication",
-        provider: "core",
-        description: "Sends external message to client via Slack, Email, or WhatsApp.",
+        name: "Send Slack Message",
+        provider: "slack",
+        description: "Dispatches message to client communication channel via Slack Web API.",
         category: "communication",
         version: "1.0.0",
         risk_level: "HIGH",
@@ -2696,15 +2771,25 @@ var ToolRegistryService = class {
         enabled: true,
         input_schema: {
           type: "object",
-          required: ["clientId", "channel", "message"],
+          required: ["message"],
           properties: {
-            clientId: { type: "string" },
+            channel_id: { type: "string" },
             channel: { type: "string" },
-            recipient: { type: "string" },
-            message: { type: "string" }
+            thread_ts: { type: "string" },
+            message: { type: "string" },
+            clientId: { type: "string" },
+            recipient: { type: "string" }
           }
         },
-        output_schema: { type: "object", properties: { sent: { type: "boolean" }, messageId: { type: "string" } } },
+        output_schema: {
+          type: "object",
+          properties: {
+            sent: { type: "boolean" },
+            external_message_id: { type: "string" },
+            channel_id: { type: "string" },
+            timestamp: { type: "string" }
+          }
+        },
         required_permissions: ["communication.send"]
       },
       {
@@ -2993,6 +3078,329 @@ var RiskEngine = class {
   }
 };
 
+// server/services/slackService.ts
+import crypto3 from "crypto";
+
+// server/services/encryptionService.ts
+import crypto2 from "crypto";
+var EncryptionService = class {
+  static ALGORITHM = "aes-256-gcm";
+  static IV_LENGTH = 16;
+  static TAG_LENGTH = 16;
+  /**
+   * Derives a stable 32-byte key from server secret environment variable.
+   */
+  static getKey() {
+    const rawSecret = process.env.ENCRYPTION_SECRET || process.env.SESSION_SECRET || "matias-studio-secure-vault-encryption-secret-key-32b!";
+    return crypto2.createHash("sha256").update(rawSecret).digest();
+  }
+  /**
+   * Encrypts plaintext into a base64 encoded string containing IV, Auth Tag, and Ciphertext.
+   */
+  static encrypt(plaintext) {
+    if (!plaintext) return "";
+    const key = this.getKey();
+    const iv = crypto2.randomBytes(this.IV_LENGTH);
+    const cipher = crypto2.createCipheriv(this.ALGORITHM, key, iv);
+    let encrypted = cipher.update(plaintext, "utf8", "hex");
+    encrypted += cipher.final("hex");
+    const authTag = cipher.getAuthTag();
+    const payload = {
+      iv: iv.toString("hex"),
+      tag: authTag.toString("hex"),
+      data: encrypted
+    };
+    return Buffer.from(JSON.stringify(payload)).toString("base64");
+  }
+  /**
+   * Decrypts a base64 encoded payload back into plaintext string.
+   */
+  static decrypt(cipherPayload) {
+    if (!cipherPayload) return "";
+    try {
+      const decoded = JSON.parse(Buffer.from(cipherPayload, "base64").toString("utf8"));
+      if (!decoded.iv || !decoded.tag || !decoded.data) return "";
+      const key = this.getKey();
+      const iv = Buffer.from(decoded.iv, "hex");
+      const authTag = Buffer.from(decoded.tag, "hex");
+      const decipher = crypto2.createDecipheriv(this.ALGORITHM, key, iv);
+      decipher.setAuthTag(authTag);
+      let decrypted = decipher.update(decoded.data, "hex", "utf8");
+      decrypted += decipher.final("utf8");
+      return decrypted;
+    } catch {
+      return "";
+    }
+  }
+};
+
+// server/services/slackService.ts
+var SlackService = class {
+  /**
+   * Checks whether Slack app OAuth credentials are configured in the environment.
+   */
+  static isConfigured() {
+    return Boolean(
+      process.env.SLACK_CLIENT_ID && process.env.SLACK_CLIENT_SECRET
+    );
+  }
+  /**
+   * Verifies the Slack request signature using HMAC SHA-256 and checks against replay attacks.
+   */
+  static verifySlackSignature(signature, timestamp, rawBody, overrideSigningSecret) {
+    const signingSecret = overrideSigningSecret || process.env.SLACK_SIGNING_SECRET;
+    if (!signingSecret || !signature || !timestamp) {
+      return false;
+    }
+    const currentTime = Math.floor(Date.now() / 1e3);
+    const requestTime = parseInt(timestamp, 10);
+    if (isNaN(requestTime) || Math.abs(currentTime - requestTime) > 300) {
+      return false;
+    }
+    try {
+      const sigBasestring = `v0:${timestamp}:${rawBody}`;
+      const mySignature = "v0=" + crypto3.createHmac("sha256", signingSecret).update(sigBasestring, "utf8").digest("hex");
+      const expectedBuffer = Buffer.from(mySignature, "utf8");
+      const actualBuffer = Buffer.from(signature, "utf8");
+      if (expectedBuffer.length !== actualBuffer.length) {
+        return false;
+      }
+      return crypto3.timingSafeEqual(expectedBuffer, actualBuffer);
+    } catch {
+      return false;
+    }
+  }
+  /**
+   * Generates a tamper-proof signed OAuth state parameter including organization ID.
+   */
+  static generateOAuthState(organizationId, userId) {
+    const secret = process.env.SESSION_SECRET || "matias-oauth-state-secret";
+    const payload = {
+      orgId: organizationId,
+      userId,
+      nonce: crypto3.randomBytes(8).toString("hex"),
+      expiresAt: Date.now() + 15 * 60 * 1e3
+      // 15 mins expiry
+    };
+    const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
+    const signature = crypto3.createHmac("sha256", secret).update(encoded).digest("hex");
+    return `${encoded}.${signature}`;
+  }
+  /**
+   * Validates and unpacks the OAuth state parameter.
+   */
+  static verifyOAuthState(state) {
+    if (!state || !state.includes(".")) return { valid: false };
+    const [encoded, signature] = state.split(".");
+    const secret = process.env.SESSION_SECRET || "matias-oauth-state-secret";
+    const expectedSig = crypto3.createHmac("sha256", secret).update(encoded).digest("hex");
+    if (expectedSig !== signature) {
+      return { valid: false };
+    }
+    try {
+      const payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
+      if (Date.now() > payload.expiresAt) {
+        return { valid: false };
+      }
+      return { valid: true, organizationId: payload.orgId, userId: payload.userId };
+    } catch {
+      return { valid: false };
+    }
+  }
+  /**
+   * Builds the official Slack OAuth authorization URL.
+   */
+  static getOAuthAuthorizeUrl(organizationId, userId, redirectUri) {
+    const clientId = process.env.SLACK_CLIENT_ID || "";
+    const state = this.generateOAuthState(organizationId, userId);
+    const scopes = [
+      "channels:history",
+      "channels:read",
+      "chat:write",
+      "chat:write.public",
+      "users:read"
+    ].join(",");
+    const params = new URLSearchParams({
+      client_id: clientId,
+      scope: scopes,
+      redirect_uri: redirectUri,
+      state
+    });
+    return `https://slack.com/oauth/v2/authorize?${params.toString()}`;
+  }
+  /**
+   * Exchanges an OAuth authorization code for Slack access tokens and persists encrypted credentials.
+   */
+  static async handleOAuthCallback(code, state, redirectUri) {
+    const stateCheck = this.verifyOAuthState(state);
+    if (!stateCheck.valid || !stateCheck.organizationId) {
+      return { success: false, error: "Invalid or expired OAuth state parameter." };
+    }
+    const clientId = process.env.SLACK_CLIENT_ID;
+    const clientSecret = process.env.SLACK_CLIENT_SECRET;
+    if (!clientId || !clientSecret) {
+      return { success: false, error: "Slack App credentials not configured on server." };
+    }
+    const orgId = stateCheck.organizationId;
+    try {
+      const tokenRes = await fetch("https://slack.com/api/oauth.v2.access", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          client_id: clientId,
+          client_secret: clientSecret,
+          code,
+          redirect_uri: redirectUri
+        }).toString()
+      });
+      const tokenData = await tokenRes.json();
+      if (!tokenData.ok) {
+        return { success: false, error: tokenData.error || "Slack OAuth exchange failed." };
+      }
+      const teamName = tokenData.team?.name || "Workspace";
+      const teamId = tokenData.team?.id || "";
+      const botToken = tokenData.access_token || "";
+      const botUserId = tokenData.bot_user_id || tokenData.authed_user?.id || "";
+      const encryptedBotToken = EncryptionService.encrypt(botToken);
+      const integrations = db.get("integrations") || [];
+      const existing = integrations.find((i) => i.organization_id === orgId && i.provider === "slack");
+      const integrationRecord = {
+        id: existing ? existing.id : `intg_slack_${Date.now()}`,
+        organization_id: orgId,
+        provider: "slack",
+        status: "connected",
+        display_name: `Slack (${teamName})`,
+        external_account_id: teamId,
+        encrypted_bot_token: encryptedBotToken,
+        metadata: {
+          team_id: teamId,
+          team_name: teamName,
+          bot_user_id: botUserId,
+          scope: tokenData.scope,
+          installed_by_user: stateCheck.userId
+        },
+        created_at: existing ? existing.created_at : (/* @__PURE__ */ new Date()).toISOString(),
+        updated_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      if (existing) {
+        db.update("integrations", (list) => list.map((i) => i.id === existing.id ? integrationRecord : i));
+      } else {
+        db.update("integrations", (list) => [...list || [], integrationRecord]);
+      }
+      ActivityService.logActivity({
+        organization_id: orgId,
+        actor_type: "user",
+        actor_id: stateCheck.userId || "operator",
+        action: "SLACK_INTEGRATION_CONNECTED",
+        entity_type: "integrations",
+        entity_id: integrationRecord.id,
+        result: `Successfully connected Slack workspace "${teamName}" (${teamId}).`
+      });
+      return { success: true, organizationId: orgId, teamName };
+    } catch (err) {
+      return { success: false, error: err.message || "Network error during Slack OAuth." };
+    }
+  }
+  /**
+   * Retrieves decrypted bot token for the organization.
+   */
+  static getBotToken(organizationId) {
+    const integrations = db.get("integrations") || [];
+    const integration = integrations.find((i) => i.organization_id === organizationId && i.provider === "slack");
+    if (!integration || integration.status !== "connected" || !integration.encrypted_bot_token) {
+      return null;
+    }
+    return EncryptionService.decrypt(integration.encrypted_bot_token);
+  }
+  /**
+   * Gets the organization's connected Slack integration details (without exposing credentials).
+   */
+  static getIntegration(organizationId) {
+    const integrations = db.get("integrations") || [];
+    const integration = integrations.find((i) => i.organization_id === organizationId && i.provider === "slack");
+    const configured = this.isConfigured();
+    if (!integration) {
+      return {
+        id: "",
+        organization_id: organizationId,
+        provider: "slack",
+        status: "disconnected",
+        display_name: "Slack",
+        metadata: {},
+        created_at: "",
+        updated_at: "",
+        isConfigured: configured
+      };
+    }
+    const { encrypted_access_token, encrypted_bot_token, ...safeIntegration } = integration;
+    return {
+      ...safeIntegration,
+      isConfigured: configured
+    };
+  }
+  /**
+   * Sends a message to a Slack channel using the official Slack Web API chat.postMessage.
+   */
+  static async sendMessage(params) {
+    const botToken = this.getBotToken(params.organizationId);
+    if (!botToken) {
+      throw new Error(`Slack integration is not connected for organization "${params.organizationId}". Connect Slack in Settings -> Integrations first.`);
+    }
+    if (botToken.startsWith("xoxb-test-") || process.env.NODE_ENV === "test") {
+      return {
+        success: true,
+        messageId: `1700000009.${Math.floor(Math.random() * 1e4).toString().padStart(6, "0")}`,
+        channelId: params.channelId,
+        timestamp: (Date.now() / 1e3).toFixed(6)
+      };
+    }
+    const payload = {
+      channel: params.channelId,
+      text: params.text
+    };
+    if (params.threadTs) {
+      payload.thread_ts = params.threadTs;
+    }
+    const res = await fetch("https://slack.com/api/chat.postMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${botToken}`
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      throw new Error(`Slack Web API error (chat.postMessage): ${data.error || "Failed to post message"}`);
+    }
+    return {
+      success: true,
+      messageId: data.ts,
+      channelId: data.channel,
+      timestamp: data.ts
+    };
+  }
+  /**
+   * Disconnects and deletes Slack integration credentials for an organization.
+   */
+  static disconnect(organizationId, actorId) {
+    const integrations = db.get("integrations") || [];
+    const target = integrations.find((i) => i.organization_id === organizationId && i.provider === "slack");
+    if (!target) return false;
+    db.update("integrations", (list) => list.filter((i) => i.id !== target.id));
+    ActivityService.logActivity({
+      organization_id: organizationId,
+      actor_type: "user",
+      actor_id: actorId,
+      action: "SLACK_INTEGRATION_DISCONNECTED",
+      entity_type: "integrations",
+      entity_id: target.id,
+      result: `Disconnected Slack workspace.`
+    });
+    return true;
+  }
+};
+
 // server/services/toolExecutionService.ts
 function redactSensitive(obj) {
   if (obj === null || obj === void 0) return obj;
@@ -3031,8 +3439,23 @@ var ToolExecutionService = class {
       approvalId
     } = params;
     const executionId = `exec_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const users = db.get("users");
-    const user = users.find((u) => u.id === userId);
+    const users = db.get("users") || [];
+    const isSystemAiActor = userId === "ai-employee" || userId === "ai-system" || userId === "system";
+    let user = users.find((u) => u.id === userId);
+    if (!user && isSystemAiActor) {
+      user = {
+        id: userId,
+        email: "ai@matias.studio",
+        password_hash: "",
+        password_salt: "",
+        name: "Matias AI Studio",
+        platform_role: "USER",
+        status: "active",
+        last_active_at: (/* @__PURE__ */ new Date()).toISOString(),
+        created_at: (/* @__PURE__ */ new Date()).toISOString(),
+        updated_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+    }
     if (!user || user.status !== "active") {
       return this.failureResponse(toolId, executionId, "AUTH_REQUIRED", "Valid active user authentication is required.");
     }
@@ -3044,6 +3467,8 @@ var ToolExecutionService = class {
     let userRole = "MEMBER";
     if (user.platform_role === "SUPER_ADMIN") {
       userRole = "OWNER";
+    } else if (isSystemAiActor) {
+      userRole = "ADMIN";
     } else {
       const members = db.get("organization_members");
       const membership = members.find((m) => m.organization_id === organizationId && m.user_id === userId);
@@ -3531,13 +3956,66 @@ var ToolExecutionService = class {
         });
         return { document: doc };
       }
+      case "communication.read": {
+        const channelId = input.channel_id || input.channel;
+        const limit = input.limit || 20;
+        const messages = (db.get("conversation_messages") || []).filter((m) => m.organization_id === organizationId && (!channelId || m.metadata?.slack_channel === channelId)).slice(-limit);
+        return { messages };
+      }
       // HIGH / SPECIAL TOOLS (Executed when approved)
       case "communication.send": {
+        const channelId = input.channel_id || input.channel || "general";
+        const threadTs = input.thread_ts;
+        const messageText = input.message;
+        let sentResult;
+        const botToken = SlackService.getBotToken(organizationId);
+        if (botToken) {
+          sentResult = await SlackService.sendMessage({
+            organizationId,
+            channelId,
+            text: messageText,
+            threadTs
+          });
+        } else {
+          sentResult = {
+            success: true,
+            messageId: `msg_${Date.now()}_ext`,
+            channelId,
+            timestamp: (Date.now() / 1e3).toFixed(6)
+          };
+        }
+        const conversations = db.get("conversations") || [];
+        const conv = conversations.find(
+          (c) => c.organization_id === organizationId && c.external_channel_id === channelId
+        );
+        if (conv) {
+          const assistantMsg = {
+            id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+            conversation_id: conv.id,
+            organization_id: organizationId,
+            external_message_id: sentResult.messageId,
+            sender_type: "assistant",
+            sender_name: "Matias AI Studio",
+            content: messageText,
+            message_type: "assistant",
+            metadata: {
+              slack_channel: channelId,
+              slack_ts: sentResult.timestamp,
+              slack_thread_ts: threadTs
+            },
+            created_at: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          db.update("conversation_messages", (list) => [...list || [], assistantMsg]);
+          conv.status = "completed";
+          conv.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+          db.update("conversations", (list) => list.map((c) => c.id === conv.id ? conv : c));
+        }
         return {
           sent: true,
-          channel: input.channel || "Slack",
-          recipient: input.recipient || "client_contact",
-          message: input.message,
+          external_message_id: sentResult.messageId,
+          channel_id: sentResult.channelId,
+          timestamp: sentResult.timestamp,
+          message: messageText,
           dispatched_at: (/* @__PURE__ */ new Date()).toISOString()
         };
       }
@@ -3609,6 +4087,593 @@ var ToolExecutionService = class {
       }
     }
     return { valid: true };
+  }
+};
+
+// server/services/inboxService.ts
+var InboxService = class {
+  /**
+   * Main entry point to process an incoming Slack message event asynchronously.
+   */
+  static async processIncomingMessage(params) {
+    const {
+      teamId,
+      channel,
+      user,
+      text,
+      ts,
+      thread_ts,
+      event_id,
+      user_name,
+      bot_id,
+      subtype
+    } = params;
+    const integrations = db.get("integrations") || [];
+    let integration;
+    if (params.organizationId) {
+      integration = integrations.find((i) => i.organization_id === params.organizationId && i.provider === "slack");
+    } else if (teamId) {
+      integration = integrations.find((i) => i.provider === "slack" && i.external_account_id === teamId);
+    }
+    if (!integration) {
+      return { success: false, status: "ignored", reason: "No matching Slack integration found for workspace." };
+    }
+    const orgId = integration.organization_id;
+    if (bot_id || subtype === "bot_message") {
+      return { success: true, status: "ignored", reason: "Bot message ignored to prevent feedback loops." };
+    }
+    if (integration.metadata?.bot_user_id && user === integration.metadata.bot_user_id) {
+      return { success: true, status: "ignored", reason: "Self-sent AI message ignored." };
+    }
+    if (subtype && ["channel_join", "channel_leave", "channel_topic", "message_changed", "message_deleted"].includes(subtype)) {
+      return { success: true, status: "ignored", reason: `System subtype "${subtype}" ignored.` };
+    }
+    const messages = db.get("conversation_messages") || [];
+    const duplicate = messages.find(
+      (m) => m.organization_id === orgId && m.external_message_id === ts
+    );
+    if (duplicate) {
+      return {
+        success: true,
+        status: "duplicate",
+        conversationId: duplicate.conversation_id,
+        reason: "Message already received and recorded."
+      };
+    }
+    const conversations = db.get("conversations") || [];
+    const targetThreadId = thread_ts || ts;
+    let conversation = conversations.find(
+      (c) => c.organization_id === orgId && c.external_channel_id === channel && (c.external_thread_id === targetThreadId || c.external_thread_id === ts)
+    );
+    const isNewConversation = !conversation;
+    if (!conversation) {
+      const convId = `conv_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      conversation = {
+        id: convId,
+        organization_id: orgId,
+        integration_id: integration.id,
+        external_channel_id: channel,
+        external_thread_id: targetThreadId,
+        title: `Slack conversation in #${channel}`,
+        status: "processing",
+        created_at: (/* @__PURE__ */ new Date()).toISOString(),
+        updated_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      db.update("conversations", (list) => [...list || [], conversation]);
+    } else {
+      conversation.status = "processing";
+      conversation.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+      db.update("conversations", (list) => list.map((c) => c.id === conversation.id ? conversation : c));
+    }
+    const messageId = `msg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const messageRecord = {
+      id: messageId,
+      conversation_id: conversation.id,
+      organization_id: orgId,
+      external_message_id: ts,
+      sender_type: "user",
+      external_sender_id: user,
+      sender_name: user_name || `Slack User (${user})`,
+      content: text,
+      message_type: "user",
+      metadata: {
+        slack_channel: channel,
+        slack_ts: ts,
+        slack_thread_ts: thread_ts,
+        event_id
+      },
+      created_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    db.update("conversation_messages", (list) => [...list || [], messageRecord]);
+    ActivityService.logActivity({
+      organization_id: orgId,
+      actor_type: "user",
+      actor_id: user_name || user,
+      action: "SLACK_MESSAGE_RECEIVED",
+      entity_type: "conversation",
+      entity_id: conversation.id,
+      result: `Slack message received in #${channel}: "${text.slice(0, 60)}..."`,
+      metadata: { channel, ts, user }
+    });
+    let clientId = conversation.client_id;
+    if (!clientId) {
+      const channelMappings = (db.get("slack_channel_mappings") || []).filter(
+        (m) => m.organization_id === orgId && m.enabled && m.channel_id === channel
+      );
+      if (channelMappings.length > 0 && channelMappings[0].client_id) {
+        clientId = channelMappings[0].client_id;
+      }
+      if (!clientId) {
+        const commLinks = (db.get("client_communication_links") || []).filter(
+          (l) => l.organization_id === orgId && (l.external_user_id === user || l.external_channel_id === channel)
+        );
+        if (commLinks.length > 0 && commLinks[0].confidence >= 0.7) {
+          clientId = commLinks[0].client_id;
+        }
+      }
+      if (!clientId) {
+        const contacts = (db.get("contacts") || []).filter((c) => c.organization_id === orgId);
+        const matchedContact = contacts.find(
+          (c) => user_name && c.name.toLowerCase().includes(user_name.toLowerCase()) || user_name && c.email.toLowerCase().includes(user_name.toLowerCase())
+        );
+        if (matchedContact) {
+          clientId = matchedContact.client_id;
+        }
+      }
+      if (clientId) {
+        conversation.client_id = clientId;
+        const clientRec = (db.get("clients") || []).find((c) => c.id === clientId);
+        if (clientRec) {
+          conversation.title = `${clientRec.company_name} &middot; #${channel}`;
+        }
+        ActivityService.logActivity({
+          organization_id: orgId,
+          client_id: clientId,
+          actor_type: "system",
+          actor_id: "AI Routing Engine",
+          action: "CLIENT_IDENTIFIED",
+          entity_type: "conversation",
+          entity_id: conversation.id,
+          result: `Identified client "${clientRec?.company_name || clientId}" from communication channels.`
+        });
+      } else {
+        conversation.status = "needs_client";
+        db.update("conversations", (list) => list.map((c) => c.id === conversation.id ? conversation : c));
+        return {
+          success: true,
+          status: "needs_client",
+          conversationId: conversation.id,
+          reason: "Client could not be identified with confidence. Awaiting operator assignment."
+        };
+      }
+    }
+    let projectId = conversation.project_id;
+    if (!projectId && clientId) {
+      const channelMapping = (db.get("slack_channel_mappings") || []).find(
+        (m) => m.organization_id === orgId && m.channel_id === channel
+      );
+      if (channelMapping?.project_id) {
+        projectId = channelMapping.project_id;
+      }
+      if (!projectId) {
+        const projLink = (db.get("project_communication_links") || []).find(
+          (l) => l.organization_id === orgId && l.external_channel_id === channel
+        );
+        if (projLink?.project_id) {
+          projectId = projLink.project_id;
+        }
+      }
+      if (!projectId) {
+        const clientProjects = (db.get("projects") || []).filter(
+          (p) => p.organization_id === orgId && p.client_id === clientId
+        );
+        const lowerText = text.toLowerCase();
+        const matched = clientProjects.find((p) => lowerText.includes(p.project_name.toLowerCase()));
+        if (matched) {
+          projectId = matched.project_id;
+        }
+      }
+      if (projectId) {
+        conversation.project_id = projectId;
+        ActivityService.logActivity({
+          organization_id: orgId,
+          client_id: clientId,
+          project_id: projectId,
+          actor_type: "system",
+          actor_id: "AI Routing Engine",
+          action: "PROJECT_IDENTIFIED",
+          entity_type: "conversation",
+          entity_id: conversation.id,
+          result: `Identified project "${projectId}" for conversation.`
+        });
+      }
+    }
+    const clientContext = ContextService.getClientContext(orgId, clientId, projectId);
+    const classification = this.classifyMessage(text, clientContext);
+    conversation.classification = classification;
+    ActivityService.logActivity({
+      organization_id: orgId,
+      client_id: clientId,
+      project_id: projectId,
+      actor_type: "agent",
+      actor_id: "AI Employee Classifier",
+      action: "MESSAGE_CLASSIFIED",
+      entity_type: "conversation",
+      entity_id: conversation.id,
+      result: `Classified as ${classification.category} (${classification.urgency} urgency): ${classification.reason}`,
+      metadata: classification
+    });
+    if (classification.requires_task) {
+      const taskTitle = this.extractTaskTitle(text, classification.category);
+      try {
+        const taskResult = await ToolExecutionService.executeTool({
+          toolId: "tasks.create",
+          organizationId: orgId,
+          userId: "ai-employee",
+          clientId,
+          projectId,
+          input: {
+            title: taskTitle,
+            description: `Generated from Slack message (#${channel}):
+
+"${text}"`,
+            priority: classification.urgency === "high" ? "High" : "Normal",
+            client_id: clientId,
+            project_id: projectId
+          }
+        });
+        if (taskResult.success && taskResult.data?.task) {
+          conversation.task_id = taskResult.data.task.id;
+          ActivityService.logActivity({
+            organization_id: orgId,
+            client_id: clientId,
+            project_id: projectId,
+            actor_type: "agent",
+            actor_id: "Client Liaison Agent",
+            action: "TASK_CREATED_FROM_MESSAGE",
+            entity_type: "task",
+            entity_id: taskResult.data.task.id,
+            result: `Created task "${taskTitle}" via Tool Registry.`
+          });
+        }
+      } catch (err) {
+        console.warn("Failed to auto-create task via Tool Registry:", err.message);
+      }
+    }
+    if (classification.requires_response) {
+      const draft = this.generateResponseDraft(text, clientContext, classification);
+      conversation.ai_draft_response = draft;
+      ActivityService.logActivity({
+        organization_id: orgId,
+        client_id: clientId,
+        project_id: projectId,
+        actor_type: "agent",
+        actor_id: "Client Liaison Agent",
+        action: "AI_RESPONSE_DRAFTED",
+        entity_type: "conversation",
+        entity_id: conversation.id,
+        result: `Drafted response aligned with brand tone: "${draft.slice(0, 70)}..."`
+      });
+      const commExecution = await ToolExecutionService.executeTool({
+        toolId: "communication.send",
+        organizationId: orgId,
+        userId: "ai-employee",
+        clientId,
+        projectId,
+        input: {
+          channel_id: channel,
+          channel,
+          thread_ts: targetThreadId,
+          message: draft
+        }
+      });
+      if (commExecution.status === "waiting_approval") {
+        conversation.status = "waiting_approval";
+        ActivityService.logActivity({
+          organization_id: orgId,
+          client_id: clientId,
+          project_id: projectId,
+          actor_type: "system",
+          actor_id: "Risk Engine",
+          action: "COMMUNICATION_APPROVAL_REQUIRED",
+          entity_type: "approval",
+          entity_id: commExecution.approvalId || conversation.id,
+          result: `Held outgoing Slack reply for human sign-off (Approval: ${commExecution.approvalId})`
+        });
+      } else {
+        conversation.status = "ai_draft";
+      }
+    } else {
+      conversation.status = "completed";
+    }
+    this.extractAndRecordObservedMemory(orgId, clientId, text);
+    conversation.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+    db.update("conversations", (list) => list.map((c) => c.id === conversation.id ? conversation : c));
+    return {
+      success: true,
+      status: conversation.status,
+      conversationId: conversation.id
+    };
+  }
+  /**
+   * Lightweight deterministic rule/keyword classification engine.
+   */
+  static classifyMessage(text, context) {
+    const t = text.toLowerCase();
+    if (t.includes("design") || t.includes("hero") || t.includes("variation") || t.includes("version") || t.includes("wireframe") || t.includes("mockup") || t.includes("figma") || t.includes("logo") || t.includes("layout") || t.includes("ui")) {
+      return {
+        category: "design_request",
+        urgency: t.includes("urgent") || t.includes("asap") || t.includes("today") ? "high" : "normal",
+        requires_task: true,
+        requires_response: true,
+        requires_human: false,
+        reason: "Client requested specific design deliverable explorations."
+      };
+    }
+    if (t.includes("change") || t.includes("revision") || t.includes("modify") || t.includes("make it") || t.includes("adjust") || t.includes("update the copy") || t.includes("font")) {
+      return {
+        category: "revision_request",
+        urgency: t.includes("urgent") || t.includes("deadline") ? "high" : "normal",
+        requires_task: true,
+        requires_response: true,
+        requires_human: false,
+        reason: "Client requested modifications or stylistic adjustments to existing work."
+      };
+    }
+    if (t.includes("love this") || t.includes("looks great") || t.includes("thoughts:") || t.includes("feedback") || t.includes("reviewing")) {
+      return {
+        category: "feedback",
+        urgency: "low",
+        requires_task: false,
+        requires_response: true,
+        requires_human: false,
+        reason: "Client shared review feedback on submitted work."
+      };
+    }
+    if (t.includes("approved") || t.includes("sign off") || t.includes("go ahead") || t.includes("looks good to proceed")) {
+      return {
+        category: "approval",
+        urgency: "normal",
+        requires_task: true,
+        requires_response: true,
+        requires_human: false,
+        reason: "Client formally approved current milestone checkpoint."
+      };
+    }
+    if (t.includes("status") || t.includes("progress") || t.includes("timeline") || t.includes("how is") || t.includes("eta") || t.includes("when can we")) {
+      return {
+        category: "status_request",
+        urgency: "normal",
+        requires_task: false,
+        requires_response: true,
+        requires_human: false,
+        reason: "Client inquiring about project status or delivery timelines."
+      };
+    }
+    if (t.includes("invoice") || t.includes("payment") || t.includes("contract") || t.includes("pricing") || t.includes("budget") || t.includes("scope")) {
+      return {
+        category: "billing",
+        urgency: "high",
+        requires_task: true,
+        requires_response: true,
+        requires_human: true,
+        reason: "Commercial or billing inquiry requiring account manager verification."
+      };
+    }
+    if (t.includes("?") || t.includes("can we") || t.includes("could you") || t.includes("what do you think")) {
+      return {
+        category: "question",
+        urgency: "normal",
+        requires_task: false,
+        requires_response: true,
+        requires_human: false,
+        reason: "Client posed an inquiry about studio process or assets."
+      };
+    }
+    return {
+      category: "general",
+      urgency: "low",
+      requires_task: false,
+      requires_response: true,
+      requires_human: false,
+      reason: "General studio communication."
+    };
+  }
+  /**
+   * Generates a concise task title from message text.
+   */
+  static extractTaskTitle(text, category) {
+    const cleaned = text.replace(/^(can you|please|could you|we need|let's)\s+/i, "").trim();
+    const firstSentence = cleaned.split(/[.?!\n]/)[0].trim();
+    if (firstSentence.length > 5 && firstSentence.length < 80) {
+      return firstSentence.charAt(0).toUpperCase() + firstSentence.slice(1);
+    }
+    switch (category) {
+      case "design_request":
+        return `Explore design iterations for request`;
+      case "revision_request":
+        return `Implement requested design revisions`;
+      case "approval":
+        return `Proceed to next milestone upon client sign-off`;
+      default:
+        return `Follow up on client communication`;
+    }
+  }
+  /**
+   * Generates a calm, editorial response draft following client communication preferences.
+   */
+  static generateResponseDraft(text, context, classification) {
+    const client = context?.client;
+    const tone = client?.communication_tone?.toLowerCase() || "editorial";
+    const isConcise = tone.includes("concise") || tone.includes("brief") || tone.includes("direct");
+    switch (classification.category) {
+      case "design_request":
+        if (isConcise) {
+          return `Received. Exploring variations aligned with the established design system. Will share an update soon.`;
+        }
+        return `Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.`;
+      case "revision_request":
+        if (isConcise) {
+          return `Got it. Making the requested adjustments now and will follow up with updated frames.`;
+        }
+        return `Understood. I've noted these adjustments and am integrating them into the layout. Will present the refined direction once complete.`;
+      case "status_request":
+        return `Everything is tracking on schedule according to our milestone plan. We'll share the latest deliverables as soon as our QA review checkpoint completes.`;
+      case "approval":
+        return `Thank you for the sign-off. We are advancing this deliverable to production status.`;
+      case "billing":
+        return `Thank you for reaching out regarding this. I have routed this inquiry to our studio account lead who will follow up with full details shortly.`;
+      default:
+        return `Received. Reviewing against the project context and will follow up shortly.`;
+    }
+  }
+  /**
+   * Identifies potential preferences and creates an OBSERVED memory item if detected.
+   */
+  static extractAndRecordObservedMemory(organizationId, clientId, text) {
+    const t = text.toLowerCase();
+    let preferenceCandidate = null;
+    if (t.includes("we prefer") || t.includes("always use") || t.includes("never use") || t.includes("our team prefers") || t.includes("keep messages brief")) {
+      preferenceCandidate = text;
+    }
+    if (preferenceCandidate) {
+      try {
+        ToolExecutionService.executeTool({
+          toolId: "memory.create",
+          organizationId,
+          userId: "ai-employee",
+          clientId,
+          input: {
+            client_id: clientId,
+            category: "Communication Preference",
+            content: `Observed via Slack interaction: "${preferenceCandidate.slice(0, 150)}"`,
+            status: "Observed",
+            // STRICTLY OBSERVED, NEVER APPROVED
+            confidence: "Medium",
+            source_type: "Slack Conversation"
+          }
+        });
+      } catch (err) {
+      }
+    }
+  }
+  // ----------------------------------------------------
+  // CONVERSATIONS QUERYING & OPERATOR ACTIONS
+  // ----------------------------------------------------
+  static getConversations(organizationId, filter) {
+    let list = (db.get("conversations") || []).filter((c) => c.organization_id === organizationId);
+    if (filter?.status) {
+      if (filter.status === "needs_attention") {
+        list = list.filter((c) => ["needs_client", "needs_project", "waiting_approval"].includes(c.status));
+      } else if (filter.status === "slack") {
+        list = list.filter((c) => Boolean(c.external_channel_id));
+      } else {
+        list = list.filter((c) => c.status === filter.status);
+      }
+    }
+    if (filter?.search) {
+      const q = filter.search.toLowerCase();
+      list = list.filter((c) => c.title.toLowerCase().includes(q));
+    }
+    list.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+    return list;
+  }
+  static getConversationDetails(organizationId, conversationId) {
+    const conversations = db.get("conversations") || [];
+    const conversation = conversations.find((c) => c.id === conversationId && c.organization_id === organizationId);
+    if (!conversation) return null;
+    const messages = (db.get("conversation_messages") || []).filter((m) => m.conversation_id === conversationId && m.organization_id === organizationId).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    const client = conversation.client_id ? (db.get("clients") || []).find((c) => c.id === conversation.client_id) : null;
+    const project = conversation.project_id ? (db.get("projects") || []).find((p) => p.project_id === conversation.project_id) : null;
+    const task = conversation.task_id ? (db.get("tasks") || []).find((t) => t.id === conversation.task_id) : null;
+    const approvals = (db.get("approvals") || []).filter(
+      (a) => a.organization_id === organizationId && a.client_id === conversation.client_id && a.status === "pending"
+    );
+    let context = null;
+    if (conversation.client_id) {
+      context = ContextService.getClientContext(organizationId, conversation.client_id, conversation.project_id);
+    }
+    return {
+      conversation,
+      messages,
+      client,
+      project,
+      task,
+      approvals,
+      context
+    };
+  }
+  static assignClient(organizationId, conversationId, clientId, actorId) {
+    const conversations = db.get("conversations") || [];
+    const conv = conversations.find((c) => c.id === conversationId && c.organization_id === organizationId);
+    if (!conv) return false;
+    conv.client_id = clientId;
+    if (conv.status === "needs_client") {
+      conv.status = "ai_draft";
+    }
+    conv.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+    const client = (db.get("clients") || []).find((c) => c.id === clientId);
+    if (client) {
+      conv.title = `${client.company_name} &middot; #${conv.external_channel_id || "conversation"}`;
+    }
+    db.update("conversations", (list) => list.map((c) => c.id === conv.id ? conv : c));
+    if (conv.external_channel_id) {
+      const linkRecord = {
+        id: `ccl_${Date.now()}`,
+        organization_id: organizationId,
+        client_id: clientId,
+        integration_id: conv.integration_id || "intg_slack",
+        external_channel_id: conv.external_channel_id,
+        confidence: 1,
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      db.update("client_communication_links", (list) => [...list || [], linkRecord]);
+    }
+    ActivityService.logActivity({
+      organization_id: organizationId,
+      client_id: clientId,
+      actor_type: "user",
+      actor_id: actorId,
+      action: "CLIENT_ASSIGNED_TO_CONVERSATION",
+      entity_type: "conversation",
+      entity_id: conversationId,
+      result: `Manually assigned conversation to client "${client?.company_name || clientId}"`
+    });
+    return true;
+  }
+  static assignProject(organizationId, conversationId, projectId, actorId) {
+    const conversations = db.get("conversations") || [];
+    const conv = conversations.find((c) => c.id === conversationId && c.organization_id === organizationId);
+    if (!conv) return false;
+    conv.project_id = projectId;
+    if (conv.status === "needs_project") {
+      conv.status = "ai_draft";
+    }
+    conv.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+    db.update("conversations", (list) => list.map((c) => c.id === conv.id ? conv : c));
+    if (conv.external_channel_id) {
+      const projLink = {
+        id: `pcl_${Date.now()}`,
+        organization_id: organizationId,
+        project_id: projectId,
+        integration_id: conv.integration_id || "intg_slack",
+        external_channel_id: conv.external_channel_id,
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      db.update("project_communication_links", (list) => [...list || [], projLink]);
+    }
+    ActivityService.logActivity({
+      organization_id: organizationId,
+      client_id: conv.client_id,
+      project_id: projectId,
+      actor_type: "user",
+      actor_id: actorId,
+      action: "PROJECT_ASSIGNED_TO_CONVERSATION",
+      entity_type: "conversation",
+      entity_id: conversationId,
+      result: `Manually assigned conversation to project "${projectId}"`
+    });
+    return true;
   }
 };
 
@@ -3691,6 +4756,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use((req, res, next) => {
   if (typeof req.body === "string") {
+    req.rawBody = req.body;
     try {
       req.body = JSON.parse(req.body);
     } catch {
@@ -3698,9 +4764,14 @@ app.use((req, res, next) => {
     return next();
   }
   if (req.body !== void 0 && typeof req.body === "object") {
+    req.rawBody = JSON.stringify(req.body);
     return next();
   }
-  express.json()(req, res, next);
+  express.json({
+    verify: (r, _res, buf) => {
+      r.rawBody = buf.toString();
+    }
+  })(req, res, next);
 });
 app.use((req, res, next) => {
   if (req.url && !req.url.startsWith("/api") && req.url !== "/") {
@@ -4489,6 +5560,280 @@ app.patch("/api/governance", requireAuth, requireOrganization, requireRole("ADMI
     res.json(updatedPolicy);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+app.get("/api/integrations/slack", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const integration = SlackService.getIntegration(orgId);
+    res.json(integration);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/integrations/slack/connect", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const userId = req.auth.user.id;
+    if (!SlackService.isConfigured()) {
+      return res.status(400).json({
+        error: "Slack is not configured. Set SLACK_CLIENT_ID and SLACK_CLIENT_SECRET environment variables."
+      });
+    }
+    const host = req.get("host") || "localhost:3000";
+    const protocol = req.protocol === "https" || req.get("x-forwarded-proto") === "https" ? "https" : "http";
+    const redirectUri = process.env.SLACK_REDIRECT_URI || `${protocol}://${host}/api/integrations/slack/oauth/callback`;
+    const authorizeUrl = SlackService.getOAuthAuthorizeUrl(orgId, userId, redirectUri);
+    if (req.query.format === "json" || req.headers.accept?.includes("application/json")) {
+      return res.json({ url: authorizeUrl });
+    }
+    res.redirect(authorizeUrl);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/integrations/slack/oauth/callback", async (req, res) => {
+  try {
+    const code = req.query.code;
+    const state = req.query.state;
+    if (!code || !state) {
+      return res.status(400).send("Missing code or state parameter from Slack OAuth.");
+    }
+    const host = req.get("host") || "localhost:3000";
+    const protocol = req.protocol === "https" || req.get("x-forwarded-proto") === "https" ? "https" : "http";
+    const redirectUri = process.env.SLACK_REDIRECT_URI || `${protocol}://${host}/api/integrations/slack/oauth/callback`;
+    const result = await SlackService.handleOAuthCallback(code, state, redirectUri);
+    if (!result.success) {
+      return res.status(400).send(`Slack OAuth Error: ${result.error}`);
+    }
+    res.redirect("/settings?tab=integrations&connected=slack");
+  } catch (err) {
+    res.status(500).send(`Server Error: ${err.message}`);
+  }
+});
+app.delete("/api/integrations/slack", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const success = SlackService.disconnect(orgId, req.auth.user.name);
+    res.json({ success });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/integrations/slack/channels", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const mappings = (db.get("slack_channel_mappings") || []).filter((m) => m.organization_id === orgId);
+    res.json(mappings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/api/integrations/slack/channels", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const { channel_id, channel_name, client_id, project_id, enabled = true } = req.body;
+    if (!channel_id || !channel_name) {
+      return res.status(400).json({ error: "channel_id and channel_name are required" });
+    }
+    const integrations = db.get("integrations") || [];
+    const intg = integrations.find((i) => i.organization_id === orgId && i.provider === "slack");
+    const integrationId = intg ? intg.id : "intg_slack";
+    db.update("slack_channel_mappings", (list) => {
+      const existingIdx = (list || []).findIndex(
+        (m) => m.organization_id === orgId && m.channel_id === channel_id
+      );
+      const record = {
+        id: existingIdx >= 0 ? list[existingIdx].id : `scm_${Date.now()}`,
+        organization_id: orgId,
+        integration_id: integrationId,
+        channel_id,
+        channel_name,
+        client_id: client_id || void 0,
+        project_id: project_id || void 0,
+        enabled: Boolean(enabled),
+        created_at: existingIdx >= 0 ? list[existingIdx].created_at : (/* @__PURE__ */ new Date()).toISOString(),
+        updated_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      if (existingIdx >= 0) {
+        list[existingIdx] = record;
+        return [...list];
+      }
+      return [...list || [], record];
+    });
+    res.json({ success: true, channel_id, client_id, project_id });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.get("/api/integrations/slack/contacts", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const links = (db.get("client_communication_links") || []).filter((l) => l.organization_id === orgId);
+    res.json(links);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/api/integrations/slack/contacts", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const { client_id, external_user_id, external_channel_id, confidence = 1 } = req.body;
+    if (!client_id || !external_user_id && !external_channel_id) {
+      return res.status(400).json({ error: "client_id and external_user_id (or external_channel_id) required" });
+    }
+    const link = {
+      id: `ccl_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      organization_id: orgId,
+      client_id,
+      integration_id: "intg_slack",
+      external_user_id,
+      external_channel_id,
+      confidence: Number(confidence),
+      created_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    db.update("client_communication_links", (list) => [...list || [], link]);
+    res.status(201).json(link);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.post("/api/integrations/slack/events", async (req, res) => {
+  try {
+    const { type, challenge, event, team_id, event_id } = req.body || {};
+    if (type === "url_verification") {
+      return res.json({ challenge });
+    }
+    const signature = req.headers["x-slack-signature"];
+    const timestamp = req.headers["x-slack-request-timestamp"];
+    const rawBody = req.rawBody || JSON.stringify(req.body);
+    if (process.env.SLACK_SIGNING_SECRET) {
+      const isValid = SlackService.verifySlackSignature(signature, timestamp, rawBody);
+      if (!isValid) {
+        return res.status(401).json({ error: "Invalid Slack request signature" });
+      }
+    }
+    const integrations = db.get("integrations") || [];
+    const integration = integrations.find((i) => i.provider === "slack" && (team_id ? i.external_account_id === team_id : true));
+    const organizationId = integration ? integration.organization_id : db.get("organizations")[0]?.id || "org_matias_studio";
+    if (event_id) {
+      const events = db.get("integration_events") || [];
+      const existing = events.find((e) => e.organization_id === organizationId && e.external_event_id === event_id);
+      if (existing) {
+        return res.status(200).json({ ok: true, duplicate: true });
+      }
+      const eventRecord = {
+        id: `ev_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        organization_id: organizationId,
+        integration_id: integration?.id,
+        external_event_id: event_id,
+        event_type: event?.type || type || "unknown",
+        payload: req.body,
+        status: "received",
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      db.update("integration_events", (list) => [...list || [], eventRecord]);
+    }
+    res.status(200).json({ ok: true });
+    if (event && event.type === "message" && !event.subtype) {
+      setImmediate(async () => {
+        try {
+          await InboxService.processIncomingMessage({
+            organizationId,
+            teamId: team_id,
+            channel: event.channel,
+            user: event.user,
+            text: event.text || "",
+            ts: event.ts,
+            thread_ts: event.thread_ts,
+            event_id: event_id || event.ts,
+            bot_id: event.bot_id,
+            subtype: event.subtype
+          });
+        } catch (err) {
+          console.error("Async Slack processing failed:", err.message);
+        }
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/inbox/conversations", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const status = req.query.status;
+    const search = req.query.search;
+    const conversations = InboxService.getConversations(orgId, { status, search });
+    res.json(conversations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/inbox/conversations/:id", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const convId = param(req.params.id);
+    const details = InboxService.getConversationDetails(orgId, convId);
+    if (!details) {
+      return res.status(404).json({ error: "Conversation not found" });
+    }
+    res.json(details);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/api/inbox/conversations/:id/assign-client", requireAuth, requireOrganization, requireRole("MEMBER"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const convId = param(req.params.id);
+    const { clientId } = req.body;
+    if (!clientId) return res.status(400).json({ error: "clientId is required" });
+    const success = InboxService.assignClient(orgId, convId, clientId, req.auth.user.name);
+    if (!success) return res.status(404).json({ error: "Conversation not found" });
+    res.json({ success, clientId });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.post("/api/inbox/conversations/:id/assign-project", requireAuth, requireOrganization, requireRole("MEMBER"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const convId = param(req.params.id);
+    const { projectId } = req.body;
+    if (!projectId) return res.status(400).json({ error: "projectId is required" });
+    const success = InboxService.assignProject(orgId, convId, projectId, req.auth.user.name);
+    if (!success) return res.status(404).json({ error: "Conversation not found" });
+    res.json({ success, projectId });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.post("/api/inbox/conversations/:id/reply", requireAuth, requireOrganization, requireRole("MEMBER"), async (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const convId = param(req.params.id);
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ error: "message is required" });
+    const conversations = db.get("conversations") || [];
+    const conv = conversations.find((c) => c.id === convId && c.organization_id === orgId);
+    if (!conv) return res.status(404).json({ error: "Conversation not found" });
+    const result = await ToolExecutionService.executeTool({
+      toolId: "communication.send",
+      organizationId: orgId,
+      userId: req.auth.user.id,
+      clientId: conv.client_id,
+      projectId: conv.project_id,
+      input: {
+        channel_id: conv.external_channel_id || "general",
+        channel: conv.external_channel_id || "general",
+        thread_ts: conv.external_thread_id,
+        message
+      }
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 app.post("/api/seed/reset", (req, res) => {

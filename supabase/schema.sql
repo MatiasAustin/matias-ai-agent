@@ -508,3 +508,154 @@ CREATE POLICY "Users can access their organization governance_policies" ON gover
         )
     );
 
+-- ==========================================
+-- INTEGRATIONS & INBOX (SLACK V1)
+-- ==========================================
+
+-- 23. INTEGRATIONS (Slack, etc.)
+CREATE TABLE IF NOT EXISTS integrations (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    provider TEXT NOT NULL CHECK (provider IN ('slack')),
+    status TEXT NOT NULL DEFAULT 'disconnected' CHECK (status IN ('connected', 'disconnected', 'error', 'pending')),
+    display_name TEXT NOT NULL,
+    external_account_id TEXT, -- e.g. Slack Team ID
+    encrypted_access_token TEXT,
+    encrypted_bot_token TEXT,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(organization_id, provider)
+);
+
+-- 24. CONVERSATIONS
+CREATE TABLE IF NOT EXISTS conversations (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    client_id TEXT REFERENCES clients(id) ON DELETE SET NULL,
+    project_id TEXT,
+    integration_id TEXT REFERENCES integrations(id) ON DELETE SET NULL,
+    external_channel_id TEXT,
+    external_thread_id TEXT,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'processing', 'needs_client', 'needs_project', 'ai_draft', 'waiting_approval', 'completed', 'archived')),
+    classification JSONB,
+    ai_draft_response TEXT,
+    task_id TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 25. CONVERSATION MESSAGES
+CREATE TABLE IF NOT EXISTS conversation_messages (
+    id TEXT PRIMARY KEY,
+    conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    external_message_id TEXT,
+    sender_type TEXT NOT NULL CHECK (sender_type IN ('user', 'assistant', 'system', 'bot')),
+    external_sender_id TEXT,
+    sender_name TEXT NOT NULL,
+    content TEXT NOT NULL,
+    message_type TEXT NOT NULL DEFAULT 'user' CHECK (message_type IN ('user', 'assistant', 'system', 'bot')),
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 26. INTEGRATION EVENTS (Idempotency and Audit)
+CREATE TABLE IF NOT EXISTS integration_events (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    integration_id TEXT REFERENCES integrations(id) ON DELETE CASCADE,
+    external_event_id TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status TEXT NOT NULL DEFAULT 'received' CHECK (status IN ('received', 'processing', 'processed', 'failed', 'ignored')),
+    processed_at TIMESTAMPTZ,
+    error TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(organization_id, external_event_id)
+);
+
+-- 27. SLACK CHANNEL MAPPINGS
+CREATE TABLE IF NOT EXISTS slack_channel_mappings (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    integration_id TEXT NOT NULL REFERENCES integrations(id) ON DELETE CASCADE,
+    channel_id TEXT NOT NULL,
+    channel_name TEXT NOT NULL,
+    client_id TEXT REFERENCES clients(id) ON DELETE SET NULL,
+    project_id TEXT,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(organization_id, integration_id, channel_id)
+);
+
+-- 28. CLIENT COMMUNICATION LINKS
+CREATE TABLE IF NOT EXISTS client_communication_links (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    client_id TEXT NOT NULL REFERENCES clients(id) ON DELETE CASCADE,
+    integration_id TEXT NOT NULL REFERENCES integrations(id) ON DELETE CASCADE,
+    external_user_id TEXT,
+    external_channel_id TEXT,
+    confidence REAL NOT NULL DEFAULT 1.0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 29. PROJECT COMMUNICATION LINKS
+CREATE TABLE IF NOT EXISTS project_communication_links (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    project_id TEXT NOT NULL,
+    integration_id TEXT NOT NULL REFERENCES integrations(id) ON DELETE CASCADE,
+    external_channel_id TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- INDEXES
+CREATE INDEX IF NOT EXISTS idx_integrations_org ON integrations(organization_id);
+CREATE INDEX IF NOT EXISTS idx_integrations_external_acct ON integrations(external_account_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_org ON conversations(organization_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_client ON conversations(organization_id, client_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_status ON conversations(organization_id, status);
+CREATE INDEX IF NOT EXISTS idx_conversations_external ON conversations(organization_id, external_channel_id, external_thread_id);
+CREATE INDEX IF NOT EXISTS idx_messages_conversation ON conversation_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_messages_org ON conversation_messages(organization_id);
+CREATE INDEX IF NOT EXISTS idx_messages_external ON conversation_messages(organization_id, external_message_id);
+CREATE INDEX IF NOT EXISTS idx_events_idempotency ON integration_events(organization_id, external_event_id);
+CREATE INDEX IF NOT EXISTS idx_channel_mappings_org ON slack_channel_mappings(organization_id, channel_id);
+CREATE INDEX IF NOT EXISTS idx_client_comm_links_user ON client_communication_links(organization_id, external_user_id);
+CREATE INDEX IF NOT EXISTS idx_project_comm_links_chan ON project_communication_links(organization_id, external_channel_id);
+
+-- ROW LEVEL SECURITY (RLS) POLICIES
+ALTER TABLE integrations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversation_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE integration_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE slack_channel_mappings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE client_communication_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE project_communication_links ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can access their organization integrations" ON integrations
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+CREATE POLICY "Users can access their organization conversations" ON conversations
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+CREATE POLICY "Users can access their organization conversation_messages" ON conversation_messages
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+CREATE POLICY "Users can access their organization integration_events" ON integration_events
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+CREATE POLICY "Users can access their organization slack_channel_mappings" ON slack_channel_mappings
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+CREATE POLICY "Users can access their organization client_communication_links" ON client_communication_links
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+CREATE POLICY "Users can access their organization project_communication_links" ON project_communication_links
+    FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
+
+

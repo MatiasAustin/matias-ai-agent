@@ -114,7 +114,14 @@ class Database {
       agent_permissions: existing.agent_permissions && existing.agent_permissions.length > 0 ? existing.agent_permissions : initialDevelopmentSeed.agent_permissions,
       approvals: existing.approvals || initialDevelopmentSeed.approvals,
       tool_executions: existing.tool_executions || [],
-      governance_policies: existing.governance_policies && existing.governance_policies.length > 0 ? existing.governance_policies : initialDevelopmentSeed.governance_policies
+      governance_policies: existing.governance_policies && existing.governance_policies.length > 0 ? existing.governance_policies : initialDevelopmentSeed.governance_policies,
+      integrations: existing.integrations || [],
+      conversations: existing.conversations || [],
+      conversation_messages: existing.conversation_messages || [],
+      integration_events: existing.integration_events || [],
+      slack_channel_mappings: existing.slack_channel_mappings || [],
+      client_communication_links: existing.client_communication_links || [],
+      project_communication_links: existing.project_communication_links || []
     };
 
     const defaultOrgId = schema.organizations[0]?.id || 'org_matias_studio';
@@ -161,6 +168,27 @@ class Database {
     });
     schema.governance_policies.forEach(gp => {
       if (!gp.organization_id) gp.organization_id = defaultOrgId;
+    });
+    schema.integrations.forEach(i => {
+      if (!i.organization_id) i.organization_id = defaultOrgId;
+    });
+    schema.conversations.forEach(c => {
+      if (!c.organization_id) c.organization_id = defaultOrgId;
+    });
+    schema.conversation_messages.forEach(cm => {
+      if (!cm.organization_id) cm.organization_id = defaultOrgId;
+    });
+    schema.integration_events.forEach(ie => {
+      if (!ie.organization_id) ie.organization_id = defaultOrgId;
+    });
+    schema.slack_channel_mappings.forEach(scm => {
+      if (!scm.organization_id) scm.organization_id = defaultOrgId;
+    });
+    schema.client_communication_links.forEach(ccl => {
+      if (!ccl.organization_id) ccl.organization_id = defaultOrgId;
+    });
+    schema.project_communication_links.forEach(pcl => {
+      if (!pcl.organization_id) pcl.organization_id = defaultOrgId;
     });
 
     // If users table was empty or missing admin

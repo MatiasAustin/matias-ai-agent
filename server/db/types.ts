@@ -406,6 +406,134 @@ export interface OrgGovernancePolicy {
   updated_at: string;
 }
 
+// ==========================================
+// INTEGRATIONS & INBOX (SLACK V1)
+// ==========================================
+export type IntegrationProvider = 'slack';
+export type IntegrationStatus = 'connected' | 'disconnected' | 'error' | 'pending';
+
+export interface IntegrationRecord {
+  id: string;
+  organization_id: string;
+  provider: IntegrationProvider;
+  status: IntegrationStatus;
+  display_name: string;
+  external_account_id?: string; // Slack team ID
+  encrypted_access_token?: string; // encrypted server-side
+  encrypted_bot_token?: string; // encrypted server-side
+  metadata?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+export type ConversationStatus = 
+  | 'new' 
+  | 'processing' 
+  | 'needs_client' 
+  | 'needs_project' 
+  | 'ai_draft' 
+  | 'waiting_approval' 
+  | 'completed' 
+  | 'archived';
+
+export interface ConversationClassification {
+  category: 
+    | 'design_request' 
+    | 'revision_request' 
+    | 'question' 
+    | 'feedback' 
+    | 'approval' 
+    | 'status_request' 
+    | 'new_project' 
+    | 'billing' 
+    | 'general' 
+    | 'unknown';
+  urgency: 'low' | 'normal' | 'high';
+  requires_task: boolean;
+  requires_response: boolean;
+  requires_human: boolean;
+  reason: string;
+}
+
+export interface ConversationRecord {
+  id: string;
+  organization_id: string;
+  client_id?: string;
+  project_id?: string;
+  integration_id?: string;
+  external_channel_id?: string;
+  external_thread_id?: string;
+  title: string;
+  status: ConversationStatus;
+  classification?: ConversationClassification;
+  ai_draft_response?: string;
+  task_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type MessageSenderType = 'user' | 'assistant' | 'system' | 'bot';
+
+export interface ConversationMessageRecord {
+  id: string;
+  conversation_id: string;
+  organization_id: string;
+  external_message_id?: string;
+  sender_type: MessageSenderType;
+  external_sender_id?: string;
+  sender_name: string;
+  content: string;
+  message_type: 'user' | 'assistant' | 'system' | 'bot';
+  metadata?: Record<string, any>;
+  created_at: string;
+}
+
+export interface IntegrationEventRecord {
+  id: string;
+  organization_id: string;
+  integration_id?: string;
+  external_event_id: string; // Slack event_id for idempotency
+  event_type: string;
+  payload: Record<string, any>;
+  status: 'received' | 'processing' | 'processed' | 'failed' | 'ignored';
+  processed_at?: string;
+  error?: string;
+  created_at: string;
+}
+
+export interface SlackChannelMappingRecord {
+  id: string;
+  organization_id: string;
+  integration_id: string;
+  channel_id: string;
+  channel_name: string;
+  client_id?: string;
+  project_id?: string;
+  enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientCommunicationLinkRecord {
+  id: string;
+  organization_id: string;
+  client_id: string;
+  integration_id: string;
+  external_user_id?: string;
+  external_channel_id?: string;
+  confidence: number;
+  created_at: string;
+}
+
+export interface ProjectCommunicationLinkRecord {
+  id: string;
+  organization_id: string;
+  project_id: string;
+  integration_id: string;
+  external_channel_id: string;
+  created_at: string;
+}
+
 export interface DatabaseSchema {
   users: UserRecord[];
   organizations: OrganizationRecord[];
@@ -428,5 +556,12 @@ export interface DatabaseSchema {
   approvals: ApprovalRecord[];
   tool_executions: ToolExecutionRecord[];
   governance_policies: OrgGovernancePolicy[];
+  integrations: IntegrationRecord[];
+  conversations: ConversationRecord[];
+  conversation_messages: ConversationMessageRecord[];
+  integration_events: IntegrationEventRecord[];
+  slack_channel_mappings: SlackChannelMappingRecord[];
+  client_communication_links: ClientCommunicationLinkRecord[];
+  project_communication_links: ProjectCommunicationLinkRecord[];
 }
 

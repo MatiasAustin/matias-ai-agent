@@ -21,7 +21,11 @@ import {
   ToolDefinition,
   ApprovalRecord,
   ToolExecutionRecord,
-  OrgGovernancePolicy
+  OrgGovernancePolicy,
+  ConversationRecord,
+  ConversationMessageRecord,
+  SlackChannelMappingRecord,
+  ClientCommunicationLinkRecord
 } from '../../server/db/types';
 import { CreateClientPayload } from '../../server/services/clientService';
 import { ClientContextPayload } from '../../server/services/contextService';
@@ -345,6 +349,57 @@ export const api = {
     request<OrgGovernancePolicy>('/governance', {
       method: 'PATCH',
       body: JSON.stringify(updates)
+    }),
+
+  // Slack Integration
+  getSlackIntegration: () => request<any>('/integrations/slack'),
+  getSlackConnectUrl: () => request<{ url: string }>('/integrations/slack/connect?format=json'),
+  disconnectSlack: () => request<{ success: boolean }>('/integrations/slack', { method: 'DELETE' }),
+  getSlackChannels: () => request<SlackChannelMappingRecord[]>('/integrations/slack/channels'),
+  saveSlackChannelMapping: (data: Partial<SlackChannelMappingRecord>) =>
+    request<any>('/integrations/slack/channels', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  getSlackContacts: () => request<ClientCommunicationLinkRecord[]>('/integrations/slack/contacts'),
+  saveSlackContactLink: (data: Partial<ClientCommunicationLinkRecord>) =>
+    request<any>('/integrations/slack/contacts', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+
+  // Unified Inbox
+  getInboxConversations: (status?: string, search?: string) => {
+    const sp = new URLSearchParams();
+    if (status) sp.set('status', status);
+    if (search) sp.set('search', search);
+    const qs = sp.toString();
+    return request<ConversationRecord[]>(`/inbox/conversations${qs ? `?${qs}` : ''}`);
+  },
+  getInboxConversationDetails: (id: string) =>
+    request<{
+      conversation: ConversationRecord;
+      messages: ConversationMessageRecord[];
+      client: ClientRecord | null;
+      project: ProjectRecord | null;
+      task: TaskRecord | null;
+      approvals: ApprovalRecord[];
+      context: any;
+    }>(`/inbox/conversations/${id}`),
+  assignConversationClient: (id: string, clientId: string) =>
+    request<{ success: boolean; clientId: string }>(`/inbox/conversations/${id}/assign-client`, {
+      method: 'POST',
+      body: JSON.stringify({ clientId })
+    }),
+  assignConversationProject: (id: string, projectId: string) =>
+    request<{ success: boolean; projectId: string }>(`/inbox/conversations/${id}/assign-project`, {
+      method: 'POST',
+      body: JSON.stringify({ projectId })
+    }),
+  replyToConversation: (id: string, message: string) =>
+    request<any>(`/inbox/conversations/${id}/reply`, {
+      method: 'POST',
+      body: JSON.stringify({ message })
     }),
 
   // Reset seed (dev only)

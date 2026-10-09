@@ -1,5 +1,6 @@
 export type NavigationTab = 
   | 'Dashboard' 
+  | 'Inbox'
   | 'Clients' 
   | 'Projects' 
   | 'Tasks' 

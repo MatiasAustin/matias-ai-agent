@@ -41,7 +41,14 @@ const TABLE_MAP: Record<keyof DatabaseSchema, string> = {
   agent_permissions: 'agent_permissions',
   approvals: 'approvals',
   tool_executions: 'tool_executions',
-  governance_policies: 'governance_policies'
+  governance_policies: 'governance_policies',
+  integrations: 'integrations',
+  conversations: 'conversations',
+  conversation_messages: 'conversation_messages',
+  integration_events: 'integration_events',
+  slack_channel_mappings: 'slack_channel_mappings',
+  client_communication_links: 'client_communication_links',
+  project_communication_links: 'project_communication_links'
 };
 
 /**
@@ -68,7 +75,14 @@ const PK_MAP: Record<keyof DatabaseSchema, string> = {
   agent_permissions: 'id',
   approvals: 'id',
   tool_executions: 'id',
-  governance_policies: 'id'
+  governance_policies: 'id',
+  integrations: 'id',
+  conversations: 'id',
+  conversation_messages: 'id',
+  integration_events: 'id',
+  slack_channel_mappings: 'id',
+  client_communication_links: 'id',
+  project_communication_links: 'id'
 };
 
 /**

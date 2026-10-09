@@ -6,6 +6,7 @@ import { SettingsView } from './components/views/SettingsView';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardView } from './components/views/DashboardView';
+import { InboxView } from './components/views/InboxView';
 import { ClientsView } from './components/views/ClientsView';
 import { ClientWorkspaceView } from './components/views/ClientWorkspaceView';
 import { ClientOnboardingView } from './components/onboarding/ClientOnboardingView';
@@ -89,6 +90,11 @@ const AppContent: React.FC = () => {
       setSelectedProjectId(null);
     } else if (path === '/settings') {
       setActiveTab('Settings');
+      setIsOnboarding(false);
+      setSelectedClientId(null);
+      setSelectedProjectId(null);
+    } else if (path === '/inbox') {
+      setActiveTab('Inbox');
       setIsOnboarding(false);
       setSelectedClientId(null);
       setSelectedProjectId(null);
@@ -434,6 +440,11 @@ const AppContent: React.FC = () => {
               clients={clients}
               memories={memories}
             />
+          )}
+
+          {/* Inbox View */}
+          {activeTab === 'Inbox' && (
+            <InboxView />
           )}
 
           {/* 2. Clients View, Onboarding Flow & Client Workspace */}

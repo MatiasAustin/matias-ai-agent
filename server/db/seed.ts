@@ -524,5 +524,12 @@ export const initialDevelopmentSeed: DatabaseSchema = {
       commercial_budget_enforcement: true,
       updated_at: new Date().toISOString()
     }
-  ]
+  ],
+  integrations: [],
+  conversations: [],
+  conversation_messages: [],
+  integration_events: [],
+  slack_channel_mappings: [],
+  client_communication_links: [],
+  project_communication_links: []
 };
