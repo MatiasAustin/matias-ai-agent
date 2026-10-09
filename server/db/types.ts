@@ -1,3 +1,13 @@
+export type PlatformRole = 'SUPER_ADMIN' | 'USER';
+
+export type OrganizationRole = 'OWNER' | 'ADMIN' | 'MEMBER' | 'VIEWER';
+
+export type OrganizationStatus = 'active' | 'suspended' | 'trial' | 'cancelled';
+
+export type OrganizationPlan = 'Free' | 'Pro' | 'Studio' | 'Enterprise';
+
+export type UserStatus = 'active' | 'suspended';
+
 export type MemoryStatus = 'OFFICIAL' | 'APPROVED' | 'OBSERVED' | 'TEMPORARY';
 
 export type MemoryCategory = 
@@ -56,8 +66,74 @@ export interface ClientPermissions {
   send_quotation: PermissionLevel;
 }
 
+export interface UserRecord {
+  id: string;
+  email: string;
+  password_hash: string;
+  password_salt: string;
+  name: string;
+  platform_role: PlatformRole;
+  status: UserStatus;
+  last_active_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationRecord {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  status: OrganizationStatus;
+  plan: OrganizationPlan;
+  subscription_status?: string;
+  trial_ends_at?: string;
+  billing_customer_id?: string;
+  subscription_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationMemberRecord {
+  id: string;
+  organization_id: string;
+  user_id: string;
+  role: OrganizationRole;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SessionRecord {
+  id: string;
+  token: string;
+  user_id: string;
+  active_organization_id: string;
+  expires_at: string;
+  created_at: string;
+}
+
+export interface InvitationRecord {
+  id: string;
+  organization_id: string;
+  email: string;
+  role: OrganizationRole;
+  invited_by_user_id: string;
+  status: 'pending' | 'accepted' | 'revoked';
+  created_at: string;
+}
+
+export interface FeatureFlagRecord {
+  id: string;
+  organization_id?: string; // null or undefined indicates global flag
+  key: string;
+  enabled: boolean;
+  description?: string;
+  updated_at: string;
+}
+
 export interface ClientRecord {
   id: string;
+  organization_id: string;
   company_name: string;
   website?: string;
   industry: string;
@@ -100,6 +176,7 @@ export interface ClientRecord {
 
 export interface ContactRecord {
   id: string;
+  organization_id: string;
   client_id: string;
   name: string;
   role: string;
@@ -112,6 +189,7 @@ export interface ContactRecord {
 
 export interface ProjectRecord {
   project_id: string;
+  organization_id: string;
   client_id: string;
   project_name: string;
   project_type: string;
@@ -129,6 +207,7 @@ export interface ProjectRecord {
 
 export interface TaskRecord {
   id: string;
+  organization_id: string;
   client_id: string;
   project_id?: string;
   title: string;
@@ -143,6 +222,7 @@ export interface TaskRecord {
 
 export interface ClientMemoryRecord {
   id: string;
+  organization_id: string;
   client_id: string;
   category: MemoryCategory;
   key: string;
@@ -159,6 +239,7 @@ export interface ClientMemoryRecord {
 
 export interface DocumentRecord {
   file_id: string;
+  organization_id: string;
   client_id: string;
   project_id?: string;
   category: DocumentCategory;
@@ -172,6 +253,7 @@ export interface DocumentRecord {
 
 export interface ClientPermissionsRecord {
   id: string;
+  organization_id: string;
   client_id: string;
   permissions: ClientPermissions;
   updated_at: string;
@@ -179,7 +261,8 @@ export interface ClientPermissionsRecord {
 
 export interface ActivityRecord {
   id: string;
-  client_id: string;
+  organization_id?: string;
+  client_id?: string;
   project_id?: string;
   actor_type: 'user' | 'agent' | 'system';
   actor_id: string;
@@ -192,6 +275,12 @@ export interface ActivityRecord {
 }
 
 export interface DatabaseSchema {
+  users: UserRecord[];
+  organizations: OrganizationRecord[];
+  organization_members: OrganizationMemberRecord[];
+  sessions: SessionRecord[];
+  invitations: InvitationRecord[];
+  feature_flags: FeatureFlagRecord[];
   clients: ClientRecord[];
   contacts: ContactRecord[];
   projects: ProjectRecord[];

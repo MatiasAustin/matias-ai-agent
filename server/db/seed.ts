@@ -1,9 +1,121 @@
 import { DatabaseSchema } from './types';
+import { AuthSecurity } from '../services/authSecurity';
+
+const adminCreds = AuthSecurity.hashPassword(process.env.SUPER_ADMIN_PASSWORD || 'Admin123!');
+const ownerCreds = AuthSecurity.hashPassword(process.env.OWNER_PASSWORD || 'Owner123!');
+const memberCreds = AuthSecurity.hashPassword(process.env.MEMBER_PASSWORD || 'Member123!');
+
+const DEFAULT_ORG_ID = 'org_matias_studio';
 
 export const initialDevelopmentSeed: DatabaseSchema = {
+  users: [
+    {
+      id: 'user_admin',
+      email: 'admin@example.com',
+      password_hash: adminCreds.hash,
+      password_salt: adminCreds.salt,
+      name: 'System Super Admin',
+      platform_role: 'SUPER_ADMIN',
+      status: 'active',
+      last_active_at: new Date().toISOString(),
+      created_at: new Date(Date.now() - 86400000 * 10).toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'user_owner',
+      email: 'owner@example.com',
+      password_hash: ownerCreds.hash,
+      password_salt: ownerCreds.salt,
+      name: 'Matias Austin',
+      platform_role: 'USER',
+      status: 'active',
+      last_active_at: new Date().toISOString(),
+      created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'user_member',
+      email: 'member@example.com',
+      password_hash: memberCreds.hash,
+      password_salt: memberCreds.salt,
+      name: 'Elena Rostova',
+      platform_role: 'USER',
+      status: 'active',
+      last_active_at: new Date().toISOString(),
+      created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ],
+  organizations: [
+    {
+      id: DEFAULT_ORG_ID,
+      name: 'Matias Studio',
+      slug: 'matias-studio',
+      status: 'active',
+      plan: 'Studio',
+      subscription_status: 'active',
+      created_at: new Date(Date.now() - 86400000 * 10).toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ],
+  organization_members: [
+    {
+      id: 'member_admin_studio',
+      organization_id: DEFAULT_ORG_ID,
+      user_id: 'user_admin',
+      role: 'OWNER',
+      created_at: new Date(Date.now() - 86400000 * 10).toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'member_owner_studio',
+      organization_id: DEFAULT_ORG_ID,
+      user_id: 'user_owner',
+      role: 'OWNER',
+      created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'member_elena_studio',
+      organization_id: DEFAULT_ORG_ID,
+      user_id: 'user_member',
+      role: 'MEMBER',
+      created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ],
+  sessions: [],
+  invitations: [],
+  feature_flags: [
+    {
+      id: 'flag_slack',
+      organization_id: DEFAULT_ORG_ID,
+      key: 'slack_integration',
+      enabled: false,
+      description: 'Client Slack workspace synchronization',
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'flag_figma',
+      organization_id: DEFAULT_ORG_ID,
+      key: 'figma_integration',
+      enabled: false,
+      description: 'Figma token and vector layout pipeline',
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'flag_browser',
+      organization_id: DEFAULT_ORG_ID,
+      key: 'browser_agent',
+      enabled: false,
+      description: 'Autonomous web research worker',
+      updated_at: new Date().toISOString()
+    }
+  ],
   clients: [
     {
       id: 'demo-xyz-ai',
+      organization_id: DEFAULT_ORG_ID,
       company_name: 'Demo: XYZ Autonomous Systems',
       website: 'https://demo-xyz.ai',
       industry: 'Robotics & Autonomous Systems',
@@ -41,6 +153,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   contacts: [
     {
       id: 'contact-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       name: 'Sarah Lin',
       role: 'VP Product & Brand Architecture',
@@ -52,6 +165,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'contact-demo-2',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       name: 'John Vance',
       role: 'Lead Engineering Partner',
@@ -65,6 +179,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   projects: [
     {
       project_id: 'proj-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       project_name: 'Brand OS & Generative UI System',
       project_type: 'Brand System',
@@ -83,6 +198,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   tasks: [
     {
       id: 'task-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       project_id: 'proj-demo-1',
       title: 'Review high-contrast spatial card tokens',
@@ -96,6 +212,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'task-demo-2',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       project_id: 'proj-demo-1',
       title: 'Consolidate feedback on rotary vibration curves',
@@ -111,6 +228,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   client_memory: [
     {
       id: 'mem-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       category: 'Brand',
       key: 'Brand Personality',
@@ -124,6 +242,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'mem-demo-2',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       category: 'Communication',
       key: 'Client Messaging Cadence',
@@ -137,6 +256,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'mem-demo-3',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       category: 'Visual',
       key: 'Color & Contrast Rules',
@@ -150,6 +270,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'mem-demo-4',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       category: 'Observations',
       key: 'Early Design Feedback Observation',
@@ -165,6 +286,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   documents: [
     {
       file_id: 'doc-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       project_id: 'proj-demo-1',
       category: 'Brand',
@@ -177,6 +299,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       file_id: 'doc-demo-2',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       project_id: 'proj-demo-1',
       category: 'Contract',
@@ -191,6 +314,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   client_permissions: [
     {
       id: 'perm-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       permissions: {
         read_client_messages: 'allowed',
@@ -212,6 +336,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
   activities: [
     {
       id: 'act-demo-1',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       actor_type: 'user',
       actor_id: 'Matias',
@@ -223,6 +348,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'act-demo-2',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       project_id: 'proj-demo-1',
       actor_type: 'user',
@@ -234,6 +360,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'act-demo-3',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       actor_type: 'user',
       actor_id: 'Matias',
@@ -244,6 +371,7 @@ export const initialDevelopmentSeed: DatabaseSchema = {
     },
     {
       id: 'act-demo-4',
+      organization_id: DEFAULT_ORG_ID,
       client_id: 'demo-xyz-ai',
       actor_type: 'user',
       actor_id: 'Matias',

@@ -8,20 +8,65 @@ import {
   ClientPermissions, 
   ActivityRecord,
   MemoryCategory,
-  MemoryStatus
+  MemoryStatus,
+  PlatformRole,
+  OrganizationRole,
+  OrganizationStatus,
+  OrganizationPlan,
+  UserStatus,
+  OrganizationRecord,
+  OrganizationMemberRecord,
+  InvitationRecord,
+  FeatureFlagRecord
 } from '../../server/db/types';
 import { CreateClientPayload } from '../../server/services/clientService';
 import { ClientContextPayload } from '../../server/services/contextService';
 
 const API_BASE = '/api';
 
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  platform_role: PlatformRole;
+  status: UserStatus;
+  last_active_at: string;
+}
+
+export interface UserOrganizationMembership {
+  organization: OrganizationRecord;
+  role: OrganizationRole;
+}
+
+export interface AuthContextResponse {
+  user: AuthUser;
+  organization: OrganizationRecord | null;
+  role: OrganizationRole | null;
+  user_organizations: UserOrganizationMembership[];
+}
+
+export interface LoginResponse extends AuthContextResponse {
+  token: string;
+}
+
+export interface AdminOverview {
+  total_organizations: number;
+  active_organizations: number;
+  suspended_organizations: number;
+  total_users: number;
+  active_users: number;
+  recent_activities: ActivityRecord[];
+}
+
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('session_token') : null;
   const res = await fetch(`${API_BASE}${endpoint}`, {
     headers: {
       'Content-Type': 'application/json',
-      'x-actor-id': 'Matias',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
       ...(options?.headers || {})
     },
+    credentials: 'include',
     ...options
   });
 
@@ -38,6 +83,81 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  // Authentication
+  login: async (credentials: { email: string; password: string }) => {
+    const data = await request<LoginResponse>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials)
+    });
+    if (data.token) {
+      localStorage.setItem('session_token', data.token);
+    }
+    return data;
+  },
+  getMe: () => request<AuthContextResponse>('/auth/me'),
+  switchOrg: (organization_id: string) => request<AuthContextResponse>('/auth/switch-org', {
+    method: 'POST',
+    body: JSON.stringify({ organization_id })
+  }),
+  logout: async () => {
+    try {
+      await request<{ status: string }>('/auth/logout', { method: 'POST' });
+    } finally {
+      localStorage.removeItem('session_token');
+    }
+  },
+
+  // Super Admin
+  getAdminOverview: () => request<AdminOverview>('/admin/overview'),
+  getAdminOrganizations: () => request<OrganizationRecord[]>('/admin/organizations'),
+  createAdminOrganization: (data: { name: string; slug?: string; plan?: OrganizationPlan }) =>
+    request<OrganizationRecord>('/admin/organizations', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  setAdminOrganizationStatus: (id: string, status: OrganizationStatus) =>
+    request<OrganizationRecord>(`/admin/organizations/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    }),
+  getAdminUsers: () => request<AuthUser[]>('/admin/users'),
+  createAdminUser: (data: { name: string; email: string; password: string; platform_role?: PlatformRole }) =>
+    request<AuthUser>('/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  setAdminUserStatus: (id: string, status: UserStatus) =>
+    request<AuthUser>(`/admin/users/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    }),
+  setAdminUserPlatformRole: (id: string, platform_role: PlatformRole) =>
+    request<AuthUser>(`/admin/users/${id}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ platform_role })
+    }),
+  getAdminActivities: (limit?: number) =>
+    request<ActivityRecord[]>(`/admin/activities${limit ? `?limit=${limit}` : ''}`),
+  getAdminFeatureFlags: () => request<FeatureFlagRecord[]>('/admin/flags'),
+
+  // Organization Settings & Members
+  getOrgMembers: () => request<OrganizationMemberRecord[]>('/organization/members'),
+  inviteOrgMember: (data: { email: string; role: OrganizationRole }) =>
+    request<InvitationRecord>('/organization/invitations', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  getOrgInvitations: () => request<InvitationRecord[]>('/organization/invitations'),
+  updateOrgMemberRole: (memberId: string, role: OrganizationRole) =>
+    request<OrganizationMemberRecord>(`/organization/members/${memberId}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role })
+    }),
+  removeOrgMember: (memberId: string) =>
+    request<{ success: boolean }>(`/organization/members/${memberId}`, {
+      method: 'DELETE'
+    }),
+
   // Clients
   getClients: () => request<ClientRecord[]>('/clients'),
   getClient: (id: string) => request<ClientRecord & { contacts: ContactRecord[] }>(`/clients/${id}`),

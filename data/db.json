@@ -1,7 +1,112 @@
 {
+  "users": [
+    {
+      "id": "user_admin",
+      "email": "admin@example.com",
+      "password_hash": "9b3bae1a95845f9888d9f10134360b6a00196a1992d05c0ade482be5597d14fd2f4078151b7ae143676330c90f744a0d78ae2008e358bd3de0f46825ecd2d297",
+      "password_salt": "df14df6e6c41c60ba1b5e45af330ce0f",
+      "name": "System Super Admin",
+      "platform_role": "SUPER_ADMIN",
+      "status": "active",
+      "last_active_at": "2026-10-09T07:31:24.593Z",
+      "created_at": "2026-09-29T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    },
+    {
+      "id": "user_owner",
+      "email": "owner@example.com",
+      "password_hash": "4c195495dd7f6f2158d378ce251ce3971f31ae67a76de9c14c8a96dc4e8a7d6b10f0e60f6074602da7d8157794a77712da25337bc23471e3ad27d3fe725ba75e",
+      "password_salt": "c07c0c87882fb526b0d489b58ca74b3d",
+      "name": "Matias Austin",
+      "platform_role": "USER",
+      "status": "active",
+      "last_active_at": "2026-10-09T07:31:24.593Z",
+      "created_at": "2026-10-04T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    },
+    {
+      "id": "user_member",
+      "email": "member@example.com",
+      "password_hash": "90338c11683a11740408a1eb85af7644534cd5fd4c7b613fd145f84127c08aee0b4914f0664d0e5297ce6f91496a21b925b9f09e7a4a574ff73755cf7080f756",
+      "password_salt": "6c779f1d523ff64fd2c47b20217b97ae",
+      "name": "Elena Rostova",
+      "platform_role": "USER",
+      "status": "active",
+      "last_active_at": "2026-10-09T07:31:24.593Z",
+      "created_at": "2026-10-07T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "org_matias_studio",
+      "name": "Matias Studio",
+      "slug": "matias-studio",
+      "status": "active",
+      "plan": "Studio",
+      "subscription_status": "active",
+      "created_at": "2026-09-29T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    }
+  ],
+  "organization_members": [
+    {
+      "id": "member_admin_studio",
+      "organization_id": "org_matias_studio",
+      "user_id": "user_admin",
+      "role": "OWNER",
+      "created_at": "2026-09-29T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    },
+    {
+      "id": "member_owner_studio",
+      "organization_id": "org_matias_studio",
+      "user_id": "user_owner",
+      "role": "OWNER",
+      "created_at": "2026-10-04T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    },
+    {
+      "id": "member_elena_studio",
+      "organization_id": "org_matias_studio",
+      "user_id": "user_member",
+      "role": "MEMBER",
+      "created_at": "2026-10-07T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    }
+  ],
+  "sessions": [],
+  "invitations": [],
+  "feature_flags": [
+    {
+      "id": "flag_slack",
+      "organization_id": "org_matias_studio",
+      "key": "slack_integration",
+      "enabled": false,
+      "description": "Client Slack workspace synchronization",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    },
+    {
+      "id": "flag_figma",
+      "organization_id": "org_matias_studio",
+      "key": "figma_integration",
+      "enabled": false,
+      "description": "Figma token and vector layout pipeline",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    },
+    {
+      "id": "flag_browser",
+      "organization_id": "org_matias_studio",
+      "key": "browser_agent",
+      "enabled": false,
+      "description": "Autonomous web research worker",
+      "updated_at": "2026-10-09T07:31:24.593Z"
+    }
+  ],
   "clients": [
     {
       "id": "demo-xyz-ai",
+      "organization_id": "org_matias_studio",
       "company_name": "Demo: XYZ Autonomous Systems",
       "website": "https://demo-xyz.ai",
       "industry": "Robotics & Autonomous Systems",
@@ -32,13 +137,14 @@
       "payment_terms": "Net 30",
       "invoice_notes": "Reference PO-XYZ-2026 on all billing vouchers",
       "contract_notes": "Retainer Active: Tier 1 Autonomous Studio Collaboration",
-      "created_at": "2026-10-06T07:10:05.054Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-06T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     }
   ],
   "contacts": [
     {
       "id": "contact-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "name": "Sarah Lin",
       "role": "VP Product & Brand Architecture",
@@ -46,10 +152,11 @@
       "phone": "+41 44 123 4567",
       "preferred_channel": "Slack",
       "is_primary_contact": true,
-      "created_at": "2026-10-06T07:10:05.055Z"
+      "created_at": "2026-10-06T07:31:24.593Z"
     },
     {
       "id": "contact-demo-2",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "name": "John Vance",
       "role": "Lead Engineering Partner",
@@ -57,12 +164,13 @@
       "phone": "+41 44 987 6543",
       "preferred_channel": "Email",
       "is_primary_contact": false,
-      "created_at": "2026-10-06T07:10:05.055Z"
+      "created_at": "2026-10-06T07:31:24.593Z"
     }
   ],
   "projects": [
     {
       "project_id": "proj-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "project_name": "Brand OS & Generative UI System",
       "project_type": "Brand System",
@@ -77,13 +185,14 @@
         "Creative Director Agent",
         "Design Automation Agent"
       ],
-      "created_at": "2026-10-07T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-07T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     }
   ],
   "tasks": [
     {
       "id": "task-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "project_id": "proj-demo-1",
       "title": "Review high-contrast spatial card tokens",
@@ -92,11 +201,12 @@
       "status": "running",
       "priority": "high",
       "deadline": "2026-10-12",
-      "created_at": "2026-10-08T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-08T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     },
     {
       "id": "task-demo-2",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "project_id": "proj-demo-1",
       "title": "Consolidate feedback on rotary vibration curves",
@@ -105,13 +215,14 @@
       "status": "waiting_approval",
       "priority": "normal",
       "deadline": "2026-10-15",
-      "created_at": "2026-10-08T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-08T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     }
   ],
   "client_memory": [
     {
       "id": "mem-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "category": "Brand",
       "key": "Brand Personality",
@@ -120,11 +231,12 @@
       "source_type": "Document",
       "source_id": "XYZ_Brand_Guidelines_v1.pdf",
       "reason_context": "Extracted from official executive onboarding workshop.",
-      "created_at": "2026-10-07T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-07T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     },
     {
       "id": "mem-demo-2",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "category": "Communication",
       "key": "Client Messaging Cadence",
@@ -133,11 +245,12 @@
       "source_type": "Onboarding",
       "source_id": "Client Onboarding Form",
       "reason_context": "Explicitly indicated by VP Product Sarah Lin during kick-off.",
-      "created_at": "2026-10-07T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-07T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     },
     {
       "id": "mem-demo-3",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "category": "Visual",
       "key": "Color & Contrast Rules",
@@ -146,11 +259,12 @@
       "source_type": "Document",
       "source_id": "Design_System_Spec.pdf",
       "reason_context": "Official typography & color specifications approved by creative direction.",
-      "created_at": "2026-10-08T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-08T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     },
     {
       "id": "mem-demo-4",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "category": "Observations",
       "key": "Early Design Feedback Observation",
@@ -159,31 +273,33 @@
       "source_type": "Activity",
       "source_id": "Design Review Meeting #01",
       "reason_context": "Noted during initial layout presentation feedback round.",
-      "created_at": "2026-10-08T07:10:05.055Z",
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "created_at": "2026-10-08T07:31:24.593Z",
+      "updated_at": "2026-10-09T07:31:24.593Z"
     }
   ],
   "documents": [
     {
       "file_id": "doc-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "project_id": "proj-demo-1",
       "category": "Brand",
       "filename": "XYZ_Brand_Guidelines_v1.pdf",
       "file_size": "3.4 MB",
-      "uploaded_at": "2026-10-07T07:10:05.055Z",
+      "uploaded_at": "2026-10-07T07:31:24.593Z",
       "uploaded_by": "Matias Austin",
       "status": "uploaded",
       "notes": "Authoritative brand manual defining typography hierarchy and color standards."
     },
     {
       "file_id": "doc-demo-2",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "project_id": "proj-demo-1",
       "category": "Contract",
       "filename": "Master_Services_Agreement_2026.pdf",
       "file_size": "1.2 MB",
-      "uploaded_at": "2026-10-06T07:10:05.055Z",
+      "uploaded_at": "2026-10-06T07:31:24.593Z",
       "uploaded_by": "Matias Austin",
       "status": "uploaded",
       "notes": "Executed MSA governing studio deliverables and commercial rates."
@@ -192,6 +308,7 @@
   "client_permissions": [
     {
       "id": "perm-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "permissions": {
         "read_client_messages": "allowed",
@@ -207,12 +324,13 @@
         "send_invoice": "approval_required",
         "send_quotation": "approval_required"
       },
-      "updated_at": "2026-10-09T07:10:05.055Z"
+      "updated_at": "2026-10-09T07:31:24.593Z"
     }
   ],
   "activities": [
     {
       "id": "act-demo-1",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "actor_type": "user",
       "actor_id": "Matias",
@@ -220,10 +338,11 @@
       "entity_type": "client",
       "entity_id": "demo-xyz-ai",
       "result": "Initialized workspace with 2 contacts and 1 project",
-      "created_at": "2026-10-06T07:10:05.055Z"
+      "created_at": "2026-10-06T07:31:24.593Z"
     },
     {
       "id": "act-demo-2",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "project_id": "proj-demo-1",
       "actor_type": "user",
@@ -231,27 +350,29 @@
       "action": "Project created: Brand OS & Generative UI System",
       "entity_type": "project",
       "entity_id": "proj-demo-1",
-      "created_at": "2026-10-07T07:10:05.055Z"
+      "created_at": "2026-10-07T07:31:24.593Z"
     },
     {
       "id": "act-demo-3",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "actor_type": "user",
       "actor_id": "Matias",
       "action": "Document uploaded: XYZ_Brand_Guidelines_v1.pdf",
       "entity_type": "document",
       "entity_id": "doc-demo-1",
-      "created_at": "2026-10-07T07:10:05.055Z"
+      "created_at": "2026-10-07T07:31:24.593Z"
     },
     {
       "id": "act-demo-4",
+      "organization_id": "org_matias_studio",
       "client_id": "demo-xyz-ai",
       "actor_type": "user",
       "actor_id": "Matias",
       "action": "Memory approved: Client Messaging Cadence",
       "entity_type": "client_memory",
       "entity_id": "mem-demo-2",
-      "created_at": "2026-10-08T07:10:05.055Z"
+      "created_at": "2026-10-08T07:31:24.593Z"
     }
   ]
 }

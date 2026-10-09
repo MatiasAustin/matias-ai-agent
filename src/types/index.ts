@@ -7,7 +7,9 @@ export type NavigationTab =
   | 'Memory' 
   | 'Documents' 
   | 'Approvals' 
-  | 'Activity';
+  | 'Activity'
+  | 'Settings'
+  | 'Super Admin';
 
 export type AIStatusType = 
   | 'online' 

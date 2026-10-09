@@ -3,7 +3,8 @@ import { ActivityRecord } from '../db/types';
 
 export class ActivityService {
   public static logActivity(params: {
-    client_id: string;
+    organization_id?: string;
+    client_id?: string;
     project_id?: string;
     actor_type?: 'user' | 'agent' | 'system';
     actor_id?: string;
@@ -15,10 +16,11 @@ export class ActivityService {
   }): ActivityRecord {
     const record: ActivityRecord = {
       id: `act_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      organization_id: params.organization_id,
       client_id: params.client_id,
       project_id: params.project_id,
       actor_type: params.actor_type || 'user',
-      actor_id: params.actor_id || 'Matias',
+      actor_id: params.actor_id || 'System',
       action: params.action,
       entity_type: params.entity_type,
       entity_id: params.entity_id,
@@ -31,11 +33,16 @@ export class ActivityService {
     return record;
   }
 
-  public static getActivities(clientId?: string, limit: number = 50): ActivityRecord[] {
+  public static getActivities(
+    organizationId?: string, 
+    clientId?: string, 
+    limit: number = 50
+  ): ActivityRecord[] {
     const all = db.get('activities');
-    if (clientId) {
-      return all.filter(a => a.client_id === clientId).slice(0, limit);
-    }
-    return all.slice(0, limit);
+    return all.filter(a => {
+      const matchOrg = organizationId ? a.organization_id === organizationId : true;
+      const matchClient = clientId ? a.client_id === clientId : true;
+      return matchOrg && matchClient;
+    }).slice(0, limit);
   }
 }

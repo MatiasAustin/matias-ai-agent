@@ -13,6 +13,7 @@ import {
 } from '../db/types';
 
 export interface ClientContextPayload {
+  organization_id: string;
   client_id: string;
   profile: ClientRecord | null;
   primary_contact: ContactRecord | null;
@@ -56,29 +57,37 @@ export interface ClientContextPayload {
 
 export class ContextService {
   /**
-   * Reusable context retrieval for future AI agent orchestration.
-   * Strictly scopes memories and files to the requested clientId.
+   * Scoped context retrieval for future AI agent orchestration.
+   * Strictly verifies client belongs to organization and scopes all memories to organization_id + client_id.
    */
-  public static getClientContext(clientId: string, projectId?: string): ClientContextPayload {
-    const client = ClientService.getClientById(clientId);
+  public static getClientContext(
+    organizationId: string, 
+    clientId: string, 
+    projectId?: string
+  ): ClientContextPayload {
+    if (!organizationId) throw new Error('organization_id is required');
+    if (!clientId) throw new Error('client_id is required');
+
+    const client = ClientService.getClientById(organizationId, clientId);
     if (!client) {
-      throw new Error(`Client with ID ${clientId} not found`);
+      throw new Error(`Client with ID ${clientId} not found in this organization`);
     }
 
-    const contacts = ClientService.getContacts(clientId);
+    const contacts = ClientService.getContacts(organizationId, clientId);
     const primaryContact = contacts.find(c => c.is_primary_contact) || (contacts[0] || null);
 
-    const allMemories = MemoryService.getClientMemory(clientId);
+    const allMemories = MemoryService.getClientMemory(organizationId, clientId);
     const approvedMemories = allMemories.filter(m => m.status === 'APPROVED');
     const observedMemories = allMemories.filter(m => m.status === 'OBSERVED');
     const officialMemories = allMemories.filter(m => m.status === 'OFFICIAL');
 
-    const projects = ProjectService.getProjects(clientId);
-    const selectedProject = projectId ? ProjectService.getProjectById(projectId) : null;
-    const files = DocumentService.getDocuments(clientId);
-    const permissions = PermissionService.getPermissions(clientId);
+    const projects = ProjectService.getProjects(organizationId, clientId);
+    const selectedProject = projectId ? ProjectService.getProjectById(organizationId, projectId) : null;
+    const files = DocumentService.getDocuments(organizationId, clientId);
+    const permissions = PermissionService.getPermissions(organizationId, clientId);
 
     return {
+      organization_id: organizationId,
       client_id: clientId,
       profile: client,
       primary_contact: primaryContact,

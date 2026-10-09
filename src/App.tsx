@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { LoginView } from './components/auth/LoginView';
+import { SuperAdminView } from './components/admin/SuperAdminView';
+import { SettingsView } from './components/views/SettingsView';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardView } from './components/views/DashboardView';
@@ -53,7 +57,9 @@ const aiStatusStates: AIStatusState[] = [
   }
 ];
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { user, organization, loading } = useAuth();
+
   // Navigation & URL parsing
   const [activeTab, setActiveTab] = useState<NavigationTab>('Dashboard');
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
@@ -76,14 +82,23 @@ export const App: React.FC = () => {
   // Sync state with URL path
   const syncFromPath = () => {
     const path = window.location.pathname;
-    if (path === '/clients/new') {
+    if (path === '/admin') {
+      setActiveTab('Super Admin');
+      setIsOnboarding(false);
+      setSelectedClientId(null);
+      setSelectedProjectId(null);
+    } else if (path === '/settings') {
+      setActiveTab('Settings');
+      setIsOnboarding(false);
+      setSelectedClientId(null);
+      setSelectedProjectId(null);
+    } else if (path === '/clients/new') {
       setActiveTab('Clients');
       setIsOnboarding(true);
       setSelectedClientId(null);
       setSelectedProjectId(null);
     } else if (path.startsWith('/clients/') && path.includes('/projects/')) {
       const parts = path.split('/');
-      // /clients/:clientId/projects/:projectId
       const cId = parts[2];
       const pId = parts[4];
       setActiveTab('Clients');
@@ -158,8 +173,9 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  // Fetch real database records
+  // Fetch real database records (scoped to active organization)
   const loadStudioState = async () => {
+    if (!user) return;
     try {
       const [c, p, t, a] = await Promise.all([
         api.getClients(),
@@ -172,20 +188,25 @@ export const App: React.FC = () => {
       setTasks(t);
       setActivities(a);
 
-      // Load all client memories
+      // Load client memories
       if (c.length > 0) {
         const memPromises = c.map(cl => api.getMemories(cl.id).catch(() => []));
         const memResults = await Promise.all(memPromises);
         setMemories(memResults.flat());
+      } else {
+        setMemories([]);
       }
     } catch (err) {
       console.error('Failed to load studio state:', err);
     }
   };
 
+  // Reload when tab, client, or active organization changes
   useEffect(() => {
-    loadStudioState();
-  }, [activeTab, selectedClientId]);
+    if (user && organization) {
+      loadStudioState();
+    }
+  }, [activeTab, selectedClientId, organization?.id, user?.id]);
 
   // Keyboard shortcut for Cmd+K / Ctrl+K
   useEffect(() => {
@@ -217,9 +238,15 @@ export const App: React.FC = () => {
     setSelectedClientId(null);
     setSelectedProjectId(null);
 
-    const slug = tab.toLowerCase();
-    const url = tab === 'Dashboard' ? '/' : `/${slug}`;
-    setUrlPath(url);
+    if (tab === 'Dashboard') {
+      setUrlPath('/');
+    } else if (tab === 'Super Admin') {
+      setUrlPath('/admin');
+    } else if (tab === 'Settings') {
+      setUrlPath('/settings');
+    } else {
+      setUrlPath(`/${tab.toLowerCase()}`);
+    }
   };
 
   const handleSelectClient = (clientId: string) => {
@@ -251,6 +278,46 @@ export const App: React.FC = () => {
     handleSelectClient(newClientId);
   };
 
+  // 1. Loading State
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F5F5F3] text-[#111111] flex flex-col items-center justify-center font-sans">
+        <div className="w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center font-medium text-base mb-4 tracking-tighter">
+          M
+        </div>
+        <div className="text-xs font-mono uppercase tracking-widest text-[#6F6F6B]">
+          Authenticating Studio Workspace...
+        </div>
+      </div>
+    );
+  }
+
+  // 2. Unauthenticated State -> Render Login
+  if (!user) {
+    return <LoginView />;
+  }
+
+  // 3. Super Admin Route Protection
+  const isSuperAdminTab = activeTab === 'Super Admin';
+  if (isSuperAdminTab && user.platform_role !== 'SUPER_ADMIN') {
+    return (
+      <div className="min-h-screen bg-[#F5F5F3] text-[#111111] flex flex-col items-center justify-center font-sans p-6 text-center">
+        <div className="max-w-md bg-white border border-[#E5E5E1] rounded-[24px] p-8 shadow-sm">
+          <h2 className="text-xl font-medium text-[#111111]">Access Denied</h2>
+          <p className="text-xs text-[#6F6F6B] mt-2 mb-6">
+            The Super Admin control plane is restricted to platform operators with SUPER_ADMIN clearance.
+          </p>
+          <button
+            onClick={() => handleNavigate('Dashboard')}
+            className="px-4 py-2 bg-[#111111] text-white rounded-xl text-xs font-medium"
+          >
+            Return to Studio Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const pendingApprovalsCount = approvals.filter(a => a.status === 'pending').length;
 
   return (
@@ -274,9 +341,20 @@ export const App: React.FC = () => {
           onCycleAIStatus={handleCycleAIStatus}
           onOpenSearch={() => setIsSearchOpen(true)}
           pendingApprovalsCount={pendingApprovalsCount}
+          onNavigate={handleNavigate}
         />
 
         <main className="flex-1 px-8 lg:px-14 py-10 max-w-7xl w-full mx-auto">
+          {/* Super Admin Control Plane */}
+          {activeTab === 'Super Admin' && user.platform_role === 'SUPER_ADMIN' && (
+            <SuperAdminView />
+          )}
+
+          {/* Settings View */}
+          {activeTab === 'Settings' && (
+            <SettingsView />
+          )}
+
           {/* 1. Dashboard View */}
           {activeTab === 'Dashboard' && (
             <DashboardView
@@ -432,6 +510,14 @@ export const App: React.FC = () => {
         onNavigate={handleNavigate}
       />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 

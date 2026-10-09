@@ -94,26 +94,33 @@ export interface CreateClientPayload {
 }
 
 export class ClientService {
-  public static getAllClients(): ClientRecord[] {
-    return db.get('clients');
-  }
-
-  public static getClientById(clientId: string): ClientRecord | null {
+  public static getAllClients(organizationId: string): ClientRecord[] {
     const clients = db.get('clients');
-    return clients.find(c => c.id === clientId) || null;
+    return clients.filter(c => c.organization_id === organizationId);
   }
 
-  public static getContacts(clientId: string): ContactRecord[] {
+  public static getClientById(organizationId: string, clientId: string): ClientRecord | null {
+    const clients = db.get('clients');
+    return clients.find(c => c.id === clientId && c.organization_id === organizationId) || null;
+  }
+
+  public static getContacts(organizationId: string, clientId: string): ContactRecord[] {
     const contacts = db.get('contacts');
-    return contacts.filter(c => c.client_id === clientId);
+    return contacts.filter(c => c.client_id === clientId && c.organization_id === organizationId);
   }
 
-  public static createClient(payload: CreateClientPayload, actorId: string = 'Matias'): ClientRecord {
+  public static createClient(
+    organizationId: string, 
+    payload: CreateClientPayload, 
+    actorId: string = 'User'
+  ): ClientRecord {
+    if (!organizationId) {
+      throw new Error('organization_id is required for creating a client');
+    }
     if (!payload.identity || !payload.identity.company_name || payload.identity.company_name.trim() === '') {
       throw new Error('company_name is required');
     }
 
-    // Generate clean slug or unique id
     const slugBase = payload.identity.company_name
       .toLowerCase()
       .replace(/[^a-z0-9]/g, '-')
@@ -123,6 +130,7 @@ export class ClientService {
 
     const newClient: ClientRecord = {
       id: clientId,
+      organization_id: organizationId,
       company_name: payload.identity.company_name.trim(),
       website: payload.identity.website,
       industry: payload.identity.industry || 'Creative / Technology',
@@ -170,6 +178,7 @@ export class ClientService {
     if (payload.people && payload.people.length > 0) {
       const contactsToSave: ContactRecord[] = payload.people.map((p, idx) => ({
         id: `contact_${Date.now()}_${idx}`,
+        organization_id: organizationId,
         client_id: clientId,
         name: p.name,
         role: p.role,
@@ -186,6 +195,7 @@ export class ClientService {
     if (payload.projects && payload.projects.length > 0) {
       const projectsToSave: ProjectRecord[] = payload.projects.map((proj, idx) => ({
         project_id: `proj_${Date.now()}_${idx}`,
+        organization_id: organizationId,
         client_id: clientId,
         project_name: proj.project_name,
         project_type: proj.project_type || 'Brand System',
@@ -207,13 +217,14 @@ export class ClientService {
     if (payload.files && payload.files.length > 0) {
       const docsToSave: DocumentRecord[] = payload.files.map((f, idx) => ({
         file_id: `doc_${Date.now()}_${idx}`,
+        organization_id: organizationId,
         client_id: clientId,
         category: (f.category as any) || 'Brand',
         filename: f.filename,
         file_size: f.file_size || '1.5 MB',
         uploaded_at: new Date().toISOString(),
         uploaded_by: actorId,
-        status: 'uploaded', // Real status
+        status: 'uploaded',
         notes: f.notes
       }));
       db.update('documents', list => [...list, ...docsToSave]);
@@ -223,7 +234,7 @@ export class ClientService {
     const brandStatus: MemoryStatus = payload.brand?.brand_status || 'OFFICIAL';
 
     if (payload.brand?.brand_personality) {
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Brand',
         key: 'Brand Personality',
@@ -237,7 +248,7 @@ export class ClientService {
     }
 
     if (payload.brand?.brand_voice) {
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Brand',
         key: 'Brand Voice',
@@ -251,7 +262,7 @@ export class ClientService {
     }
 
     if (payload.brand?.design_style) {
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Visual',
         key: 'Design Style',
@@ -265,7 +276,7 @@ export class ClientService {
     }
 
     if (payload.brand?.visual_principles) {
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Visual',
         key: 'Visual Principles',
@@ -279,7 +290,7 @@ export class ClientService {
     }
 
     if (payload.brand?.things_to_avoid) {
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Restrictions',
         key: 'Things to Avoid',
@@ -299,7 +310,7 @@ export class ClientService {
         payload.communication.important_communication_notes || ''
       ].filter(Boolean).join('. ');
 
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Communication',
         key: 'Communication Protocols',
@@ -313,7 +324,7 @@ export class ClientService {
     }
 
     if (payload.business?.positioning || payload.business?.value_proposition) {
-      MemoryService.createMemory({
+      MemoryService.createMemory(organizationId, {
         client_id: clientId,
         category: 'Positioning',
         key: 'Market Positioning & Value Proposition',
@@ -328,13 +339,14 @@ export class ClientService {
 
     // 6. Set AI permissions
     if (payload.ai_setup) {
-      PermissionService.updatePermissions(clientId, payload.ai_setup, actorId);
+      PermissionService.updatePermissions(organizationId, clientId, payload.ai_setup, actorId);
     } else {
-      PermissionService.getPermissions(clientId); // initializes defaults
+      PermissionService.getPermissions(organizationId, clientId);
     }
 
-    // 7. Log single real activity
+    // 7. Log real activity
     ActivityService.logActivity({
+      organization_id: organizationId,
       client_id: clientId,
       actor_id: actorId,
       action: 'Client workspace created',
@@ -347,16 +359,17 @@ export class ClientService {
   }
 
   public static updateClient(
+    organizationId: string,
     clientId: string, 
-    updates: Partial<Omit<ClientRecord, 'id' | 'created_at'>>,
-    actorId: string = 'Matias'
+    updates: Partial<Omit<ClientRecord, 'id' | 'organization_id' | 'created_at'>>,
+    actorId: string = 'User'
   ): ClientRecord {
     let updated: ClientRecord | null = null;
 
     db.update('clients', list => {
-      const idx = list.findIndex(c => c.id === clientId);
+      const idx = list.findIndex(c => c.id === clientId && c.organization_id === organizationId);
       if (idx === -1) {
-        throw new Error(`Client with ID ${clientId} not found`);
+        throw new Error(`Client with ID ${clientId} not found in this organization`);
       }
       updated = {
         ...list[idx],
@@ -369,6 +382,7 @@ export class ClientService {
 
     if (updated) {
       ActivityService.logActivity({
+        organization_id: organizationId,
         client_id: clientId,
         actor_id: actorId,
         action: `Client profile updated: ${(updated as ClientRecord).company_name}`,

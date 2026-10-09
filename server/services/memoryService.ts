@@ -3,24 +3,32 @@ import { ClientMemoryRecord, MemoryCategory, MemoryStatus } from '../db/types';
 import { ActivityService } from './activityService';
 
 export class MemoryService {
-  public static createMemory(params: {
-    client_id: string;
-    category: MemoryCategory;
-    key: string;
-    value: string;
-    status: MemoryStatus;
-    confidence?: 'High' | 'Medium' | 'Low';
-    source_type: string;
-    source_id: string;
-    reason_context?: string;
-    actor_id?: string;
-  }): ClientMemoryRecord {
-    if (!params.client_id) {
-      throw new Error('client_id is required for creating memory');
+  public static createMemory(
+    organizationId: string,
+    params: {
+      client_id: string;
+      category: MemoryCategory;
+      key: string;
+      value: string;
+      status: MemoryStatus;
+      confidence?: 'High' | 'Medium' | 'Low';
+      source_type: string;
+      source_id: string;
+      reason_context?: string;
+      actor_id?: string;
     }
+  ): ClientMemoryRecord {
+    if (!organizationId) throw new Error('organization_id is required');
+    if (!params.client_id) throw new Error('client_id is required');
+
+    // Verify client belongs to organization
+    const clients = db.get('clients');
+    const client = clients.find(c => c.id === params.client_id && c.organization_id === organizationId);
+    if (!client) throw new Error('Client not found in this organization');
 
     const record: ClientMemoryRecord = {
       id: `mem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      organization_id: organizationId,
       client_id: params.client_id,
       category: params.category,
       key: params.key.trim(),
@@ -38,8 +46,9 @@ export class MemoryService {
     db.update('client_memory', (list) => [...list, record]);
 
     ActivityService.logActivity({
+      organization_id: organizationId,
       client_id: params.client_id,
-      actor_id: params.actor_id || 'Matias',
+      actor_id: params.actor_id || 'User',
       action: `Memory added: ${record.key} (${record.status})`,
       entity_type: 'client_memory',
       entity_id: record.id,
@@ -49,28 +58,38 @@ export class MemoryService {
     return record;
   }
 
-  public static getMemory(memoryId: string): ClientMemoryRecord | null {
+  public static getMemory(organizationId: string, memoryId: string): ClientMemoryRecord | null {
     const list = db.get('client_memory');
-    return list.find(m => m.id === memoryId && !m.archived) || null;
+    return list.find(m => m.id === memoryId && m.organization_id === organizationId && !m.archived) || null;
   }
 
-  public static getClientMemory(clientId: string, category?: MemoryCategory): ClientMemoryRecord[] {
+  public static getClientMemory(
+    organizationId: string, 
+    clientId: string, 
+    category?: MemoryCategory
+  ): ClientMemoryRecord[] {
     const list = db.get('client_memory');
     return list.filter(m => {
+      const matchesOrg = m.organization_id === organizationId;
       const matchesClient = m.client_id === clientId;
       const notArchived = !m.archived;
       const matchesCategory = category ? m.category === category : true;
-      return matchesClient && notArchived && matchesCategory;
+      return matchesOrg && matchesClient && notArchived && matchesCategory;
     });
   }
 
   /**
-   * Strictly scopes search to the given clientId.
-   * Client A memories NEVER leak into Client B context.
+   * Strictly scopes search to the given organizationId AND clientId.
+   * Client A / Org A memories NEVER leak into Client B / Org B context.
    */
-  public static searchMemory(clientId: string, query: string, category?: MemoryCategory): ClientMemoryRecord[] {
-    if (!clientId) return [];
-    const clientMemories = this.getClientMemory(clientId, category);
+  public static searchMemory(
+    organizationId: string,
+    clientId: string, 
+    query: string, 
+    category?: MemoryCategory
+  ): ClientMemoryRecord[] {
+    if (!organizationId || !clientId) return [];
+    const clientMemories = this.getClientMemory(organizationId, clientId, category);
     if (!query || query.trim() === '') return clientMemories;
 
     const q = query.toLowerCase().trim();
@@ -83,22 +102,22 @@ export class MemoryService {
   }
 
   public static updateMemory(
+    organizationId: string,
     memoryId: string, 
     updates: Partial<Pick<ClientMemoryRecord, 'key' | 'value' | 'category' | 'status' | 'reason_context' | 'confidence'>>,
-    actorId: string = 'Matias',
+    actorId: string = 'User',
     allowOfficialOverwrite: boolean = false
   ): ClientMemoryRecord {
     let updatedRecord: ClientMemoryRecord | null = null;
 
     db.update('client_memory', (list) => {
-      const idx = list.findIndex(m => m.id === memoryId);
+      const idx = list.findIndex(m => m.id === memoryId && m.organization_id === organizationId);
       if (idx === -1) {
-        throw new Error(`Memory record with ID ${memoryId} not found`);
+        throw new Error(`Memory record with ID ${memoryId} not found in this organization`);
       }
 
       const existing = list[idx];
 
-      // Enforce rule: OFFICIAL memories cannot be casually overwritten without authorization
       if (existing.status === 'OFFICIAL' && !allowOfficialOverwrite && updates.value && updates.value !== existing.value) {
         throw new Error('OFFICIAL memories cannot be casually overwritten. Explicit review required.');
       }
@@ -115,6 +134,7 @@ export class MemoryService {
 
     if (updatedRecord) {
       ActivityService.logActivity({
+        organization_id: organizationId,
         client_id: (updatedRecord as ClientMemoryRecord).client_id,
         actor_id: actorId,
         action: `Memory updated: ${(updatedRecord as ClientMemoryRecord).key}`,
@@ -127,13 +147,17 @@ export class MemoryService {
     return updatedRecord!;
   }
 
-  public static approveMemory(memoryId: string, approvedBy: string = 'Matias'): ClientMemoryRecord {
+  public static approveMemory(
+    organizationId: string,
+    memoryId: string, 
+    approvedBy: string = 'User'
+  ): ClientMemoryRecord {
     let approved: ClientMemoryRecord | null = null;
 
     db.update('client_memory', (list) => {
-      const idx = list.findIndex(m => m.id === memoryId);
+      const idx = list.findIndex(m => m.id === memoryId && m.organization_id === organizationId);
       if (idx === -1) {
-        throw new Error(`Memory record with ID ${memoryId} not found`);
+        throw new Error(`Memory record with ID ${memoryId} not found in this organization`);
       }
 
       const current = list[idx];
@@ -149,9 +173,10 @@ export class MemoryService {
 
     if (approved) {
       ActivityService.logActivity({
+        organization_id: organizationId,
         client_id: (approved as ClientMemoryRecord).client_id,
         actor_id: approvedBy,
-        action: `Matias approved memory: ${(approved as ClientMemoryRecord).key}`,
+        action: `Memory approved: ${(approved as ClientMemoryRecord).key}`,
         entity_type: 'client_memory',
         entity_id: memoryId,
         result: 'Promoted to APPROVED'
@@ -161,12 +186,16 @@ export class MemoryService {
     return approved!;
   }
 
-  public static archiveMemory(memoryId: string, actorId: string = 'Matias'): boolean {
+  public static archiveMemory(
+    organizationId: string,
+    memoryId: string, 
+    actorId: string = 'User'
+  ): boolean {
     let clientId = '';
     let key = '';
 
     db.update('client_memory', (list) => {
-      const idx = list.findIndex(m => m.id === memoryId);
+      const idx = list.findIndex(m => m.id === memoryId && m.organization_id === organizationId);
       if (idx === -1) return list;
       clientId = list[idx].client_id;
       key = list[idx].key;
@@ -180,6 +209,7 @@ export class MemoryService {
 
     if (clientId) {
       ActivityService.logActivity({
+        organization_id: organizationId,
         client_id: clientId,
         actor_id: actorId,
         action: `Memory archived: ${key}`,

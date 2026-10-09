@@ -18,15 +18,15 @@ export const defaultPermissions: ClientPermissions = {
 };
 
 export class PermissionService {
-  public static getPermissions(clientId: string): ClientPermissions {
+  public static getPermissions(organizationId: string, clientId: string): ClientPermissions {
     const records = db.get('client_permissions');
-    const existing = records.find(p => p.client_id === clientId);
+    const existing = records.find(p => p.client_id === clientId && p.organization_id === organizationId);
     if (existing) {
       return existing.permissions;
     }
-    // If not found, create and return default
     const newRecord: ClientPermissionsRecord = {
       id: `perm_${Date.now()}`,
+      organization_id: organizationId,
       client_id: clientId,
       permissions: { ...defaultPermissions },
       updated_at: new Date().toISOString()
@@ -36,14 +36,15 @@ export class PermissionService {
   }
 
   public static updatePermissions(
+    organizationId: string,
     clientId: string, 
     newPermissions: Partial<ClientPermissions>,
-    actorId: string = 'Matias'
+    actorId: string = 'User'
   ): ClientPermissions {
     let result: ClientPermissions = { ...defaultPermissions };
 
     db.update('client_permissions', (list) => {
-      const idx = list.findIndex(p => p.client_id === clientId);
+      const idx = list.findIndex(p => p.client_id === clientId && p.organization_id === organizationId);
       if (idx >= 0) {
         const merged = { ...list[idx].permissions, ...newPermissions };
         list[idx] = {
@@ -57,6 +58,7 @@ export class PermissionService {
         const merged = { ...defaultPermissions, ...newPermissions };
         const record: ClientPermissionsRecord = {
           id: `perm_${Date.now()}`,
+          organization_id: organizationId,
           client_id: clientId,
           permissions: merged,
           updated_at: new Date().toISOString()
@@ -67,6 +69,7 @@ export class PermissionService {
     });
 
     ActivityService.logActivity({
+      organization_id: organizationId,
       client_id: clientId,
       actor_id: actorId,
       action: 'AI permissions updated',
