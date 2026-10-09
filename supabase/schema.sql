@@ -343,3 +343,168 @@ VALUES
     ('mem_seed_2', 'org_matias_studio', 'client_acme_demo', 'Communication', 'preferred_format', 'Client prefers Slack bullets, avoid long paragraphs', 'OFFICIAL', 'High', 'Onboarding', 'onboarding_01'),
     ('mem_seed_3', 'org_matias_studio', 'client_acme_demo', 'Workflow', 'approval_gate', 'Deliverables require Sarah Connor confirmation before publishing', 'APPROVED', 'High', 'Meeting Notes', 'call_20261001')
 ON CONFLICT (id) DO NOTHING;
+
+-- ==============================================================================
+-- TOOL REGISTRY, PERMISSIONS, APPROVALS & EXECUTION PIPELINE
+-- ==============================================================================
+
+-- 16. TOOLS (Registry)
+CREATE TABLE IF NOT EXISTS tools (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    provider TEXT NOT NULL DEFAULT 'core',
+    description TEXT NOT NULL,
+    category TEXT NOT NULL,
+    version TEXT NOT NULL DEFAULT '1.0.0',
+    risk_level TEXT NOT NULL CHECK (risk_level IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+    requires_approval BOOLEAN NOT NULL DEFAULT false,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    input_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    output_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    required_permissions TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 17. AGENTS
+CREATE TABLE IF NOT EXISTS agents (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL,
+    description TEXT,
+    status TEXT NOT NULL DEFAULT 'Active',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 18. AGENT TOOLS (Allowed Tool Mapping)
+CREATE TABLE IF NOT EXISTS agent_tools (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    agent_id TEXT NOT NULL,
+    tool_id TEXT NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(organization_id, agent_id, tool_id)
+);
+
+-- 19. AGENT PERMISSIONS (Agent Boundary)
+CREATE TABLE IF NOT EXISTS agent_permissions (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    agent_id TEXT NOT NULL,
+    permission TEXT NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(organization_id, agent_id, permission)
+);
+
+-- 20. APPROVALS
+CREATE TABLE IF NOT EXISTS approvals (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    client_id TEXT REFERENCES clients(id) ON DELETE SET NULL,
+    project_id TEXT,
+    requested_by_type TEXT NOT NULL CHECK (requested_by_type IN ('user', 'agent')),
+    requested_by_id TEXT NOT NULL,
+    tool_id TEXT NOT NULL,
+    risk_level TEXT NOT NULL CHECK (risk_level IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'expired', 'cancelled', 'executed', 'failed')),
+    original_input JSONB NOT NULL DEFAULT '{}'::jsonb,
+    approved_input JSONB,
+    reason TEXT NOT NULL,
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 21. TOOL EXECUTIONS
+CREATE TABLE IF NOT EXISTS tool_executions (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    tool_id TEXT NOT NULL,
+    agent_id TEXT,
+    user_id TEXT NOT NULL,
+    client_id TEXT,
+    project_id TEXT,
+    approval_id TEXT REFERENCES approvals(id) ON DELETE SET NULL,
+    risk_level TEXT NOT NULL CHECK (risk_level IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+    status TEXT NOT NULL DEFAULT 'queued' CHECK (status IN ('queued', 'running', 'waiting_approval', 'completed', 'failed', 'cancelled')),
+    input JSONB NOT NULL DEFAULT '{}'::jsonb,
+    output JSONB,
+    error JSONB,
+    idempotency_key TEXT,
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 22. GOVERNANCE POLICIES
+CREATE TABLE IF NOT EXISTS governance_policies (
+    id TEXT PRIMARY KEY,
+    organization_id TEXT UNIQUE NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    official_truth_gate BOOLEAN NOT NULL DEFAULT true,
+    external_communication_gate BOOLEAN NOT NULL DEFAULT true,
+    design_publishing_gate BOOLEAN NOT NULL DEFAULT true,
+    commercial_budget_enforcement BOOLEAN NOT NULL DEFAULT true,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- INDEXES FOR NEW ENTITIES
+CREATE INDEX IF NOT EXISTS idx_agent_tools_org ON agent_tools(organization_id, agent_id);
+CREATE INDEX IF NOT EXISTS idx_agent_perms_org ON agent_permissions(organization_id, agent_id);
+CREATE INDEX IF NOT EXISTS idx_approvals_org ON approvals(organization_id);
+CREATE INDEX IF NOT EXISTS idx_approvals_org_client ON approvals(organization_id, client_id);
+CREATE INDEX IF NOT EXISTS idx_approvals_org_status ON approvals(organization_id, status);
+CREATE INDEX IF NOT EXISTS idx_tool_exec_org ON tool_executions(organization_id);
+CREATE INDEX IF NOT EXISTS idx_tool_exec_idempotency ON tool_executions(organization_id, idempotency_key);
+CREATE INDEX IF NOT EXISTS idx_tool_exec_agent ON tool_executions(organization_id, agent_id);
+CREATE INDEX IF NOT EXISTS idx_tool_exec_approval ON tool_executions(approval_id);
+
+-- ROW LEVEL SECURITY (RLS) POLICIES
+ALTER TABLE agent_tools ENABLE ROW LEVEL SECURITY;
+ALTER TABLE agent_permissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE approvals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tool_executions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE governance_policies ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can access their organization agent_tools" ON agent_tools
+    FOR ALL USING (
+        organization_id IN (
+            SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text
+        )
+    );
+
+CREATE POLICY "Users can access their organization agent_permissions" ON agent_permissions
+    FOR ALL USING (
+        organization_id IN (
+            SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text
+        )
+    );
+
+CREATE POLICY "Users can access their organization approvals" ON approvals
+    FOR ALL USING (
+        organization_id IN (
+            SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text
+        )
+    );
+
+CREATE POLICY "Users can access their organization tool_executions" ON tool_executions
+    FOR ALL USING (
+        organization_id IN (
+            SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text
+        )
+    );
+
+CREATE POLICY "Users can access their organization governance_policies" ON governance_policies
+    FOR ALL USING (
+        organization_id IN (
+            SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text
+        )
+    );
+

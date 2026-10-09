@@ -12,6 +12,8 @@ import { DocumentService } from './services/documentService';
 import { ActivityService } from './services/activityService';
 import { PermissionService } from './services/permissionService';
 import { ContextService } from './services/contextService';
+import { ToolRegistryService } from './services/toolRegistryService';
+import { ToolExecutionService } from './services/toolExecutionService';
 import { db } from './db/database';
 import { isSupabaseConfigured } from './db/supabase';
 import { 
@@ -590,6 +592,406 @@ app.get('/api/activities', requireAuth, requireOrganization, (req: Authenticated
     res.json(activities);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// 10. TOOL REGISTRY & EXECUTION GATEWAY
+// ==========================================
+app.get('/api/tools', requireAuth, requireOrganization, (req: AuthenticatedRequest, res) => {
+  try {
+    const tools = ToolRegistryService.listTools();
+    res.json(tools);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/tools/execute', requireAuth, requireOrganization, async (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const userId = req.auth!.user.id;
+    const { 
+      toolId, 
+      clientId, 
+      projectId, 
+      agentId, 
+      input = {}, 
+      idempotencyKey, 
+      approvalId,
+      source = 'api'
+    } = req.body;
+
+    if (!toolId) {
+      return res.status(400).json({
+        success: false,
+        errorCode: 'INVALID_INPUT',
+        message: 'toolId is required'
+      });
+    }
+
+    const result = await ToolExecutionService.executeTool({
+      toolId,
+      organizationId: orgId,
+      userId,
+      agentId,
+      clientId,
+      projectId,
+      input,
+      source,
+      idempotencyKey,
+      approvalId
+    });
+
+    const statusCode = result.success ? (result.status === 'waiting_approval' ? 202 : 200) : 400;
+    res.status(statusCode).json(result);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      errorCode: 'EXECUTION_FAILED',
+      message: err.message
+    });
+  }
+});
+
+// ==========================================
+// 11. AGENT ORCHESTRATION & BOUNDARIES
+// ==========================================
+app.get('/api/agents', requireAuth, requireOrganization, (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const allTools = ToolRegistryService.listTools();
+    const agents = (db.get('agents') || []).filter(a => a.organization_id === orgId);
+    const agentTools = (db.get('agent_tools') || []).filter(at => at.organization_id === orgId);
+    const agentPerms = (db.get('agent_permissions') || []).filter(ap => ap.organization_id === orgId);
+    const executions = (db.get('tool_executions') || []).filter(e => e.organization_id === orgId);
+
+    const detailedAgents = agents.map(agent => {
+      const allowedToolIds = agentTools
+        .filter(at => at.agent_id === agent.id && at.enabled)
+        .map(at => at.tool_id);
+      
+      const allowedTools = allTools.filter(t => allowedToolIds.includes(t.id));
+      const blockedTools = allTools.filter(t => !allowedToolIds.includes(t.id));
+      const permissions = agentPerms
+        .filter(ap => ap.agent_id === agent.id && ap.enabled)
+        .map(ap => ap.permission);
+
+      const agentExecutions = executions.filter(e => e.agent_id === agent.id);
+      const recentFailures = agentExecutions.filter(e => e.status === 'failed').slice(0, 5);
+      const recentExecutions = agentExecutions.slice(0, 5);
+
+      return {
+        ...agent,
+        allowedTools,
+        blockedTools,
+        permissions,
+        totalExecutions: agentExecutions.length,
+        recentExecutions,
+        recentFailures
+      };
+    });
+
+    res.json(detailedAgents);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch('/api/agents/:id/tools', requireAuth, requireOrganization, requireRole('ADMIN'), (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const agentId = param(req.params.id);
+    const { toolId, enabled } = req.body;
+
+    if (!toolId || typeof enabled !== 'boolean') {
+      return res.status(400).json({ error: 'toolId and enabled (boolean) are required' });
+    }
+
+    db.update('agent_tools', list => {
+      const existing = (list || []).find(
+        at => at.organization_id === orgId && at.agent_id === agentId && at.tool_id === toolId
+      );
+      if (existing) {
+        existing.enabled = enabled;
+        existing.updated_at = new Date().toISOString();
+        return [...list];
+      }
+      const newRecord = {
+        id: `at_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        organization_id: orgId,
+        agent_id: agentId,
+        tool_id: toolId,
+        enabled,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      return [...(list || []), newRecord];
+    });
+
+    ActivityService.logActivity({
+      organization_id: orgId,
+      actor_type: 'user',
+      actor_id: req.auth!.user.name,
+      action: 'Agent tool access modified',
+      entity_type: 'agent_tools',
+      entity_id: agentId,
+      result: `Tool "${toolId}" set to ${enabled ? 'ENABLED' : 'BLOCKED'} for agent "${agentId}".`
+    });
+
+    res.json({ success: true, agentId, toolId, enabled });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// 12. APPROVALS WORKFLOW
+// ==========================================
+app.get('/api/approvals', requireAuth, requireOrganization, (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const status = req.query.status as string | undefined;
+    let approvals = (db.get('approvals') || []).filter(a => a.organization_id === orgId);
+
+    // Auto-expire approvals past expires_at
+    const now = new Date();
+    approvals.forEach(a => {
+      if (a.status === 'pending' && new Date(a.expires_at) < now) {
+        a.status = 'expired';
+        a.updated_at = now.toISOString();
+      }
+    });
+
+    if (status) {
+      approvals = approvals.filter(a => a.status === status);
+    }
+
+    // Sort newest first
+    approvals.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    res.json(approvals);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/approvals/:id/approve', requireAuth, requireOrganization, requireRole('ADMIN'), async (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const approvalId = param(req.params.id);
+    const { editedInput } = req.body;
+
+    const approvals = db.get('approvals') || [];
+    const approval = approvals.find(a => a.id === approvalId && a.organization_id === orgId);
+
+    if (!approval) {
+      return res.status(404).json({ error: 'Approval request not found.' });
+    }
+
+    if (approval.status !== 'pending') {
+      return res.status(400).json({ error: `Cannot approve item with status "${approval.status}".` });
+    }
+
+    if (new Date(approval.expires_at) < new Date()) {
+      approval.status = 'expired';
+      db.update('approvals', list => list.map(a => a.id === approval.id ? approval : a));
+      return res.status(400).json({ 
+        success: false, 
+        errorCode: 'APPROVAL_EXPIRED', 
+        message: 'This approval has expired.' 
+      });
+    }
+
+    // Update approval with edited input if provided
+    if (editedInput) {
+      approval.approved_input = editedInput;
+    } else {
+      approval.approved_input = approval.original_input;
+    }
+    approval.status = 'approved';
+    approval.reviewed_by = req.auth!.user.name;
+    approval.reviewed_at = new Date().toISOString();
+    approval.updated_at = new Date().toISOString();
+
+    db.update('approvals', list => list.map(a => a.id === approval.id ? approval : a));
+
+    ActivityService.logActivity({
+      organization_id: orgId,
+      client_id: approval.client_id,
+      project_id: approval.project_id,
+      actor_type: 'user',
+      actor_id: req.auth!.user.name,
+      action: 'TOOL_APPROVED',
+      entity_type: 'approval',
+      entity_id: approval.id,
+      result: `Approved action for tool "${approval.tool_id}"`
+    });
+
+    // Execute the approved action immediately
+    const executionResult = await ToolExecutionService.executeTool({
+      toolId: approval.tool_id,
+      organizationId: orgId,
+      userId: req.auth!.user.id,
+      clientId: approval.client_id,
+      projectId: approval.project_id,
+      input: approval.approved_input || approval.original_input || {},
+      approvalId: approval.id
+    });
+
+    const finalApproval = (db.get('approvals') || []).find(a => a.id === approval.id) || approval;
+
+    res.json({
+      approval: finalApproval,
+      execution: executionResult
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/approvals/:id/reject', requireAuth, requireOrganization, requireRole('ADMIN'), (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const approvalId = param(req.params.id);
+    const { reason = 'Rejected by studio operator' } = req.body;
+
+    const approvals = db.get('approvals') || [];
+    const approval = approvals.find(a => a.id === approvalId && a.organization_id === orgId);
+
+    if (!approval) {
+      return res.status(404).json({ error: 'Approval request not found.' });
+    }
+
+    if (approval.status !== 'pending') {
+      return res.status(400).json({ error: `Cannot reject item with status "${approval.status}".` });
+    }
+
+    approval.status = 'rejected';
+    approval.reviewed_by = req.auth!.user.name;
+    approval.reviewed_at = new Date().toISOString();
+    approval.updated_at = new Date().toISOString();
+
+    db.update('approvals', list => list.map(a => a.id === approval.id ? approval : a));
+
+    ActivityService.logActivity({
+      organization_id: orgId,
+      client_id: approval.client_id,
+      project_id: approval.project_id,
+      actor_type: 'user',
+      actor_id: req.auth!.user.name,
+      action: 'TOOL_REJECTED',
+      entity_type: 'approval',
+      entity_id: approval.id,
+      result: `Rejected execution for tool "${approval.tool_id}": ${reason}`
+    });
+
+    res.json({ success: true, approval });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// 13. TOOL EXECUTIONS TELEMETRY & LOGS
+// ==========================================
+app.get('/api/tool-executions', requireAuth, requireOrganization, (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const agentId = req.query.agentId as string | undefined;
+    const toolId = req.query.toolId as string | undefined;
+    const status = req.query.status as any;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
+
+    let list = (db.get('tool_executions') || []).filter(e => e.organization_id === orgId);
+
+    if (agentId) list = list.filter(e => e.agent_id === agentId);
+    if (toolId) list = list.filter(e => e.tool_id === toolId);
+    if (status) list = list.filter(e => e.status === status);
+
+    list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    res.json(list.slice(0, limit));
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// 14. AI GOVERNANCE POLICIES
+// ==========================================
+app.get('/api/governance', requireAuth, requireOrganization, (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const policies = db.get('governance_policies') || [];
+    const policy = policies.find(p => p.organization_id === orgId) || {
+      id: `gov_${orgId}`,
+      organization_id: orgId,
+      official_truth_gate: true,
+      external_communication_gate: true,
+      design_publishing_gate: true,
+      commercial_budget_enforcement: true,
+      updated_at: new Date().toISOString()
+    };
+    res.json(policy);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch('/api/governance', requireAuth, requireOrganization, requireRole('ADMIN'), (req: AuthenticatedRequest, res) => {
+  try {
+    const orgId = req.auth!.organization!.id;
+    const { 
+      official_truth_gate, 
+      external_communication_gate, 
+      design_publishing_gate, 
+      commercial_budget_enforcement 
+    } = req.body;
+
+    let updatedPolicy: any;
+
+    db.update('governance_policies', list => {
+      const existingIdx = (list || []).findIndex(p => p.organization_id === orgId);
+      if (existingIdx >= 0) {
+        list[existingIdx] = {
+          ...list[existingIdx],
+          ...(official_truth_gate !== undefined && { official_truth_gate: Boolean(official_truth_gate) }),
+          ...(external_communication_gate !== undefined && { external_communication_gate: Boolean(external_communication_gate) }),
+          ...(design_publishing_gate !== undefined && { design_publishing_gate: Boolean(design_publishing_gate) }),
+          ...(commercial_budget_enforcement !== undefined && { commercial_budget_enforcement: Boolean(commercial_budget_enforcement) }),
+          updated_at: new Date().toISOString()
+        };
+        updatedPolicy = list[existingIdx];
+        return [...list];
+      } else {
+        const newPolicy = {
+          id: `gov_${orgId}`,
+          organization_id: orgId,
+          official_truth_gate: official_truth_gate !== undefined ? Boolean(official_truth_gate) : true,
+          external_communication_gate: external_communication_gate !== undefined ? Boolean(external_communication_gate) : true,
+          design_publishing_gate: design_publishing_gate !== undefined ? Boolean(design_publishing_gate) : true,
+          commercial_budget_enforcement: commercial_budget_enforcement !== undefined ? Boolean(commercial_budget_enforcement) : true,
+          updated_at: new Date().toISOString()
+        };
+        updatedPolicy = newPolicy;
+        return [...(list || []), newPolicy];
+      }
+    });
+
+    ActivityService.logActivity({
+      organization_id: orgId,
+      actor_type: 'user',
+      actor_id: req.auth!.user.name,
+      action: 'AI Governance policy modified',
+      entity_type: 'governance_policies',
+      entity_id: orgId,
+      result: 'Updated organization AI governance gates'
+    });
+
+    res.json(updatedPolicy);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
   }
 });
 

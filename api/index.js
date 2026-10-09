@@ -419,6 +419,142 @@ var initialDevelopmentSeed = {
       entity_id: "mem-demo-2",
       created_at: new Date(Date.now() - 864e5).toISOString()
     }
+  ],
+  tools: [],
+  agents: [
+    {
+      id: "ag-cd",
+      organization_id: DEFAULT_ORG_ID,
+      name: "Creative Director Agent",
+      role: "Art Direction, Taste Evaluation & Synthesis",
+      description: "Supervises aesthetic consistency, brand fidelity, and creative compositions.",
+      status: "Active",
+      created_at: new Date(Date.now() - 864e5 * 10).toISOString(),
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "ag-design",
+      organization_id: DEFAULT_ORG_ID,
+      name: "Design Automation Agent",
+      role: "Figma Token Sync, Layout Spatialization & UI Spec",
+      description: "Automates token transformations, design systems, and export specifications.",
+      status: "Active",
+      created_at: new Date(Date.now() - 864e5 * 10).toISOString(),
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "ag-mem",
+      organization_id: DEFAULT_ORG_ID,
+      name: "Memory Intelligence Engine",
+      role: "Knowledge Retrieval, Brand DNA & Client Habits",
+      description: "Continuously synthesizes and indexes long-term client context and habits.",
+      status: "Active",
+      created_at: new Date(Date.now() - 864e5 * 10).toISOString(),
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "ag-liaison",
+      organization_id: DEFAULT_ORG_ID,
+      name: "Client Liaison Agent",
+      role: "Communications, Slack / Email Drafting, Approval Queue",
+      description: "Prepares client dispatches, summarizes communications, and routes approvals.",
+      status: "Standby",
+      created_at: new Date(Date.now() - 864e5 * 10).toISOString(),
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "ag-research",
+      organization_id: DEFAULT_ORG_ID,
+      name: "Research & Discovery Agent",
+      role: "Brief Deconstruction, Market Mapping, Technical Papers",
+      description: "Analyzes project briefs, extracts market positioning, and benchmarks competitors.",
+      status: "Active",
+      created_at: new Date(Date.now() - 864e5 * 10).toISOString(),
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    }
+  ],
+  agent_tools: [
+    // Design Agent
+    { id: "at-1", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", tool_id: "projects.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-2", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", tool_id: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-3", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", tool_id: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-4", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", tool_id: "figma.publish", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-5", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", tool_id: "tasks.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-6", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", tool_id: "tasks.update", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    // Research Agent
+    { id: "at-7", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", tool_id: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-8", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", tool_id: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-9", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", tool_id: "clients.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-10", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", tool_id: "projects.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    // Client Liaison Agent
+    { id: "at-11", organization_id: DEFAULT_ORG_ID, agent_id: "ag-liaison", tool_id: "communication.send", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-12", organization_id: DEFAULT_ORG_ID, agent_id: "ag-liaison", tool_id: "clients.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-13", organization_id: DEFAULT_ORG_ID, agent_id: "ag-liaison", tool_id: "tasks.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    // Memory Intelligence Engine
+    { id: "at-14", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", tool_id: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-15", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", tool_id: "memory.create", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-16", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", tool_id: "memory.update", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-17", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", tool_id: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    // Creative Director Agent
+    { id: "at-18", organization_id: DEFAULT_ORG_ID, agent_id: "ag-cd", tool_id: "projects.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-19", organization_id: DEFAULT_ORG_ID, agent_id: "ag-cd", tool_id: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "at-20", organization_id: DEFAULT_ORG_ID, agent_id: "ag-cd", tool_id: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() }
+  ],
+  agent_permissions: [
+    { id: "ap-1", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", permission: "projects.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-2", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", permission: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-3", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", permission: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-4", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", permission: "design.publish", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-5", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", permission: "tasks.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-6", organization_id: DEFAULT_ORG_ID, agent_id: "ag-design", permission: "tasks.update", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-7", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", permission: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-8", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", permission: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-9", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", permission: "clients.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-10", organization_id: DEFAULT_ORG_ID, agent_id: "ag-research", permission: "projects.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-11", organization_id: DEFAULT_ORG_ID, agent_id: "ag-liaison", permission: "communication.send", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-12", organization_id: DEFAULT_ORG_ID, agent_id: "ag-liaison", permission: "clients.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-13", organization_id: DEFAULT_ORG_ID, agent_id: "ag-liaison", permission: "tasks.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-14", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", permission: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-15", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", permission: "memory.create", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-16", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", permission: "memory.update", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-17", organization_id: DEFAULT_ORG_ID, agent_id: "ag-mem", permission: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-18", organization_id: DEFAULT_ORG_ID, agent_id: "ag-cd", permission: "projects.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-19", organization_id: DEFAULT_ORG_ID, agent_id: "ag-cd", permission: "memory.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() },
+    { id: "ap-20", organization_id: DEFAULT_ORG_ID, agent_id: "ag-cd", permission: "documents.read", enabled: true, created_at: (/* @__PURE__ */ new Date()).toISOString(), updated_at: (/* @__PURE__ */ new Date()).toISOString() }
+  ],
+  approvals: [
+    {
+      id: "appr-seed-1",
+      organization_id: DEFAULT_ORG_ID,
+      client_id: "demo-xyz-ai",
+      project_id: "proj-demo-1",
+      requested_by_type: "agent",
+      requested_by_id: "ag-liaison",
+      tool_id: "communication.send",
+      risk_level: "HIGH",
+      status: "pending",
+      original_input: {
+        channel: "Slack",
+        recipient: "Sarah Connor",
+        message: "The initial draft of the spatial design token architecture has passed internal checks and is ready for your team review."
+      },
+      reason: "External Communication Gate: AI Agent requested dispatch of outbound Slack update to client stakeholder.",
+      expires_at: new Date(Date.now() + 24 * 36e5).toISOString(),
+      created_at: new Date(Date.now() - 36e5 * 2).toISOString(),
+      updated_at: new Date(Date.now() - 36e5 * 2).toISOString()
+    }
+  ],
+  tool_executions: [],
+  governance_policies: [
+    {
+      id: `gov_${DEFAULT_ORG_ID}`,
+      organization_id: DEFAULT_ORG_ID,
+      official_truth_gate: true,
+      external_communication_gate: true,
+      design_publishing_gate: true,
+      commercial_budget_enforcement: true,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    }
   ]
 };
 
@@ -449,7 +585,14 @@ var TABLE_MAP = {
   client_memory: "client_memory",
   documents: "documents",
   client_permissions: "client_permissions",
-  activities: "activities"
+  activities: "activities",
+  tools: "tools",
+  agents: "agents",
+  agent_tools: "agent_tools",
+  agent_permissions: "agent_permissions",
+  approvals: "approvals",
+  tool_executions: "tool_executions",
+  governance_policies: "governance_policies"
 };
 var PK_MAP = {
   users: "id",
@@ -465,7 +608,14 @@ var PK_MAP = {
   client_memory: "id",
   documents: "file_id",
   client_permissions: "id",
-  activities: "id"
+  activities: "id",
+  tools: "id",
+  agents: "id",
+  agent_tools: "id",
+  agent_permissions: "id",
+  approvals: "id",
+  tool_executions: "id",
+  governance_policies: "id"
 };
 async function loadFromSupabase() {
   if (!supabase) return null;
@@ -597,7 +747,14 @@ var Database = class {
       client_memory: existing.client_memory || [],
       documents: existing.documents || [],
       client_permissions: existing.client_permissions || [],
-      activities: existing.activities || []
+      activities: existing.activities || [],
+      tools: existing.tools || [],
+      agents: existing.agents && existing.agents.length > 0 ? existing.agents : initialDevelopmentSeed.agents,
+      agent_tools: existing.agent_tools && existing.agent_tools.length > 0 ? existing.agent_tools : initialDevelopmentSeed.agent_tools,
+      agent_permissions: existing.agent_permissions && existing.agent_permissions.length > 0 ? existing.agent_permissions : initialDevelopmentSeed.agent_permissions,
+      approvals: existing.approvals || initialDevelopmentSeed.approvals,
+      tool_executions: existing.tool_executions || [],
+      governance_policies: existing.governance_policies && existing.governance_policies.length > 0 ? existing.governance_policies : initialDevelopmentSeed.governance_policies
     };
     const defaultOrgId = schema.organizations[0]?.id || "org_matias_studio";
     schema.clients.forEach((c) => {
@@ -623,6 +780,24 @@ var Database = class {
     });
     schema.activities.forEach((a) => {
       if (!a.organization_id) a.organization_id = defaultOrgId;
+    });
+    schema.agents.forEach((ag) => {
+      if (!ag.organization_id) ag.organization_id = defaultOrgId;
+    });
+    schema.agent_tools.forEach((at) => {
+      if (!at.organization_id) at.organization_id = defaultOrgId;
+    });
+    schema.agent_permissions.forEach((ap) => {
+      if (!ap.organization_id) ap.organization_id = defaultOrgId;
+    });
+    schema.approvals.forEach((appr) => {
+      if (!appr.organization_id) appr.organization_id = defaultOrgId;
+    });
+    schema.tool_executions.forEach((te) => {
+      if (!te.organization_id) te.organization_id = defaultOrgId;
+    });
+    schema.governance_policies.forEach((gp) => {
+      if (!gp.organization_id) gp.organization_id = defaultOrgId;
     });
     if (!schema.users || schema.users.length === 0) {
       schema.users = initialDevelopmentSeed.users;
@@ -1213,7 +1388,193 @@ var defaultPermissions = {
   send_invoice: "approval_required",
   send_quotation: "approval_required"
 };
+var ROLE_PERMISSIONS = {
+  OWNER: [
+    "*",
+    // Full access
+    "clients.read",
+    "clients.create",
+    "clients.update",
+    "clients.delete",
+    "projects.read",
+    "projects.create",
+    "projects.update",
+    "projects.delete",
+    "tasks.read",
+    "tasks.create",
+    "tasks.update",
+    "tasks.delete",
+    "memory.read",
+    "memory.create",
+    "memory.update",
+    "memory.approve",
+    "memory.archive",
+    "documents.read",
+    "documents.create",
+    "documents.update",
+    "documents.delete",
+    "documents.publish",
+    "communication.read",
+    "communication.draft",
+    "communication.send",
+    "integrations.read",
+    "integrations.manage",
+    "agents.read",
+    "agents.execute",
+    "agents.configure",
+    "approvals.read",
+    "approvals.create",
+    "approvals.resolve",
+    "organization.manage",
+    "members.manage",
+    "billing.manage",
+    "system:read",
+    "design.publish",
+    "credential_access"
+  ],
+  ADMIN: [
+    "clients.read",
+    "clients.create",
+    "clients.update",
+    "projects.read",
+    "projects.create",
+    "projects.update",
+    "projects.delete",
+    "tasks.read",
+    "tasks.create",
+    "tasks.update",
+    "tasks.delete",
+    "memory.read",
+    "memory.create",
+    "memory.update",
+    "memory.approve",
+    "memory.archive",
+    "documents.read",
+    "documents.create",
+    "documents.update",
+    "documents.delete",
+    "documents.publish",
+    "communication.read",
+    "communication.draft",
+    "communication.send",
+    "integrations.read",
+    "agents.read",
+    "agents.execute",
+    "agents.configure",
+    "approvals.read",
+    "approvals.create",
+    "approvals.resolve",
+    "members.manage",
+    "system:read",
+    "design.publish"
+  ],
+  MEMBER: [
+    "clients.read",
+    "clients.create",
+    "projects.read",
+    "projects.create",
+    "tasks.read",
+    "tasks.create",
+    "tasks.update",
+    "memory.read",
+    "memory.create",
+    "memory.update",
+    "documents.read",
+    "documents.create",
+    "communication.read",
+    "communication.draft",
+    "communication.send",
+    "integrations.read",
+    "agents.read",
+    "agents.execute",
+    "approvals.read",
+    "system:read"
+  ],
+  VIEWER: [
+    "clients.read",
+    "projects.read",
+    "tasks.read",
+    "memory.read",
+    "documents.read",
+    "communication.read",
+    "integrations.read",
+    "agents.read",
+    "approvals.read",
+    "system:read"
+  ]
+};
 var PermissionService = class {
+  /**
+   * Evaluates if a given role possesses a requested permission
+   */
+  static hasPermission(role, permission) {
+    if (role === "SUPER_ADMIN") {
+      return true;
+    }
+    const orgRole = role;
+    const permissions = ROLE_PERMISSIONS[orgRole] || [];
+    if (permissions.includes("*")) {
+      return true;
+    }
+    return permissions.includes(permission);
+  }
+  /**
+   * Throws an error if the role lacks the required permission
+   */
+  static requirePermission(role, permission) {
+    if (!this.hasPermission(role, permission)) {
+      throw new Error(`PERMISSION_DENIED: Role "${role}" lacks required permission "${permission}".`);
+    }
+  }
+  /**
+   * Returns list of permissions granted to an organization role
+   */
+  static getRolePermissions(role) {
+    return ROLE_PERMISSIONS[role] || [];
+  }
+  /**
+   * Checks if a user role can execute a tool based on required permissions
+   */
+  static canExecuteTool(role, toolId, requiredPermissions) {
+    if (role === "SUPER_ADMIN") return true;
+    for (const perm of requiredPermissions) {
+      if (!this.hasPermission(role, perm)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  /**
+   * Evaluates agent tool boundary and permissions
+   */
+  static canAgentExecuteTool(organizationId, agentId, toolId, requiredPermissions) {
+    const agentTools = db.get("agent_tools") || [];
+    const mapping = agentTools.find(
+      (at) => at.organization_id === organizationId && at.agent_id === agentId && at.tool_id === toolId
+    );
+    if (!mapping || !mapping.enabled) {
+      return {
+        allowed: false,
+        reason: `AGENT_NOT_ALLOWED: Agent "${agentId}" does not have tool "${toolId}" in its allowed tools catalog.`
+      };
+    }
+    const agentPerms = db.get("agent_permissions") || [];
+    const activePerms = agentPerms.filter((ap) => ap.organization_id === organizationId && ap.agent_id === agentId && ap.enabled).map((ap) => ap.permission);
+    if (activePerms.length > 0) {
+      for (const reqPerm of requiredPermissions) {
+        if (!activePerms.includes(reqPerm) && !activePerms.includes("*")) {
+          return {
+            allowed: false,
+            reason: `PERMISSION_DENIED: Agent "${agentId}" lacks granular permission "${reqPerm}".`
+          };
+        }
+      }
+    }
+    return { allowed: true };
+  }
+  // ==========================================
+  // Client-Level Permission Overrides (Legacy & UI support)
+  // ==========================================
   static getPermissions(organizationId, clientId) {
     const records = db.get("client_permissions");
     const existing = records.find((p) => p.client_id === clientId && p.organization_id === organizationId);
@@ -1970,6 +2331,1287 @@ var ContextService = class {
   }
 };
 
+// server/services/toolRegistryService.ts
+var ToolRegistryService = class {
+  static registeredTools = /* @__PURE__ */ new Map();
+  static initialized = false;
+  static initialize() {
+    if (this.initialized) return;
+    const initialDefinitions = [
+      // ----------------------------------------------------
+      // LOW RISK (Read-only operations)
+      // ----------------------------------------------------
+      {
+        id: "system.get_current_user",
+        name: "Get Current User",
+        provider: "core",
+        description: "Retrieves current authenticated user profile and permissions.",
+        category: "system",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: {} },
+        output_schema: { type: "object", properties: { user: { type: "object" } } },
+        required_permissions: ["system:read"]
+      },
+      {
+        id: "system.get_current_organization",
+        name: "Get Current Organization",
+        provider: "core",
+        description: "Retrieves current active organization context and plan tier.",
+        category: "system",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: {} },
+        output_schema: { type: "object", properties: { organization: { type: "object" } } },
+        required_permissions: ["system:read"]
+      },
+      {
+        id: "clients.read",
+        name: "Read Client Information",
+        provider: "core",
+        description: "Retrieves client profile, contacts, and metadata.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: { clientId: { type: "string" } } },
+        output_schema: { type: "object", properties: { client: { type: "object" } } },
+        required_permissions: ["clients.read"]
+      },
+      {
+        id: "projects.read",
+        name: "Read Project Portfolio",
+        provider: "core",
+        description: "Retrieves projects, deliverables, milestones, and progress.",
+        category: "project_management",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: { projectId: { type: "string" }, clientId: { type: "string" } } },
+        output_schema: { type: "object", properties: { projects: { type: "array" } } },
+        required_permissions: ["projects.read"]
+      },
+      {
+        id: "tasks.read",
+        name: "Read Studio Tasks",
+        provider: "core",
+        description: "Queries active, queued, or completed tasks for a project or client.",
+        category: "project_management",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: { taskId: { type: "string" }, projectId: { type: "string" } } },
+        output_schema: { type: "object", properties: { tasks: { type: "array" } } },
+        required_permissions: ["tasks.read"]
+      },
+      {
+        id: "memory.read",
+        name: "Query Client Memory",
+        provider: "core",
+        description: "Retrieves authoritative and observed client knowledge nodes.",
+        category: "research",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: { clientId: { type: "string" }, category: { type: "string" } } },
+        output_schema: { type: "object", properties: { memories: { type: "array" } } },
+        required_permissions: ["memory.read"]
+      },
+      {
+        id: "documents.read",
+        name: "Read Studio Documents",
+        provider: "core",
+        description: "Retrieves indexed documents, briefs, and brand assets.",
+        category: "documents",
+        version: "1.0.0",
+        risk_level: "LOW",
+        requires_approval: false,
+        enabled: true,
+        input_schema: { type: "object", properties: { documentId: { type: "string" }, clientId: { type: "string" } } },
+        output_schema: { type: "object", properties: { documents: { type: "array" } } },
+        required_permissions: ["documents.read"]
+      },
+      // ----------------------------------------------------
+      // MEDIUM RISK (Internal mutations with reversible effects)
+      // ----------------------------------------------------
+      {
+        id: "clients.create",
+        name: "Create Client Workspace",
+        provider: "core",
+        description: "Initializes a new client workspace with identity and contacts.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["company_name", "industry"],
+          properties: {
+            company_name: { type: "string" },
+            industry: { type: "string" },
+            website: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { client: { type: "object" } } },
+        required_permissions: ["clients.create"]
+      },
+      {
+        id: "projects.create",
+        name: "Create Studio Project",
+        provider: "core",
+        description: "Creates a project container for client deliverables.",
+        category: "project_management",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["client_id", "project_name", "project_type", "deadline"],
+          properties: {
+            client_id: { type: "string" },
+            project_name: { type: "string" },
+            project_type: { type: "string" },
+            deadline: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { project: { type: "object" } } },
+        required_permissions: ["projects.create"]
+      },
+      {
+        id: "tasks.create",
+        name: "Create Task",
+        provider: "core",
+        description: "Dispatches a new task into the studio execution queue.",
+        category: "project_management",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["client_id", "title"],
+          properties: {
+            client_id: { type: "string" },
+            project_id: { type: "string" },
+            title: { type: "string" },
+            assigned_agent: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { task: { type: "object" } } },
+        required_permissions: ["tasks.create"]
+      },
+      {
+        id: "tasks.update",
+        name: "Update Task Status",
+        provider: "core",
+        description: "Modifies status, priority, or notes of an existing task.",
+        category: "project_management",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["taskId"],
+          properties: {
+            taskId: { type: "string" },
+            status: { type: "string" },
+            priority: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { task: { type: "object" } } },
+        required_permissions: ["tasks.update"]
+      },
+      {
+        id: "memory.create",
+        name: "Store Client Memory Node",
+        provider: "core",
+        description: "Adds an observed knowledge node or fact to client memory.",
+        category: "research",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["client_id", "category", "key", "value"],
+          properties: {
+            client_id: { type: "string" },
+            category: { type: "string" },
+            key: { type: "string" },
+            value: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { memory: { type: "object" } } },
+        required_permissions: ["memory.create"]
+      },
+      {
+        id: "memory.update",
+        name: "Update Client Memory Node",
+        provider: "core",
+        description: "Updates values or confidence score of an existing memory item.",
+        category: "research",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["memoryId"],
+          properties: {
+            memoryId: { type: "string" },
+            value: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { memory: { type: "object" } } },
+        required_permissions: ["memory.update"]
+      },
+      {
+        id: "documents.create",
+        name: "Register Studio Document",
+        provider: "core",
+        description: "Registers uploaded asset or extracted file metadata.",
+        category: "documents",
+        version: "1.0.0",
+        risk_level: "MEDIUM",
+        requires_approval: false,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["client_id", "filename", "category"],
+          properties: {
+            client_id: { type: "string" },
+            filename: { type: "string" },
+            category: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { document: { type: "object" } } },
+        required_permissions: ["documents.create"]
+      },
+      // ----------------------------------------------------
+      // HIGH RISK (External communication, publishing, commercial, official truth)
+      // ----------------------------------------------------
+      {
+        id: "memory.approve",
+        name: "Approve Official Memory",
+        provider: "core",
+        description: "Elevates observed knowledge into official authoritative studio truth.",
+        category: "research",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["memoryId"],
+          properties: {
+            memoryId: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { approved: { type: "boolean" } } },
+        required_permissions: ["memory.approve"]
+      },
+      {
+        id: "client.update",
+        name: "Update Client Profile",
+        provider: "core",
+        description: "Modifies top-level client identity and strategic business positioning.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["clientId"],
+          properties: {
+            clientId: { type: "string" },
+            updates: { type: "object" }
+          }
+        },
+        output_schema: { type: "object", properties: { client: { type: "object" } } },
+        required_permissions: ["clients.update"]
+      },
+      {
+        id: "clients.update",
+        name: "Update Client Profile (Alias)",
+        provider: "core",
+        description: "Modifies client profile records and settings.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["clientId"],
+          properties: {
+            clientId: { type: "string" },
+            updates: { type: "object" }
+          }
+        },
+        output_schema: { type: "object", properties: { client: { type: "object" } } },
+        required_permissions: ["clients.update"]
+      },
+      {
+        id: "document.publish",
+        name: "Publish Deliverable Document",
+        provider: "core",
+        description: "Publishes finalized brand assets, pitch decks, or specifications.",
+        category: "documents",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["documentId"],
+          properties: {
+            documentId: { type: "string" },
+            distribution: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { published: { type: "boolean" } } },
+        required_permissions: ["documents.publish"]
+      },
+      {
+        id: "communication.send",
+        name: "Send Client Communication",
+        provider: "core",
+        description: "Sends external message to client via Slack, Email, or WhatsApp.",
+        category: "communication",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["clientId", "channel", "message"],
+          properties: {
+            clientId: { type: "string" },
+            channel: { type: "string" },
+            recipient: { type: "string" },
+            message: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { sent: { type: "boolean" }, messageId: { type: "string" } } },
+        required_permissions: ["communication.send"]
+      },
+      {
+        id: "figma.publish",
+        name: "Publish Figma Design Tokens",
+        provider: "core",
+        description: "Exports and publishes design tokens directly to remote Figma files.",
+        category: "design",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["fileKey", "tokens"],
+          properties: {
+            fileKey: { type: "string" },
+            tokens: { type: "object" }
+          }
+        },
+        output_schema: { type: "object", properties: { synced: { type: "boolean" } } },
+        required_permissions: ["design.publish"]
+      },
+      {
+        id: "invoice.send",
+        name: "Issue Commercial Invoice",
+        provider: "core",
+        description: "Generates and transmits commercial invoice to client billing contact.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["clientId", "amount", "currency"],
+          properties: {
+            clientId: { type: "string" },
+            amount: { type: "number" },
+            currency: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { invoiceId: { type: "string" }, sent: { type: "boolean" } } },
+        required_permissions: ["billing.manage"]
+      },
+      {
+        id: "quotation.send",
+        name: "Send Commercial Quotation",
+        provider: "core",
+        description: "Submits formal fee quotation or project estimate to client.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "HIGH",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["clientId", "estimatedAmount"],
+          properties: {
+            clientId: { type: "string" },
+            estimatedAmount: { type: "number" }
+          }
+        },
+        output_schema: { type: "object", properties: { quoteId: { type: "string" }, sent: { type: "boolean" } } },
+        required_permissions: ["billing.manage"]
+      },
+      // ----------------------------------------------------
+      // CRITICAL RISK (Security, credentials, tenant deletion)
+      // ----------------------------------------------------
+      {
+        id: "organization.delete",
+        name: "Delete Studio Organization",
+        provider: "core",
+        description: "Permanently deletes organization tenant and all associated data.",
+        category: "system",
+        version: "1.0.0",
+        risk_level: "CRITICAL",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["organizationId", "confirmSlug"],
+          properties: {
+            organizationId: { type: "string" },
+            confirmSlug: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { deleted: { type: "boolean" } } },
+        required_permissions: ["organization.manage"]
+      },
+      {
+        id: "user.delete",
+        name: "Delete Organization User",
+        provider: "core",
+        description: "Revokes user access and deletes account credentials.",
+        category: "system",
+        version: "1.0.0",
+        risk_level: "CRITICAL",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["targetUserId"],
+          properties: {
+            targetUserId: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { deleted: { type: "boolean" } } },
+        required_permissions: ["members.manage"]
+      },
+      {
+        id: "financial_action",
+        name: "Execute Direct Financial Action",
+        provider: "core",
+        description: "Initiates debit/credit or refund transaction on studio payment gateway.",
+        category: "business",
+        version: "1.0.0",
+        risk_level: "CRITICAL",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["actionType", "amount"],
+          properties: {
+            actionType: { type: "string" },
+            amount: { type: "number" }
+          }
+        },
+        output_schema: { type: "object", properties: { executed: { type: "boolean" } } },
+        required_permissions: ["billing.manage"]
+      },
+      {
+        id: "credential_access",
+        name: "Access Vault Credentials",
+        provider: "core",
+        description: "Requests raw API tokens or third-party OAuth secrets.",
+        category: "system",
+        version: "1.0.0",
+        risk_level: "CRITICAL",
+        requires_approval: true,
+        enabled: true,
+        input_schema: {
+          type: "object",
+          required: ["secretName"],
+          properties: {
+            secretName: { type: "string" }
+          }
+        },
+        output_schema: { type: "object", properties: { retrieved: { type: "boolean" } } },
+        required_permissions: ["credential_access"]
+      }
+    ];
+    for (const tool of initialDefinitions) {
+      this.registeredTools.set(tool.id, tool);
+    }
+    this.initialized = true;
+  }
+  static registerTool(tool) {
+    this.initialize();
+    this.registeredTools.set(tool.id, tool);
+  }
+  static getTool(id) {
+    this.initialize();
+    return this.registeredTools.get(id);
+  }
+  static listTools() {
+    this.initialize();
+    return Array.from(this.registeredTools.values()).map((t) => {
+      const { executor, ...def } = t;
+      return def;
+    });
+  }
+  static isToolAvailable(id) {
+    this.initialize();
+    const tool = this.registeredTools.get(id);
+    return Boolean(tool && tool.enabled);
+  }
+  static getToolSchema(id) {
+    this.initialize();
+    const tool = this.registeredTools.get(id);
+    if (!tool) return void 0;
+    return {
+      input: tool.input_schema,
+      output: tool.output_schema
+    };
+  }
+  static getToolsForAgent(agentId, organizationId) {
+    this.initialize();
+    const agentTools = db.get("agent_tools").filter(
+      (at) => at.organization_id === organizationId && at.agent_id === agentId && at.enabled
+    );
+    const allowedIds = new Set(agentTools.map((at) => at.tool_id));
+    return this.listTools().filter((t) => allowedIds.has(t.id));
+  }
+};
+
+// server/services/riskEngine.ts
+var RiskEngine = class {
+  /**
+   * Evaluates the risk level and approval requirement for a proposed tool execution
+   */
+  static evaluateToolRisk(tool, organization, user, agent, context) {
+    if (context?.isApprovalExecution) {
+      return {
+        riskLevel: tool.risk_level,
+        requiresApproval: false,
+        reason: "Action has been approved and validated by human operator."
+      };
+    }
+    let riskLevel = tool.risk_level;
+    let requiresApproval = tool.requires_approval;
+    let reason = `Standard risk level [${tool.risk_level}] for ${tool.name}.`;
+    const policies = db.get("governance_policies") || [];
+    const orgPolicy = policies.find((p) => p.organization_id === organization.id) || {
+      id: `gov_${organization.id}`,
+      organization_id: organization.id,
+      official_truth_gate: true,
+      external_communication_gate: true,
+      design_publishing_gate: true,
+      commercial_budget_enforcement: true,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    if (tool.id === "communication.send") {
+      if (orgPolicy.external_communication_gate) {
+        requiresApproval = true;
+        reason = "External Communication Gate is active: Outbound messages require human review.";
+      }
+    }
+    if (tool.id === "memory.approve") {
+      if (orgPolicy.official_truth_gate) {
+        requiresApproval = true;
+        reason = "Official Truth Modification Gate is active: Elevating memory to official truth requires confirmation.";
+      }
+    }
+    if (tool.id === "memory.update" && context?.input?.status === "OFFICIAL") {
+      if (orgPolicy.official_truth_gate) {
+        riskLevel = "HIGH";
+        requiresApproval = true;
+        reason = "Official Truth Modification Gate is active: Direct write to official memory requires confirmation.";
+      }
+    }
+    if (tool.id === "figma.publish" || tool.id === "document.publish") {
+      if (orgPolicy.design_publishing_gate) {
+        requiresApproval = true;
+        reason = "Design Asset Publishing Gate is active: Deliverable publishing requires human verification.";
+      }
+    }
+    if (tool.id === "invoice.send" || tool.id === "quotation.send" || tool.id === "financial_action") {
+      if (orgPolicy.commercial_budget_enforcement) {
+        requiresApproval = true;
+        reason = "Commercial Budget Enforcement is active: Financial and quotation actions require studio confirmation.";
+      }
+    }
+    if (context?.clientId) {
+      const clientPerms = PermissionService.getPermissions(organization.id, context.clientId);
+      if (tool.id === "communication.send" && clientPerms.send_client_messages === "approval_required") {
+        requiresApproval = true;
+        reason = "Client-specific rule enforces review before sending messages.";
+      }
+      if (tool.id === "figma.publish" && clientPerms.publish_design === "approval_required") {
+        requiresApproval = true;
+        reason = "Client-specific rule enforces review before publishing designs.";
+      }
+      if (tool.id === "invoice.send" && clientPerms.send_invoice === "approval_required") {
+        requiresApproval = true;
+        reason = "Client-specific rule enforces review before issuing invoices.";
+      }
+      if (tool.id === "quotation.send" && clientPerms.send_quotation === "approval_required") {
+        requiresApproval = true;
+        reason = "Client-specific rule enforces review before sending quotations.";
+      }
+      if (tool.id === "memory.update" && clientPerms.modify_client_memory === "approval_required") {
+        requiresApproval = true;
+        reason = "Client-specific rule enforces review for modifying memory.";
+      }
+    }
+    if (riskLevel === "CRITICAL") {
+      requiresApproval = true;
+      reason = "CRITICAL SECURITY LEVEL: Requires strict confirmation before execution.";
+    }
+    return {
+      riskLevel,
+      requiresApproval,
+      reason
+    };
+  }
+};
+
+// server/services/toolExecutionService.ts
+function redactSensitive(obj) {
+  if (obj === null || obj === void 0) return obj;
+  if (typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) {
+    return obj.map((item) => redactSensitive(item));
+  }
+  const redacted = {};
+  const sensitiveRegex = /password|secret|token|salt|bearer|credential|auth_header/i;
+  for (const [key, value] of Object.entries(obj)) {
+    if (sensitiveRegex.test(key)) {
+      redacted[key] = "[REDACTED]";
+    } else if (typeof value === "object" && value !== null) {
+      redacted[key] = redactSensitive(value);
+    } else {
+      redacted[key] = value;
+    }
+  }
+  return redacted;
+}
+var ToolExecutionService = class {
+  /**
+   * The Central 15-Step Tool Execution Pipeline
+   */
+  static async executeTool(params) {
+    const {
+      toolId,
+      organizationId,
+      userId,
+      agentId,
+      clientId,
+      projectId,
+      input = {},
+      source = "api",
+      idempotencyKey,
+      approvalId
+    } = params;
+    const executionId = `exec_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const users = db.get("users");
+    const user = users.find((u) => u.id === userId);
+    if (!user || user.status !== "active") {
+      return this.failureResponse(toolId, executionId, "AUTH_REQUIRED", "Valid active user authentication is required.");
+    }
+    const orgs = db.get("organizations");
+    const organization = orgs.find((o) => o.id === organizationId);
+    if (!organization || organization.status === "suspended" || organization.status === "cancelled") {
+      return this.failureResponse(toolId, executionId, "FORBIDDEN", "Target organization is inactive or not found.");
+    }
+    let userRole = "MEMBER";
+    if (user.platform_role === "SUPER_ADMIN") {
+      userRole = "OWNER";
+    } else {
+      const members = db.get("organization_members");
+      const membership = members.find((m) => m.organization_id === organizationId && m.user_id === userId);
+      if (!membership) {
+        return this.failureResponse(toolId, executionId, "FORBIDDEN", "User is not a member of this organization.");
+      }
+      userRole = membership.role;
+    }
+    const tool = ToolRegistryService.getTool(toolId);
+    if (!tool) {
+      return this.failureResponse(toolId, executionId, "TOOL_NOT_FOUND", `Tool "${toolId}" is not registered in the catalog.`);
+    }
+    const normalizedInput = { ...input };
+    const resolvedClientId = clientId || input.clientId || input.client_id;
+    const resolvedProjectId = projectId || input.projectId || input.project_id;
+    if (resolvedClientId) {
+      normalizedInput.clientId = resolvedClientId;
+      normalizedInput.client_id = resolvedClientId;
+    }
+    if (resolvedProjectId) {
+      normalizedInput.projectId = resolvedProjectId;
+      normalizedInput.project_id = resolvedProjectId;
+    }
+    if (resolvedClientId) {
+      const clients = db.get("clients");
+      const client = clients.find((c) => c.id === resolvedClientId);
+      if (!client || client.organization_id !== organizationId) {
+        return this.failureResponse(
+          toolId,
+          executionId,
+          "TENANT_MISMATCH",
+          `Client "${resolvedClientId}" does not belong to organization "${organizationId}". Access denied.`
+        );
+      }
+    }
+    if (resolvedProjectId) {
+      const projects = db.get("projects");
+      const project = projects.find((p) => p.project_id === resolvedProjectId);
+      if (!project || project.organization_id !== organizationId) {
+        return this.failureResponse(
+          toolId,
+          executionId,
+          "TENANT_MISMATCH",
+          `Project "${resolvedProjectId}" does not belong to organization "${organizationId}". Access denied.`
+        );
+      }
+    }
+    const inputValidation = this.validateInput(tool.input_schema, normalizedInput);
+    if (!inputValidation.valid) {
+      return this.failureResponse(toolId, executionId, "INVALID_INPUT", inputValidation.error || "Input validation failed.");
+    }
+    if (!tool.enabled) {
+      return this.failureResponse(toolId, executionId, "TOOL_DISABLED", `Tool "${toolId}" is currently disabled in system settings.`);
+    }
+    const canUserExecute = PermissionService.canExecuteTool(userRole, tool.id, tool.required_permissions);
+    if (!canUserExecute) {
+      return this.failureResponse(
+        toolId,
+        executionId,
+        "PERMISSION_DENIED",
+        `Role "${userRole}" lacks the required permissions for tool "${toolId}".`
+      );
+    }
+    let agentRecord;
+    if (agentId) {
+      const agents = db.get("agents") || [];
+      agentRecord = agents.find((a) => a.id === agentId && a.organization_id === organizationId);
+      const agentCheck = PermissionService.canAgentExecuteTool(
+        organizationId,
+        agentId,
+        tool.id,
+        tool.required_permissions
+      );
+      if (!agentCheck.allowed) {
+        return this.failureResponse(
+          toolId,
+          executionId,
+          agentCheck.reason?.includes("AGENT_NOT_ALLOWED") ? "AGENT_NOT_ALLOWED" : "PERMISSION_DENIED",
+          agentCheck.reason || "Agent is not permitted to execute this tool."
+        );
+      }
+    }
+    if (idempotencyKey) {
+      const executions = db.get("tool_executions") || [];
+      const existing = executions.find(
+        (e) => e.organization_id === organizationId && e.idempotency_key === idempotencyKey
+      );
+      if (existing) {
+        if (existing.status === "completed") {
+          return {
+            success: true,
+            toolId: existing.tool_id,
+            executionId: existing.id,
+            status: "completed",
+            data: existing.output
+          };
+        }
+        if (existing.status === "waiting_approval") {
+          return {
+            success: true,
+            toolId: existing.tool_id,
+            executionId: existing.id,
+            status: "waiting_approval",
+            approvalId: existing.approval_id,
+            message: "An approval request for this idempotent action is already pending review."
+          };
+        }
+      }
+    }
+    const isApprovalExecution = Boolean(approvalId);
+    let existingApproval;
+    if (approvalId) {
+      const approvals = db.get("approvals") || [];
+      existingApproval = approvals.find((a) => a.id === approvalId && a.organization_id === organizationId);
+      if (!existingApproval) {
+        return this.failureResponse(toolId, executionId, "FORBIDDEN", "Approval request not found for this tenant.");
+      }
+      if (existingApproval.status === "rejected") {
+        return this.failureResponse(toolId, executionId, "FORBIDDEN", "This approval request was previously rejected.");
+      }
+      if (existingApproval.status === "expired" || new Date(existingApproval.expires_at) < /* @__PURE__ */ new Date()) {
+        existingApproval.status = "expired";
+        db.update("approvals", (list) => list.map((a) => a.id === existingApproval.id ? existingApproval : a));
+        return this.failureResponse(toolId, executionId, "APPROVAL_EXPIRED", "The approval window for this action has expired.");
+      }
+      if (existingApproval.status === "executed") {
+        return this.failureResponse(toolId, executionId, "FORBIDDEN", "This approval has already been executed.");
+      }
+    }
+    const riskEvaluation = RiskEngine.evaluateToolRisk(
+      tool,
+      organization,
+      user,
+      agentRecord,
+      {
+        clientId: resolvedClientId,
+        projectId: resolvedProjectId,
+        input,
+        isApprovalExecution
+      }
+    );
+    if (riskEvaluation.requiresApproval) {
+      const newApprovalId = `appr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1e3).toISOString();
+      const approvalRecord = {
+        id: newApprovalId,
+        organization_id: organizationId,
+        client_id: resolvedClientId,
+        project_id: resolvedProjectId,
+        requested_by_type: agentId ? "agent" : "user",
+        requested_by_id: agentId || userId,
+        tool_id: tool.id,
+        risk_level: riskEvaluation.riskLevel,
+        status: "pending",
+        original_input: redactSensitive(normalizedInput),
+        reason: riskEvaluation.reason,
+        expires_at: expiresAt,
+        created_at: (/* @__PURE__ */ new Date()).toISOString(),
+        updated_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      const executionRecord = {
+        id: executionId,
+        organization_id: organizationId,
+        tool_id: tool.id,
+        agent_id: agentId,
+        user_id: userId,
+        client_id: resolvedClientId,
+        project_id: resolvedProjectId,
+        approval_id: newApprovalId,
+        risk_level: riskEvaluation.riskLevel,
+        status: "waiting_approval",
+        input: redactSensitive(normalizedInput),
+        idempotency_key: idempotencyKey,
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      db.update("approvals", (list) => [...list || [], approvalRecord]);
+      db.update("tool_executions", (list) => [...list || [], executionRecord]);
+      ActivityService.logActivity({
+        organization_id: organizationId,
+        client_id: resolvedClientId,
+        project_id: resolvedProjectId,
+        actor_type: agentId ? "agent" : "user",
+        actor_id: agentId ? agentRecord?.name || agentId : user.name,
+        action: "TOOL_APPROVAL_REQUIRED",
+        entity_type: "tool_execution",
+        entity_id: executionId,
+        result: riskEvaluation.reason,
+        metadata: {
+          tool_id: tool.id,
+          risk_level: riskEvaluation.riskLevel,
+          approval_id: newApprovalId
+        }
+      });
+      return {
+        success: true,
+        toolId: tool.id,
+        executionId,
+        status: "waiting_approval",
+        approvalId: newApprovalId,
+        message: riskEvaluation.reason
+      };
+    }
+    const runningExecution = {
+      id: executionId,
+      organization_id: organizationId,
+      tool_id: tool.id,
+      agent_id: agentId,
+      user_id: userId,
+      client_id: resolvedClientId,
+      project_id: resolvedProjectId,
+      approval_id: approvalId,
+      risk_level: riskEvaluation.riskLevel,
+      status: "running",
+      input: redactSensitive(normalizedInput),
+      idempotency_key: idempotencyKey,
+      started_at: (/* @__PURE__ */ new Date()).toISOString(),
+      created_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    db.update("tool_executions", (list) => [...list || [], runningExecution]);
+    ActivityService.logActivity({
+      organization_id: organizationId,
+      client_id: resolvedClientId,
+      project_id: resolvedProjectId,
+      actor_type: agentId ? "agent" : "user",
+      actor_id: agentId ? agentRecord?.name || agentId : user.name,
+      action: "TOOL_STARTED",
+      entity_type: "tool_execution",
+      entity_id: executionId,
+      result: `Started execution for ${tool.name}`
+    });
+    try {
+      const effectiveInput = existingApproval?.approved_input || normalizedInput;
+      const result = await this.dispatchRealExecutor(tool.id, {
+        organizationId,
+        userId,
+        clientId: resolvedClientId,
+        projectId: resolvedProjectId,
+        input: effectiveInput
+      });
+      const safeOutput = redactSensitive(result);
+      db.update(
+        "tool_executions",
+        (list) => (list || []).map((e) => e.id === executionId ? {
+          ...e,
+          status: "completed",
+          output: safeOutput,
+          completed_at: (/* @__PURE__ */ new Date()).toISOString()
+        } : e)
+      );
+      if (existingApproval) {
+        db.update(
+          "approvals",
+          (list) => (list || []).map((a) => a.id === existingApproval.id ? {
+            ...a,
+            status: "executed",
+            reviewed_by: user.name,
+            reviewed_at: (/* @__PURE__ */ new Date()).toISOString(),
+            updated_at: (/* @__PURE__ */ new Date()).toISOString()
+          } : a)
+        );
+      }
+      ActivityService.logActivity({
+        organization_id: organizationId,
+        client_id: resolvedClientId,
+        project_id: resolvedProjectId,
+        actor_type: agentId ? "agent" : "user",
+        actor_id: agentId ? agentRecord?.name || agentId : user.name,
+        action: "TOOL_COMPLETED",
+        entity_type: "tool_execution",
+        entity_id: executionId,
+        result: `Successfully completed ${tool.name}`,
+        metadata: {
+          tool_id: tool.id,
+          execution_id: executionId
+        }
+      });
+      return {
+        success: true,
+        toolId: tool.id,
+        executionId,
+        status: "completed",
+        data: safeOutput
+      };
+    } catch (err) {
+      db.update(
+        "tool_executions",
+        (list) => (list || []).map((e) => e.id === executionId ? {
+          ...e,
+          status: "failed",
+          error: { code: "EXECUTION_FAILED", message: err.message },
+          completed_at: (/* @__PURE__ */ new Date()).toISOString()
+        } : e)
+      );
+      if (existingApproval) {
+        db.update(
+          "approvals",
+          (list) => (list || []).map((a) => a.id === existingApproval.id ? {
+            ...a,
+            status: "failed",
+            updated_at: (/* @__PURE__ */ new Date()).toISOString()
+          } : a)
+        );
+      }
+      ActivityService.logActivity({
+        organization_id: organizationId,
+        client_id: resolvedClientId,
+        project_id: resolvedProjectId,
+        actor_type: agentId ? "agent" : "user",
+        actor_id: agentId ? agentRecord?.name || agentId : user.name,
+        action: "TOOL_FAILED",
+        entity_type: "tool_execution",
+        entity_id: executionId,
+        result: `Execution failed for ${tool.name}: ${err.message}`
+      });
+      return {
+        success: false,
+        toolId: tool.id,
+        executionId,
+        status: "failed",
+        errorCode: "EXECUTION_FAILED",
+        message: err.message
+      };
+    }
+  }
+  /**
+   * Dispatches real tool executors connected to Supabase / Database state
+   */
+  static async dispatchRealExecutor(toolId, context) {
+    const { organizationId, userId, clientId, projectId, input } = context;
+    switch (toolId) {
+      // SYSTEM TOOLS
+      case "system.get_current_user": {
+        const users = db.get("users");
+        const user = users.find((u) => u.id === userId);
+        return { user: user ? { id: user.id, email: user.email, name: user.name, role: user.platform_role } : null };
+      }
+      case "system.get_current_organization": {
+        const orgs = db.get("organizations");
+        const org = orgs.find((o) => o.id === organizationId);
+        return { organization: org || null };
+      }
+      // CLIENT TOOLS
+      case "clients.read": {
+        const targetId = clientId || input.clientId || input.client_id;
+        if (targetId) {
+          const client = ClientService.getClientById(organizationId, targetId);
+          return { client };
+        }
+        const clients = ClientService.getAllClients(organizationId);
+        return { clients };
+      }
+      case "clients.create": {
+        const clientPayload = {
+          identity: {
+            company_name: input.company_name || input.name || "New Client Workspace",
+            website: input.website,
+            industry: input.industry || "Technology",
+            company_size: input.company_size,
+            location: input.location,
+            timezone: input.timezone,
+            company_description: input.company_description
+          },
+          people: input.people || [
+            {
+              name: input.contact_name || "Primary Contact",
+              role: input.contact_role || "Executive",
+              email: input.contact_email || "client@example.com",
+              phone: input.phone,
+              preferred_channel: input.preferred_channel || "Slack",
+              is_primary_contact: true
+            }
+          ],
+          business: input.business,
+          brand: input.brand,
+          communication: input.communication
+        };
+        const client = ClientService.createClient(organizationId, clientPayload, "System Tool Registry");
+        return { client };
+      }
+      case "client.update":
+      case "clients.update": {
+        const targetId = clientId || input.clientId || input.client_id;
+        const updates = input.updates || input;
+        const client = ClientService.updateClient(organizationId, targetId, updates, "System Tool Registry");
+        return { client };
+      }
+      // PROJECT TOOLS
+      case "projects.read": {
+        const targetProjectId = projectId || input.projectId || input.project_id;
+        if (targetProjectId) {
+          const project = ProjectService.getProjectById(organizationId, targetProjectId);
+          return { project };
+        }
+        const projects = ProjectService.getProjects(organizationId, clientId);
+        return { projects };
+      }
+      case "projects.create": {
+        const project = ProjectService.createProject(organizationId, {
+          client_id: clientId || input.client_id || input.clientId,
+          project_name: input.project_name || input.name || "Untitled Project",
+          project_type: input.project_type || "Brand Design",
+          description: input.description || "",
+          deadline: input.deadline || new Date(Date.now() + 14 * 864e5).toISOString().split("T")[0],
+          priority: input.priority || "normal",
+          estimated_budget: input.estimated_budget,
+          assigned_agents: input.assigned_agents || []
+        });
+        return { project };
+      }
+      // TASK TOOLS
+      case "tasks.read": {
+        const targetTaskId = input.taskId || input.id;
+        const tasks = TaskService.getTasks(organizationId, clientId, projectId);
+        if (targetTaskId) {
+          const task = tasks.find((t) => t.id === targetTaskId);
+          return { task };
+        }
+        return { tasks };
+      }
+      case "tasks.create": {
+        const task = TaskService.createTask(organizationId, {
+          client_id: clientId || input.client_id || input.clientId,
+          project_id: projectId || input.project_id || input.projectId,
+          title: input.title || "New Task",
+          description: input.description || "",
+          assigned_agent: input.assigned_agent,
+          priority: input.priority || "normal",
+          deadline: input.deadline
+        });
+        return { task };
+      }
+      case "tasks.update": {
+        const targetTaskId = input.taskId || input.id;
+        const task = TaskService.updateTask(organizationId, targetTaskId, input, "System Tool Registry");
+        return { task };
+      }
+      // MEMORY TOOLS
+      case "memory.read": {
+        const targetClientId = clientId || input.clientId || input.client_id;
+        if (targetClientId) {
+          const memories = MemoryService.getClientMemory(organizationId, targetClientId, input.category);
+          return { memories };
+        }
+        const allMemories = db.get("client_memory").filter((m) => m.organization_id === organizationId && !m.archived);
+        return { memories: allMemories };
+      }
+      case "memory.create": {
+        const memory = MemoryService.createMemory(organizationId, {
+          client_id: clientId || input.client_id || input.clientId,
+          category: input.category || "Observations",
+          key: input.key,
+          value: input.value,
+          status: input.status || "OBSERVED",
+          confidence: input.confidence || "Medium",
+          source_type: input.source_type || "AI Tool Execution",
+          source_id: input.source_id || "tool_registry"
+        });
+        return { memory };
+      }
+      case "memory.update": {
+        const targetMemoryId = input.memoryId || input.id;
+        const memory = MemoryService.updateMemory(organizationId, targetMemoryId, input, "System Tool Registry", true);
+        return { memory };
+      }
+      case "memory.approve": {
+        const targetMemoryId = input.memoryId || input.id;
+        const memory = MemoryService.approveMemory(organizationId, targetMemoryId, "System Tool Registry");
+        return { approved: true, memory };
+      }
+      // DOCUMENT TOOLS
+      case "documents.read": {
+        const targetClientId = clientId || input.clientId || input.client_id;
+        const documents = DocumentService.getDocuments(organizationId, targetClientId, input.category);
+        return { documents };
+      }
+      case "documents.create": {
+        const doc = DocumentService.uploadDocument(organizationId, {
+          client_id: clientId || input.client_id || input.clientId,
+          project_id: projectId || input.project_id || input.projectId,
+          category: input.category || "Other",
+          filename: input.filename,
+          file_size: input.file_size || "1.2 MB",
+          uploaded_by: "System Tool Registry",
+          notes: input.notes
+        });
+        return { document: doc };
+      }
+      // HIGH / SPECIAL TOOLS (Executed when approved)
+      case "communication.send": {
+        return {
+          sent: true,
+          channel: input.channel || "Slack",
+          recipient: input.recipient || "client_contact",
+          message: input.message,
+          dispatched_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+      }
+      case "figma.publish": {
+        return {
+          synced: true,
+          fileKey: input.fileKey,
+          tokensCount: input.tokens ? Object.keys(input.tokens).length : 0,
+          published_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+      }
+      case "document.publish": {
+        return {
+          published: true,
+          documentId: input.documentId,
+          distribution: input.distribution || "Client Portal",
+          published_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+      }
+      case "invoice.send": {
+        return {
+          sent: true,
+          invoiceId: `inv_${Date.now()}`,
+          clientId: clientId || input.clientId,
+          amount: input.amount,
+          currency: input.currency || "USD",
+          issued_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+      }
+      case "quotation.send": {
+        return {
+          sent: true,
+          quoteId: `quote_${Date.now()}`,
+          clientId: clientId || input.clientId,
+          estimatedAmount: input.estimatedAmount,
+          issued_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+      }
+      default:
+        throw new Error(`Execution handler for tool "${toolId}" is not implemented.`);
+    }
+  }
+  /**
+   * Helper to format standardized failure response
+   */
+  static failureResponse(toolId, executionId, errorCode, message) {
+    return {
+      success: false,
+      toolId,
+      executionId,
+      status: "failed",
+      errorCode,
+      message
+    };
+  }
+  /**
+   * Validates required fields according to tool input schema
+   */
+  static validateInput(schema, input) {
+    if (!schema || !schema.required || !Array.isArray(schema.required)) {
+      return { valid: true };
+    }
+    for (const field of schema.required) {
+      if (input[field] === void 0 || input[field] === null || input[field] === "") {
+        return {
+          valid: false,
+          error: `Missing required field "${field}" for tool input schema.`
+        };
+      }
+    }
+    return { valid: true };
+  }
+};
+
 // server/middleware/auth.ts
 var ROLE_HIERARCHY = {
   OWNER: 4,
@@ -2521,6 +4163,332 @@ app.get("/api/activities", requireAuth, requireOrganization, (req, res) => {
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/tools", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const tools = ToolRegistryService.listTools();
+    res.json(tools);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/api/tools/execute", requireAuth, requireOrganization, async (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const userId = req.auth.user.id;
+    const {
+      toolId,
+      clientId,
+      projectId,
+      agentId,
+      input = {},
+      idempotencyKey,
+      approvalId,
+      source = "api"
+    } = req.body;
+    if (!toolId) {
+      return res.status(400).json({
+        success: false,
+        errorCode: "INVALID_INPUT",
+        message: "toolId is required"
+      });
+    }
+    const result = await ToolExecutionService.executeTool({
+      toolId,
+      organizationId: orgId,
+      userId,
+      agentId,
+      clientId,
+      projectId,
+      input,
+      source,
+      idempotencyKey,
+      approvalId
+    });
+    const statusCode = result.success ? result.status === "waiting_approval" ? 202 : 200 : 400;
+    res.status(statusCode).json(result);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      errorCode: "EXECUTION_FAILED",
+      message: err.message
+    });
+  }
+});
+app.get("/api/agents", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const allTools = ToolRegistryService.listTools();
+    const agents = (db.get("agents") || []).filter((a) => a.organization_id === orgId);
+    const agentTools = (db.get("agent_tools") || []).filter((at) => at.organization_id === orgId);
+    const agentPerms = (db.get("agent_permissions") || []).filter((ap) => ap.organization_id === orgId);
+    const executions = (db.get("tool_executions") || []).filter((e) => e.organization_id === orgId);
+    const detailedAgents = agents.map((agent) => {
+      const allowedToolIds = agentTools.filter((at) => at.agent_id === agent.id && at.enabled).map((at) => at.tool_id);
+      const allowedTools = allTools.filter((t) => allowedToolIds.includes(t.id));
+      const blockedTools = allTools.filter((t) => !allowedToolIds.includes(t.id));
+      const permissions = agentPerms.filter((ap) => ap.agent_id === agent.id && ap.enabled).map((ap) => ap.permission);
+      const agentExecutions = executions.filter((e) => e.agent_id === agent.id);
+      const recentFailures = agentExecutions.filter((e) => e.status === "failed").slice(0, 5);
+      const recentExecutions = agentExecutions.slice(0, 5);
+      return {
+        ...agent,
+        allowedTools,
+        blockedTools,
+        permissions,
+        totalExecutions: agentExecutions.length,
+        recentExecutions,
+        recentFailures
+      };
+    });
+    res.json(detailedAgents);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.patch("/api/agents/:id/tools", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const agentId = param(req.params.id);
+    const { toolId, enabled } = req.body;
+    if (!toolId || typeof enabled !== "boolean") {
+      return res.status(400).json({ error: "toolId and enabled (boolean) are required" });
+    }
+    db.update("agent_tools", (list) => {
+      const existing = (list || []).find(
+        (at) => at.organization_id === orgId && at.agent_id === agentId && at.tool_id === toolId
+      );
+      if (existing) {
+        existing.enabled = enabled;
+        existing.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+        return [...list];
+      }
+      const newRecord = {
+        id: `at_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        organization_id: orgId,
+        agent_id: agentId,
+        tool_id: toolId,
+        enabled,
+        created_at: (/* @__PURE__ */ new Date()).toISOString(),
+        updated_at: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      return [...list || [], newRecord];
+    });
+    ActivityService.logActivity({
+      organization_id: orgId,
+      actor_type: "user",
+      actor_id: req.auth.user.name,
+      action: "Agent tool access modified",
+      entity_type: "agent_tools",
+      entity_id: agentId,
+      result: `Tool "${toolId}" set to ${enabled ? "ENABLED" : "BLOCKED"} for agent "${agentId}".`
+    });
+    res.json({ success: true, agentId, toolId, enabled });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+app.get("/api/approvals", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const status = req.query.status;
+    let approvals = (db.get("approvals") || []).filter((a) => a.organization_id === orgId);
+    const now = /* @__PURE__ */ new Date();
+    approvals.forEach((a) => {
+      if (a.status === "pending" && new Date(a.expires_at) < now) {
+        a.status = "expired";
+        a.updated_at = now.toISOString();
+      }
+    });
+    if (status) {
+      approvals = approvals.filter((a) => a.status === status);
+    }
+    approvals.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    res.json(approvals);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/api/approvals/:id/approve", requireAuth, requireOrganization, requireRole("ADMIN"), async (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const approvalId = param(req.params.id);
+    const { editedInput } = req.body;
+    const approvals = db.get("approvals") || [];
+    const approval = approvals.find((a) => a.id === approvalId && a.organization_id === orgId);
+    if (!approval) {
+      return res.status(404).json({ error: "Approval request not found." });
+    }
+    if (approval.status !== "pending") {
+      return res.status(400).json({ error: `Cannot approve item with status "${approval.status}".` });
+    }
+    if (new Date(approval.expires_at) < /* @__PURE__ */ new Date()) {
+      approval.status = "expired";
+      db.update("approvals", (list) => list.map((a) => a.id === approval.id ? approval : a));
+      return res.status(400).json({
+        success: false,
+        errorCode: "APPROVAL_EXPIRED",
+        message: "This approval has expired."
+      });
+    }
+    if (editedInput) {
+      approval.approved_input = editedInput;
+    } else {
+      approval.approved_input = approval.original_input;
+    }
+    approval.status = "approved";
+    approval.reviewed_by = req.auth.user.name;
+    approval.reviewed_at = (/* @__PURE__ */ new Date()).toISOString();
+    approval.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+    db.update("approvals", (list) => list.map((a) => a.id === approval.id ? approval : a));
+    ActivityService.logActivity({
+      organization_id: orgId,
+      client_id: approval.client_id,
+      project_id: approval.project_id,
+      actor_type: "user",
+      actor_id: req.auth.user.name,
+      action: "TOOL_APPROVED",
+      entity_type: "approval",
+      entity_id: approval.id,
+      result: `Approved action for tool "${approval.tool_id}"`
+    });
+    const executionResult = await ToolExecutionService.executeTool({
+      toolId: approval.tool_id,
+      organizationId: orgId,
+      userId: req.auth.user.id,
+      clientId: approval.client_id,
+      projectId: approval.project_id,
+      input: approval.approved_input || approval.original_input || {},
+      approvalId: approval.id
+    });
+    const finalApproval = (db.get("approvals") || []).find((a) => a.id === approval.id) || approval;
+    res.json({
+      approval: finalApproval,
+      execution: executionResult
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/api/approvals/:id/reject", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const approvalId = param(req.params.id);
+    const { reason = "Rejected by studio operator" } = req.body;
+    const approvals = db.get("approvals") || [];
+    const approval = approvals.find((a) => a.id === approvalId && a.organization_id === orgId);
+    if (!approval) {
+      return res.status(404).json({ error: "Approval request not found." });
+    }
+    if (approval.status !== "pending") {
+      return res.status(400).json({ error: `Cannot reject item with status "${approval.status}".` });
+    }
+    approval.status = "rejected";
+    approval.reviewed_by = req.auth.user.name;
+    approval.reviewed_at = (/* @__PURE__ */ new Date()).toISOString();
+    approval.updated_at = (/* @__PURE__ */ new Date()).toISOString();
+    db.update("approvals", (list) => list.map((a) => a.id === approval.id ? approval : a));
+    ActivityService.logActivity({
+      organization_id: orgId,
+      client_id: approval.client_id,
+      project_id: approval.project_id,
+      actor_type: "user",
+      actor_id: req.auth.user.name,
+      action: "TOOL_REJECTED",
+      entity_type: "approval",
+      entity_id: approval.id,
+      result: `Rejected execution for tool "${approval.tool_id}": ${reason}`
+    });
+    res.json({ success: true, approval });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/tool-executions", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const agentId = req.query.agentId;
+    const toolId = req.query.toolId;
+    const status = req.query.status;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 50;
+    let list = (db.get("tool_executions") || []).filter((e) => e.organization_id === orgId);
+    if (agentId) list = list.filter((e) => e.agent_id === agentId);
+    if (toolId) list = list.filter((e) => e.tool_id === toolId);
+    if (status) list = list.filter((e) => e.status === status);
+    list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    res.json(list.slice(0, limit));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get("/api/governance", requireAuth, requireOrganization, (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const policies = db.get("governance_policies") || [];
+    const policy = policies.find((p) => p.organization_id === orgId) || {
+      id: `gov_${orgId}`,
+      organization_id: orgId,
+      official_truth_gate: true,
+      external_communication_gate: true,
+      design_publishing_gate: true,
+      commercial_budget_enforcement: true,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    res.json(policy);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.patch("/api/governance", requireAuth, requireOrganization, requireRole("ADMIN"), (req, res) => {
+  try {
+    const orgId = req.auth.organization.id;
+    const {
+      official_truth_gate,
+      external_communication_gate,
+      design_publishing_gate,
+      commercial_budget_enforcement
+    } = req.body;
+    let updatedPolicy;
+    db.update("governance_policies", (list) => {
+      const existingIdx = (list || []).findIndex((p) => p.organization_id === orgId);
+      if (existingIdx >= 0) {
+        list[existingIdx] = {
+          ...list[existingIdx],
+          ...official_truth_gate !== void 0 && { official_truth_gate: Boolean(official_truth_gate) },
+          ...external_communication_gate !== void 0 && { external_communication_gate: Boolean(external_communication_gate) },
+          ...design_publishing_gate !== void 0 && { design_publishing_gate: Boolean(design_publishing_gate) },
+          ...commercial_budget_enforcement !== void 0 && { commercial_budget_enforcement: Boolean(commercial_budget_enforcement) },
+          updated_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        updatedPolicy = list[existingIdx];
+        return [...list];
+      } else {
+        const newPolicy = {
+          id: `gov_${orgId}`,
+          organization_id: orgId,
+          official_truth_gate: official_truth_gate !== void 0 ? Boolean(official_truth_gate) : true,
+          external_communication_gate: external_communication_gate !== void 0 ? Boolean(external_communication_gate) : true,
+          design_publishing_gate: design_publishing_gate !== void 0 ? Boolean(design_publishing_gate) : true,
+          commercial_budget_enforcement: commercial_budget_enforcement !== void 0 ? Boolean(commercial_budget_enforcement) : true,
+          updated_at: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        updatedPolicy = newPolicy;
+        return [...list || [], newPolicy];
+      }
+    });
+    ActivityService.logActivity({
+      organization_id: orgId,
+      actor_type: "user",
+      actor_id: req.auth.user.name,
+      action: "AI Governance policy modified",
+      entity_type: "governance_policies",
+      entity_id: orgId,
+      result: "Updated organization AI governance gates"
+    });
+    res.json(updatedPolicy);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 app.post("/api/seed/reset", (req, res) => {

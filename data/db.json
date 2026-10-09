@@ -3,38 +3,38 @@
     {
       "id": "user_admin",
       "email": "admin@example.com",
-      "password_hash": "9b3bae1a95845f9888d9f10134360b6a00196a1992d05c0ade482be5597d14fd2f4078151b7ae143676330c90f744a0d78ae2008e358bd3de0f46825ecd2d297",
-      "password_salt": "df14df6e6c41c60ba1b5e45af330ce0f",
+      "password_hash": "39242d8e3767401d369ed7279ec1d648cd0e48e5bfb0d3456f09cc3d6fdb6004d005335140ae3cd9afc301ebbc1f0f977861358d15cd1cc24d4591e78dedebe5",
+      "password_salt": "b1fc8907f7f2e215732e4a4c9ba5d413",
       "name": "System Super Admin",
       "platform_role": "SUPER_ADMIN",
       "status": "active",
-      "last_active_at": "2026-10-09T07:31:24.593Z",
-      "created_at": "2026-09-29T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "last_active_at": "2026-10-09T08:39:55.327Z",
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "user_owner",
       "email": "owner@example.com",
-      "password_hash": "4c195495dd7f6f2158d378ce251ce3971f31ae67a76de9c14c8a96dc4e8a7d6b10f0e60f6074602da7d8157794a77712da25337bc23471e3ad27d3fe725ba75e",
-      "password_salt": "c07c0c87882fb526b0d489b58ca74b3d",
+      "password_hash": "aee17b9f7ffc6a99f4e171173b3723882add70af266ad0df06fd6eb8401174906eb1cb34da492a28e4f005c69b72595485baa207b5b716ca7018c5a7cea26f7c",
+      "password_salt": "89cb7b2ba543a833128aa918e2628080",
       "name": "Matias Austin",
       "platform_role": "USER",
       "status": "active",
-      "last_active_at": "2026-10-09T07:42:17.883Z",
-      "created_at": "2026-10-04T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "last_active_at": "2026-10-09T08:39:55.437Z",
+      "created_at": "2026-10-04T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "user_member",
       "email": "member@example.com",
-      "password_hash": "90338c11683a11740408a1eb85af7644534cd5fd4c7b613fd145f84127c08aee0b4914f0664d0e5297ce6f91496a21b925b9f09e7a4a574ff73755cf7080f756",
-      "password_salt": "6c779f1d523ff64fd2c47b20217b97ae",
+      "password_hash": "22caf91fe70d51c94611d4d17448820386e5b5a70b1e2b67472acf0123e13ea8a7a272ae46ad62972900be052c18e1e4a2ea2124f4456d374c94060fe34e566e",
+      "password_salt": "3f8aaaf7e179a22b9bc6be3a44fd9327",
       "name": "Elena Rostova",
       "platform_role": "USER",
       "status": "active",
-      "last_active_at": "2026-10-09T07:31:24.593Z",
-      "created_at": "2026-10-07T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "last_active_at": "2026-10-09T08:39:55.328Z",
+      "created_at": "2026-10-07T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "organizations": [
@@ -45,8 +45,8 @@
       "status": "active",
       "plan": "Studio",
       "subscription_status": "active",
-      "created_at": "2026-09-29T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "organization_members": [
@@ -55,34 +55,34 @@
       "organization_id": "org_matias_studio",
       "user_id": "user_admin",
       "role": "OWNER",
-      "created_at": "2026-09-29T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "member_owner_studio",
       "organization_id": "org_matias_studio",
       "user_id": "user_owner",
       "role": "OWNER",
-      "created_at": "2026-10-04T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-04T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "member_elena_studio",
       "organization_id": "org_matias_studio",
       "user_id": "user_member",
       "role": "MEMBER",
-      "created_at": "2026-10-07T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-07T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "sessions": [
     {
-      "id": "sess_1791531737883_yp9z4",
-      "token": "1f4ad0b16e41a86fecaae22d2f69bf8be93cab3c6320753b1d599d1e6409cb63",
+      "id": "sess_1791535195436_y8xz2",
+      "token": "bb23c3bfd0f500d99c5b631d9832696df7ccaf0ad63cb2601fa402ee0e936f40",
       "user_id": "user_owner",
       "active_organization_id": "org_matias_studio",
-      "expires_at": "2026-10-16T07:42:17.883Z",
-      "created_at": "2026-10-09T07:42:17.883Z"
+      "expires_at": "2026-10-16T08:39:55.436Z",
+      "created_at": "2026-10-09T08:39:55.436Z"
     }
   ],
   "invitations": [],
@@ -93,7 +93,7 @@
       "key": "slack_integration",
       "enabled": false,
       "description": "Client Slack workspace synchronization",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "flag_figma",
@@ -101,7 +101,7 @@
       "key": "figma_integration",
       "enabled": false,
       "description": "Figma token and vector layout pipeline",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "flag_browser",
@@ -109,10 +109,21 @@
       "key": "browser_agent",
       "enabled": false,
       "description": "Autonomous web research worker",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "clients": [
+    {
+      "id": "client_studio-autonomous-client_hd02",
+      "organization_id": "org_matias_studio",
+      "company_name": "Studio Autonomous Client",
+      "industry": "Spatial AI",
+      "status": "active",
+      "currency": "USD",
+      "payment_terms": "Net 30",
+      "created_at": "2026-10-09T08:39:55.454Z",
+      "updated_at": "2026-10-09T08:39:55.454Z"
+    },
     {
       "id": "demo-xyz-ai",
       "organization_id": "org_matias_studio",
@@ -146,8 +157,8 @@
       "payment_terms": "Net 30",
       "invoice_notes": "Reference PO-XYZ-2026 on all billing vouchers",
       "contract_notes": "Retainer Active: Tier 1 Autonomous Studio Collaboration",
-      "created_at": "2026-10-06T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-06T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "contacts": [
@@ -161,7 +172,7 @@
       "phone": "+41 44 123 4567",
       "preferred_channel": "Slack",
       "is_primary_contact": true,
-      "created_at": "2026-10-06T07:31:24.593Z"
+      "created_at": "2026-10-06T08:39:55.328Z"
     },
     {
       "id": "contact-demo-2",
@@ -173,7 +184,18 @@
       "phone": "+41 44 987 6543",
       "preferred_channel": "Email",
       "is_primary_contact": false,
-      "created_at": "2026-10-06T07:31:24.593Z"
+      "created_at": "2026-10-06T08:39:55.328Z"
+    },
+    {
+      "id": "contact_1791535195455_0",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "name": "Primary Contact",
+      "role": "Executive",
+      "email": "client@example.com",
+      "preferred_channel": "Slack",
+      "is_primary_contact": true,
+      "created_at": "2026-10-09T08:39:55.455Z"
     }
   ],
   "projects": [
@@ -194,8 +216,8 @@
         "Creative Director Agent",
         "Design Automation Agent"
       ],
-      "created_at": "2026-10-07T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-07T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "tasks": [
@@ -210,8 +232,8 @@
       "status": "running",
       "priority": "high",
       "deadline": "2026-10-12",
-      "created_at": "2026-10-08T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-08T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "task-demo-2",
@@ -224,8 +246,8 @@
       "status": "waiting_approval",
       "priority": "normal",
       "deadline": "2026-10-15",
-      "created_at": "2026-10-08T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-08T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "client_memory": [
@@ -240,8 +262,8 @@
       "source_type": "Document",
       "source_id": "XYZ_Brand_Guidelines_v1.pdf",
       "reason_context": "Extracted from official executive onboarding workshop.",
-      "created_at": "2026-10-07T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-07T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "mem-demo-2",
@@ -254,8 +276,8 @@
       "source_type": "Onboarding",
       "source_id": "Client Onboarding Form",
       "reason_context": "Explicitly indicated by VP Product Sarah Lin during kick-off.",
-      "created_at": "2026-10-07T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-07T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "mem-demo-3",
@@ -268,8 +290,8 @@
       "source_type": "Document",
       "source_id": "Design_System_Spec.pdf",
       "reason_context": "Official typography & color specifications approved by creative direction.",
-      "created_at": "2026-10-08T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-08T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     },
     {
       "id": "mem-demo-4",
@@ -282,8 +304,8 @@
       "source_type": "Activity",
       "source_id": "Design Review Meeting #01",
       "reason_context": "Noted during initial layout presentation feedback round.",
-      "created_at": "2026-10-08T07:31:24.593Z",
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "created_at": "2026-10-08T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
     }
   ],
   "documents": [
@@ -295,7 +317,7 @@
       "category": "Brand",
       "filename": "XYZ_Brand_Guidelines_v1.pdf",
       "file_size": "3.4 MB",
-      "uploaded_at": "2026-10-07T07:31:24.593Z",
+      "uploaded_at": "2026-10-07T08:39:55.328Z",
       "uploaded_by": "Matias Austin",
       "status": "uploaded",
       "notes": "Authoritative brand manual defining typography hierarchy and color standards."
@@ -308,7 +330,7 @@
       "category": "Contract",
       "filename": "Master_Services_Agreement_2026.pdf",
       "file_size": "1.2 MB",
-      "uploaded_at": "2026-10-06T07:31:24.593Z",
+      "uploaded_at": "2026-10-06T08:39:55.328Z",
       "uploaded_by": "Matias Austin",
       "status": "uploaded",
       "notes": "Executed MSA governing studio deliverables and commercial rates."
@@ -333,12 +355,175 @@
         "send_invoice": "approval_required",
         "send_quotation": "approval_required"
       },
-      "updated_at": "2026-10-09T07:31:24.593Z"
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "perm_1791535195455",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "permissions": {
+        "read_client_messages": "allowed",
+        "read_project_files": "allowed",
+        "read_brand_guidelines": "allowed",
+        "create_tasks": "allowed",
+        "update_tasks": "allowed",
+        "create_documents": "allowed",
+        "draft_client_messages": "allowed",
+        "send_client_messages": "approval_required",
+        "modify_client_memory": "approval_required",
+        "publish_design": "approval_required",
+        "send_invoice": "approval_required",
+        "send_quotation": "approval_required"
+      },
+      "updated_at": "2026-10-09T08:39:55.455Z"
     }
   ],
   "activities": [
     {
-      "id": "act_1791531737883_5k41l",
+      "id": "act_1791535195473_013jb",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "AI Governance policy modified",
+      "entity_type": "governance_policies",
+      "entity_id": "org_matias_studio",
+      "result": "Updated organization AI governance gates",
+      "created_at": "2026-10-09T08:39:55.473Z"
+    },
+    {
+      "id": "act_1791535195469_is5db",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_COMPLETED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195467_ece6y",
+      "result": "Successfully completed Send Client Communication",
+      "metadata": {
+        "tool_id": "communication.send",
+        "execution_id": "exec_1791535195467_ece6y"
+      },
+      "created_at": "2026-10-09T08:39:55.469Z"
+    },
+    {
+      "id": "act_1791535195467_23qmm",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_STARTED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195467_ece6y",
+      "result": "Started execution for Send Client Communication",
+      "created_at": "2026-10-09T08:39:55.467Z"
+    },
+    {
+      "id": "act_1791535195466_w7zmp",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_APPROVED",
+      "entity_type": "approval",
+      "entity_id": "appr_1791535195463_bstb",
+      "result": "Approved action for tool \"communication.send\"",
+      "created_at": "2026-10-09T08:39:55.466Z"
+    },
+    {
+      "id": "act_1791535195464_6ttqn",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_APPROVAL_REQUIRED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195463_z1l7q",
+      "result": "Client-specific rule enforces review before sending messages.",
+      "metadata": {
+        "tool_id": "communication.send",
+        "risk_level": "HIGH",
+        "approval_id": "appr_1791535195463_bstb"
+      },
+      "created_at": "2026-10-09T08:39:55.464Z"
+    },
+    {
+      "id": "act_1791535195461_8188g",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "Agent tool access modified",
+      "entity_type": "agent_tools",
+      "entity_id": "ag-cd",
+      "result": "Tool \"system.get_current_organization\" set to ENABLED for agent \"ag-cd\".",
+      "created_at": "2026-10-09T08:39:55.461Z"
+    },
+    {
+      "id": "act_1791535195456_oyyje",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_COMPLETED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195453_4md19",
+      "result": "Successfully completed Create Client Workspace",
+      "metadata": {
+        "tool_id": "clients.create",
+        "execution_id": "exec_1791535195453_4md19"
+      },
+      "created_at": "2026-10-09T08:39:55.456Z"
+    },
+    {
+      "id": "act_1791535195455_2d36h",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "actor_type": "user",
+      "actor_id": "System Tool Registry",
+      "action": "Client workspace created",
+      "entity_type": "client",
+      "entity_id": "client_studio-autonomous-client_hd02",
+      "result": "Initialized workspace with 1 contacts and 0 projects",
+      "created_at": "2026-10-09T08:39:55.455Z"
+    },
+    {
+      "id": "act_1791535195454_2a3hj",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_STARTED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195453_4md19",
+      "result": "Started execution for Create Client Workspace",
+      "created_at": "2026-10-09T08:39:55.454Z"
+    },
+    {
+      "id": "act_1791535195452_in17t",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_COMPLETED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195450_zzer6",
+      "result": "Successfully completed Get Current User",
+      "metadata": {
+        "tool_id": "system.get_current_user",
+        "execution_id": "exec_1791535195450_zzer6"
+      },
+      "created_at": "2026-10-09T08:39:55.452Z"
+    },
+    {
+      "id": "act_1791535195451_smb14",
+      "organization_id": "org_matias_studio",
+      "actor_type": "user",
+      "actor_id": "Matias Austin",
+      "action": "TOOL_STARTED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791535195450_zzer6",
+      "result": "Started execution for Get Current User",
+      "created_at": "2026-10-09T08:39:55.451Z"
+    },
+    {
+      "id": "act_1791535195437_azrkh",
       "organization_id": "org_matias_studio",
       "actor_type": "user",
       "actor_id": "Matias Austin",
@@ -346,7 +531,7 @@
       "entity_type": "auth",
       "entity_id": "user_owner",
       "result": "Authenticated as USER (Org: Matias Studio)",
-      "created_at": "2026-10-09T07:42:17.883Z"
+      "created_at": "2026-10-09T08:39:55.437Z"
     },
     {
       "id": "act-demo-1",
@@ -358,7 +543,7 @@
       "entity_type": "client",
       "entity_id": "demo-xyz-ai",
       "result": "Initialized workspace with 2 contacts and 1 project",
-      "created_at": "2026-10-06T07:31:24.593Z"
+      "created_at": "2026-10-06T08:39:55.328Z"
     },
     {
       "id": "act-demo-2",
@@ -370,7 +555,7 @@
       "action": "Project created: Brand OS & Generative UI System",
       "entity_type": "project",
       "entity_id": "proj-demo-1",
-      "created_at": "2026-10-07T07:31:24.593Z"
+      "created_at": "2026-10-07T08:39:55.328Z"
     },
     {
       "id": "act-demo-3",
@@ -381,7 +566,7 @@
       "action": "Document uploaded: XYZ_Brand_Guidelines_v1.pdf",
       "entity_type": "document",
       "entity_id": "doc-demo-1",
-      "created_at": "2026-10-07T07:31:24.593Z"
+      "created_at": "2026-10-07T08:39:55.328Z"
     },
     {
       "id": "act-demo-4",
@@ -392,7 +577,591 @@
       "action": "Memory approved: Client Messaging Cadence",
       "entity_type": "client_memory",
       "entity_id": "mem-demo-2",
-      "created_at": "2026-10-08T07:31:24.593Z"
+      "created_at": "2026-10-08T08:39:55.328Z"
+    }
+  ],
+  "tools": [],
+  "agents": [
+    {
+      "id": "ag-cd",
+      "organization_id": "org_matias_studio",
+      "name": "Creative Director Agent",
+      "role": "Art Direction, Taste Evaluation & Synthesis",
+      "description": "Supervises aesthetic consistency, brand fidelity, and creative compositions.",
+      "status": "Active",
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ag-design",
+      "organization_id": "org_matias_studio",
+      "name": "Design Automation Agent",
+      "role": "Figma Token Sync, Layout Spatialization & UI Spec",
+      "description": "Automates token transformations, design systems, and export specifications.",
+      "status": "Active",
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ag-mem",
+      "organization_id": "org_matias_studio",
+      "name": "Memory Intelligence Engine",
+      "role": "Knowledge Retrieval, Brand DNA & Client Habits",
+      "description": "Continuously synthesizes and indexes long-term client context and habits.",
+      "status": "Active",
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ag-liaison",
+      "organization_id": "org_matias_studio",
+      "name": "Client Liaison Agent",
+      "role": "Communications, Slack / Email Drafting, Approval Queue",
+      "description": "Prepares client dispatches, summarizes communications, and routes approvals.",
+      "status": "Standby",
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ag-research",
+      "organization_id": "org_matias_studio",
+      "name": "Research & Discovery Agent",
+      "role": "Brief Deconstruction, Market Mapping, Technical Papers",
+      "description": "Analyzes project briefs, extracts market positioning, and benchmarks competitors.",
+      "status": "Active",
+      "created_at": "2026-09-29T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    }
+  ],
+  "agent_tools": [
+    {
+      "id": "at-1",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "tool_id": "projects.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-2",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "tool_id": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-3",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "tool_id": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-4",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "tool_id": "figma.publish",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-5",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "tool_id": "tasks.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-6",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "tool_id": "tasks.update",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-7",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "tool_id": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-8",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "tool_id": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-9",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "tool_id": "clients.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-10",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "tool_id": "projects.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-11",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-liaison",
+      "tool_id": "communication.send",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-12",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-liaison",
+      "tool_id": "clients.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-13",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-liaison",
+      "tool_id": "tasks.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-14",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "tool_id": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-15",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "tool_id": "memory.create",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-16",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "tool_id": "memory.update",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-17",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "tool_id": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-18",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "tool_id": "projects.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-19",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "tool_id": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at-20",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "tool_id": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "at_1791535195460_x2kp",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "tool_id": "system.get_current_organization",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.460Z",
+      "updated_at": "2026-10-09T08:39:55.460Z"
+    }
+  ],
+  "agent_permissions": [
+    {
+      "id": "ap-1",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "permission": "projects.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-2",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "permission": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-3",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "permission": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-4",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "permission": "design.publish",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-5",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "permission": "tasks.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-6",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-design",
+      "permission": "tasks.update",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-7",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "permission": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-8",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "permission": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-9",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "permission": "clients.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-10",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-research",
+      "permission": "projects.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-11",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-liaison",
+      "permission": "communication.send",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-12",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-liaison",
+      "permission": "clients.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-13",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-liaison",
+      "permission": "tasks.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-14",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "permission": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-15",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "permission": "memory.create",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-16",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "permission": "memory.update",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-17",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-mem",
+      "permission": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-18",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "permission": "projects.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-19",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "permission": "memory.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    },
+    {
+      "id": "ap-20",
+      "organization_id": "org_matias_studio",
+      "agent_id": "ag-cd",
+      "permission": "documents.read",
+      "enabled": true,
+      "created_at": "2026-10-09T08:39:55.328Z",
+      "updated_at": "2026-10-09T08:39:55.328Z"
+    }
+  ],
+  "approvals": [
+    {
+      "id": "appr-seed-1",
+      "organization_id": "org_matias_studio",
+      "client_id": "demo-xyz-ai",
+      "project_id": "proj-demo-1",
+      "requested_by_type": "agent",
+      "requested_by_id": "ag-liaison",
+      "tool_id": "communication.send",
+      "risk_level": "HIGH",
+      "status": "pending",
+      "original_input": {
+        "channel": "Slack",
+        "recipient": "Sarah Connor",
+        "message": "The initial draft of the spatial design token architecture has passed internal checks and is ready for your team review."
+      },
+      "reason": "External Communication Gate: AI Agent requested dispatch of outbound Slack update to client stakeholder.",
+      "expires_at": "2026-10-10T08:39:55.328Z",
+      "created_at": "2026-10-09T06:39:55.328Z",
+      "updated_at": "2026-10-09T06:39:55.328Z"
+    },
+    {
+      "id": "appr_1791535195463_bstb",
+      "organization_id": "org_matias_studio",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "requested_by_type": "user",
+      "requested_by_id": "user_owner",
+      "tool_id": "communication.send",
+      "risk_level": "HIGH",
+      "status": "executed",
+      "original_input": {
+        "channel": "Slack",
+        "recipient": "Lead Partner",
+        "message": "Ready for delivery confirmation.",
+        "clientId": "client_studio-autonomous-client_hd02",
+        "client_id": "client_studio-autonomous-client_hd02"
+      },
+      "reason": "Client-specific rule enforces review before sending messages.",
+      "expires_at": "2026-10-10T08:39:55.463Z",
+      "created_at": "2026-10-09T08:39:55.463Z",
+      "updated_at": "2026-10-09T08:39:55.469Z",
+      "approved_input": {
+        "channel": "Slack",
+        "recipient": "Lead Partner",
+        "message": "Ready for delivery confirmation.",
+        "clientId": "client_studio-autonomous-client_hd02",
+        "client_id": "client_studio-autonomous-client_hd02"
+      },
+      "reviewed_by": "Matias Austin",
+      "reviewed_at": "2026-10-09T08:39:55.469Z"
+    }
+  ],
+  "tool_executions": [
+    {
+      "id": "exec_1791535195450_zzer6",
+      "organization_id": "org_matias_studio",
+      "tool_id": "system.get_current_user",
+      "user_id": "user_owner",
+      "risk_level": "LOW",
+      "status": "completed",
+      "input": {},
+      "started_at": "2026-10-09T08:39:55.450Z",
+      "created_at": "2026-10-09T08:39:55.450Z",
+      "output": {
+        "user": {
+          "id": "user_owner",
+          "email": "owner@example.com",
+          "name": "Matias Austin",
+          "role": "USER"
+        }
+      },
+      "completed_at": "2026-10-09T08:39:55.451Z"
+    },
+    {
+      "id": "exec_1791535195453_4md19",
+      "organization_id": "org_matias_studio",
+      "tool_id": "clients.create",
+      "user_id": "user_owner",
+      "risk_level": "MEDIUM",
+      "status": "completed",
+      "input": {
+        "company_name": "Studio Autonomous Client",
+        "industry": "Spatial AI"
+      },
+      "started_at": "2026-10-09T08:39:55.453Z",
+      "created_at": "2026-10-09T08:39:55.453Z",
+      "output": {
+        "client": {
+          "id": "client_studio-autonomous-client_hd02",
+          "organization_id": "org_matias_studio",
+          "company_name": "Studio Autonomous Client",
+          "industry": "Spatial AI",
+          "status": "active",
+          "currency": "USD",
+          "payment_terms": "Net 30",
+          "created_at": "2026-10-09T08:39:55.454Z",
+          "updated_at": "2026-10-09T08:39:55.454Z"
+        }
+      },
+      "completed_at": "2026-10-09T08:39:55.456Z"
+    },
+    {
+      "id": "exec_1791535195463_z1l7q",
+      "organization_id": "org_matias_studio",
+      "tool_id": "communication.send",
+      "user_id": "user_owner",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "approval_id": "appr_1791535195463_bstb",
+      "risk_level": "HIGH",
+      "status": "waiting_approval",
+      "input": {
+        "channel": "Slack",
+        "recipient": "Lead Partner",
+        "message": "Ready for delivery confirmation.",
+        "clientId": "client_studio-autonomous-client_hd02",
+        "client_id": "client_studio-autonomous-client_hd02"
+      },
+      "created_at": "2026-10-09T08:39:55.463Z"
+    },
+    {
+      "id": "exec_1791535195467_ece6y",
+      "organization_id": "org_matias_studio",
+      "tool_id": "communication.send",
+      "user_id": "user_owner",
+      "client_id": "client_studio-autonomous-client_hd02",
+      "approval_id": "appr_1791535195463_bstb",
+      "risk_level": "HIGH",
+      "status": "completed",
+      "input": {
+        "channel": "Slack",
+        "recipient": "Lead Partner",
+        "message": "Ready for delivery confirmation.",
+        "clientId": "client_studio-autonomous-client_hd02",
+        "client_id": "client_studio-autonomous-client_hd02"
+      },
+      "started_at": "2026-10-09T08:39:55.467Z",
+      "created_at": "2026-10-09T08:39:55.467Z",
+      "output": {
+        "sent": true,
+        "channel": "Slack",
+        "recipient": "Lead Partner",
+        "message": "Ready for delivery confirmation.",
+        "dispatched_at": "2026-10-09T08:39:55.468Z"
+      },
+      "completed_at": "2026-10-09T08:39:55.468Z"
+    }
+  ],
+  "governance_policies": [
+    {
+      "id": "gov_org_matias_studio",
+      "organization_id": "org_matias_studio",
+      "official_truth_gate": true,
+      "external_communication_gate": true,
+      "design_publishing_gate": false,
+      "commercial_budget_enforcement": true,
+      "updated_at": "2026-10-09T08:39:55.473Z"
     }
   ]
 }

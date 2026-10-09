@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../api/client';
-import { OrganizationMemberRecord, OrganizationRole, InvitationRecord } from '../../../server/db/types';
+import { OrganizationMemberRecord, OrganizationRole, InvitationRecord, ToolDefinition, OrgGovernancePolicy } from '../../../server/db/types';
 import { 
   Building2, 
   Users, 
@@ -16,18 +16,26 @@ import {
   CheckCircle2, 
   AlertCircle,
   ExternalLink,
-  Lock
+  Lock,
+  Wrench,
+  Play,
+  Terminal,
+  Activity
 } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'organization' | 'members' | 'security' | 'ai' | 'integrations' | 'billing';
+type SettingsTab = 'profile' | 'organization' | 'members' | 'security' | 'tools' | 'ai' | 'integrations' | 'billing';
 
 export const SettingsView: React.FC = () => {
   const { user, organization, role, refreshAuth } = useAuth();
-  const [activeTab, setActiveTab] = useState<SettingsTab>('members');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('tools');
   const [members, setMembers] = useState<OrganizationMemberRecord[]>([]);
   const [invitations, setInvitations] = useState<InvitationRecord[]>([]);
+  const [tools, setTools] = useState<ToolDefinition[]>([]);
+  const [governance, setGovernance] = useState<OrgGovernancePolicy | null>(null);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [executionResult, setExecutionResult] = useState<{ toolId: string; result: any } | null>(null);
+  const [executingTool, setExecutingTool] = useState<string | null>(null);
 
   // Invite modal / state
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -54,10 +62,28 @@ export const SettingsView: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (activeTab === 'members') {
-      loadMembersAndInvites();
+  const loadTools = async () => {
+    try {
+      const toolList = await api.getTools();
+      setTools(toolList);
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message });
     }
+  };
+
+  const loadGovernance = async () => {
+    try {
+      const gov = await api.getGovernance();
+      setGovernance(gov);
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message });
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'members') loadMembersAndInvites();
+    if (activeTab === 'tools') loadTools();
+    if (activeTab === 'ai') loadGovernance();
   }, [activeTab, organization?.id]);
 
   const handleInvite = async (e: React.FormEvent) => {
@@ -148,11 +174,12 @@ export const SettingsView: React.FC = () => {
       {/* Settings Navigation Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#E5E5E1]">
         {[
+          { id: 'tools', label: 'Tools Catalog', icon: Wrench },
+          { id: 'ai', label: 'AI Agent Governance', icon: Bot },
           { id: 'members', label: 'Members & Roles', icon: Users },
           { id: 'organization', label: 'Organization Profile', icon: Building2 },
           { id: 'profile', label: 'My Profile', icon: User },
           { id: 'security', label: 'Security & Sessions', icon: ShieldCheck },
-          { id: 'ai', label: 'AI Agent Governance', icon: Bot },
           { id: 'integrations', label: 'Integrations', icon: Link2 },
           { id: 'billing', label: 'Plans & Billing', icon: CreditCard },
         ].map((tab) => {
@@ -174,6 +201,278 @@ export const SettingsView: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Tab: Tools Catalog */}
+      {activeTab === 'tools' && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-medium text-[#111111]">Central Tool Registry</h2>
+              <p className="text-xs text-[#6F6F6B] mt-0.5">
+                Strongly typed execution catalog with risk ratings, permission boundaries, and approval requirements.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono px-3 py-1 bg-white border border-[#E5E5E1] rounded-full text-[#111111]">
+                {tools.length} Registered Tools
+              </span>
+            </div>
+          </div>
+
+          {/* Test Execution Feedback Banner */}
+          {executionResult && (
+            <div className="p-4 rounded-2xl bg-white border border-[#E5E5E1] shadow-sm space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-[#111111]" />
+                  <span className="text-xs font-mono font-medium text-[#111111]">
+                    Execution Result: {executionResult.toolId}
+                  </span>
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                    executionResult.result.success ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'
+                  }`}>
+                    {executionResult.result.status}
+                  </span>
+                </div>
+                <button 
+                  onClick={() => setExecutionResult(null)}
+                  className="text-xs text-[#6F6F6B] hover:text-[#111111]"
+                >
+                  Dismiss
+                </button>
+              </div>
+              <pre className="p-3 bg-[#F5F5F3] rounded-xl text-[11px] font-mono overflow-x-auto text-[#111111] max-h-48">
+                {JSON.stringify(executionResult.result, null, 2)}
+              </pre>
+            </div>
+          )}
+
+          {/* Tools Table */}
+          <div className="bg-white border border-[#E5E5E1] rounded-[24px] overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-[#F5F5F3]/60 border-b border-[#E5E5E1] text-[#6F6F6B] font-mono">
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider">Tool &amp; Identifier</th>
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider">Provider</th>
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider">Category</th>
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider">Risk Level</th>
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider">Required Permission</th>
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider">Status</th>
+                    <th className="py-3 px-4 font-medium uppercase tracking-wider text-right">Gateway Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E5E5E1]/60">
+                  {tools.map((t) => {
+                    const isCritical = t.risk_level === 'CRITICAL';
+                    const isHigh = t.risk_level === 'HIGH';
+                    const isMedium = t.risk_level === 'MEDIUM';
+                    return (
+                      <tr key={t.id} className="hover:bg-[#F5F5F3]/30 transition-colors">
+                        <td className="py-3.5 px-4">
+                          <div className="font-medium text-[#111111]">{t.name}</div>
+                          <div className="font-mono text-[10px] text-[#6F6F6B] mt-0.5">{t.id}</div>
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-[#6F6F6B] uppercase text-[11px]">
+                          {t.provider}
+                        </td>
+                        <td className="py-3.5 px-4 text-[#111111] capitalize">
+                          {t.category.replace('_', ' ')}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium ${
+                            isCritical ? 'bg-red-50 text-red-700 border border-red-200' :
+                            isHigh ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                            isMedium ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                            'bg-neutral-100 text-neutral-700 border border-neutral-200'
+                          }`}>
+                            {t.risk_level}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-[11px] text-[#6F6F6B]">
+                          {t.required_permissions.join(', ') || 'none'}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span className="inline-flex items-center gap-1.5 text-[11px] text-emerald-700 font-medium">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            {t.requires_approval ? 'Approval Required' : 'Enabled'}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <button
+                            onClick={async () => {
+                              setExecutingTool(t.id);
+                              try {
+                                const res = await api.executeTool({
+                                  toolId: t.id,
+                                  input: t.id === 'clients.create'
+                                    ? { company_name: `Test Client ${Date.now()}`, industry: 'Creative Tech' }
+                                    : t.id === 'communication.send'
+                                    ? { channel: 'Slack', recipient: 'Lead Partner', message: 'Test message dispatch.' }
+                                    : {}
+                                });
+                                setExecutionResult({ toolId: t.id, result: res });
+                                setNotification({
+                                  type: 'success',
+                                  message: res.status === 'waiting_approval' 
+                                    ? `Approval checkpoint created: ${res.message}` 
+                                    : `Execution succeeded (${res.status})`
+                                });
+                              } catch (err: any) {
+                                setNotification({ type: 'error', message: err.message });
+                              } finally {
+                                setExecutingTool(null);
+                              }
+                            }}
+                            disabled={executingTool === t.id}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#E5E5E1] bg-white hover:bg-[#F5F5F3] text-[11px] font-medium text-[#111111] transition-all disabled:opacity-50"
+                          >
+                            <Play className="w-3 h-3 text-[#6F6F6B]" />
+                            <span>{executingTool === t.id ? 'Executing...' : 'Test Run'}</span>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: AI Governance */}
+      {activeTab === 'ai' && (
+        <div className="bg-white border border-[#E5E5E1] rounded-[24px] p-8 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-medium text-[#111111]">AI Agent Governance &amp; Gates</h2>
+              <p className="text-xs text-[#6F6F6B] mt-1">
+                Real database policy gates actively evaluated by ToolExecutionService before execution.
+              </p>
+            </div>
+            <span className="font-mono text-xs px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+              Engine Status: Enforcing
+            </span>
+          </div>
+
+          <div className="space-y-3 text-xs">
+            {[
+              { 
+                key: 'official_truth_gate' as keyof OrgGovernancePolicy, 
+                title: 'Official Truth Modification Gate', 
+                desc: 'Require human review before observed facts or memory updates can elevate to official authoritative studio truth.',
+                active: governance ? Boolean(governance.official_truth_gate) : true
+              },
+              { 
+                key: 'external_communication_gate' as keyof OrgGovernancePolicy, 
+                title: 'External Communication Gate', 
+                desc: 'Require studio operator sign-off before AI agents dispatch outbound Slack, Email, or WhatsApp communications.',
+                active: governance ? Boolean(governance.external_communication_gate) : true
+              },
+              { 
+                key: 'design_publishing_gate' as keyof OrgGovernancePolicy, 
+                title: 'Design Asset Publishing Gate', 
+                desc: 'Hold client-facing Figma exports and deliverables in quarantine until design director confirmation.',
+                active: governance ? Boolean(governance.design_publishing_gate) : true
+              },
+              { 
+                key: 'commercial_budget_enforcement' as keyof OrgGovernancePolicy, 
+                title: 'Commercial Budget Enforcement', 
+                desc: 'Prevent agents from issuing invoices or quotations without formal finance confirmation.',
+                active: governance ? Boolean(governance.commercial_budget_enforcement) : true
+              },
+            ].map((gate) => (
+              <div key={gate.key} className="p-4 rounded-xl bg-[#F5F5F3] border border-[#E5E5E1] flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-[#111111]">{gate.title}</div>
+                  <div className="text-[#6F6F6B] text-[11px] mt-0.5">{gate.desc}</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={`font-mono text-[11px] px-2 py-0.5 rounded border ${
+                    gate.active 
+                      ? 'text-emerald-700 bg-emerald-50 border-emerald-200' 
+                      : 'text-neutral-500 bg-neutral-100 border-neutral-200'
+                  }`}>
+                    {gate.active ? 'ACTIVE GATE' : 'BYPASSED'}
+                  </span>
+                  {canManageMembers && (
+                    <button
+                      onClick={async () => {
+                        if (!governance) return;
+                        try {
+                          const updated = await api.updateGovernance({ [gate.key]: !gate.active });
+                          setGovernance(updated);
+                          setNotification({
+                            type: 'success',
+                            message: `Gate "${gate.title}" is now ${!gate.active ? 'ACTIVE' : 'BYPASSED'}.`
+                          });
+                        } catch (err: any) {
+                          setNotification({ type: 'error', message: err.message });
+                        }
+                      }}
+                      className="px-3 py-1 rounded-lg border border-[#E5E5E1] bg-white hover:bg-neutral-100 text-[11px] font-medium text-[#111111]"
+                    >
+                      {gate.active ? 'Disable' : 'Enable'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Tab: Integrations */}
+      {activeTab === 'integrations' && (
+        <div className="bg-white border border-[#E5E5E1] rounded-[24px] p-8 shadow-sm space-y-6">
+          <div>
+            <h2 className="text-lg font-medium text-[#111111]">Studio Tool Integrations</h2>
+            <p className="text-xs text-[#6F6F6B] mt-1">
+              Tool registry execution gateway is live. External tool connectors connect through registered tool pipelines.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="font-medium text-sm text-[#111111] flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                Core Studio Tools Gateway
+              </div>
+              <p className="text-[#6F6F6B] text-xs mt-1">
+                25 strongly-typed core tools connected to database, tenant isolation, and risk engine.
+              </p>
+            </div>
+            <span className="text-xs font-mono font-medium text-emerald-700 bg-white px-3 py-1 rounded-full border border-emerald-200 self-start sm:self-auto">
+              Connected
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            {[
+              { name: 'Figma', desc: 'Design token publisher & component sync pipeline', status: 'Not connected' },
+              { name: 'Slack', desc: 'Client channel messaging gateway with approval gates', status: 'Not connected' },
+              { name: 'Linear', desc: 'Task coordination and milestone issue tracking', status: 'Not connected' },
+              { name: 'Google Workspace', desc: 'Drive and Docs brief ingestion gateway', status: 'Not connected' },
+            ].map((intg, i) => (
+              <div key={i} className="p-5 rounded-2xl border border-[#E5E5E1] bg-white flex flex-col justify-between">
+                <div>
+                  <div className="font-medium text-sm text-[#111111]">{intg.name}</div>
+                  <p className="text-[#6F6F6B] text-xs mt-1">{intg.desc}</p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-[#E5E5E1] flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-[#6F6F6B] bg-[#F5F5F3] px-2 py-0.5 rounded">
+                    {intg.status}
+                  </span>
+                  <span className="text-[11px] text-[#6F6F6B] italic font-light">
+                    Pending next milestone
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Tab: Members */}
       {activeTab === 'members' && (
@@ -397,62 +696,6 @@ export const SettingsView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab: AI Governance */}
-      {activeTab === 'ai' && (
-        <div className="bg-white border border-[#E5E5E1] rounded-[24px] p-8 shadow-sm space-y-6">
-          <div>
-            <h2 className="text-lg font-medium text-[#111111]">AI Agent Governance &amp; Approvals</h2>
-            <p className="text-xs text-[#6F6F6B] mt-1">Configure autonomy bounds and approval gates for autonomous studio workers.</p>
-          </div>
-          <div className="space-y-3 text-xs">
-            {[
-              { title: 'Official Truth Modification Gate', desc: 'Require human review before observed facts can overwrite official brand memories.', state: 'Active' },
-              { title: 'External Communication Gate', desc: 'Require studio operator sign-off before AI agents send messages to external channels.', state: 'Active' },
-              { title: 'Design Asset Publishing Gate', desc: 'Hold client-facing deliverables until design lead confirmation.', state: 'Active' },
-              { title: 'Commercial Budget Enforcement', desc: 'Prevent agent from issuing quotes exceeding project baseline estimates.', state: 'Active' },
-            ].map((gate, i) => (
-              <div key={i} className="p-4 rounded-xl bg-[#F5F5F3] border border-[#E5E5E1] flex items-center justify-between">
-                <div>
-                  <div className="font-medium text-[#111111]">{gate.title}</div>
-                  <div className="text-[#6F6F6B] text-[11px] mt-0.5">{gate.desc}</div>
-                </div>
-                <span className="font-mono text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-200">{gate.state}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Tab: Integrations */}
-      {activeTab === 'integrations' && (
-        <div className="bg-white border border-[#E5E5E1] rounded-[24px] p-8 shadow-sm space-y-6">
-          <div>
-            <h2 className="text-lg font-medium text-[#111111]">Studio Tool Integrations</h2>
-            <p className="text-xs text-[#6F6F6B] mt-1">Connect external creative pipelines to the Matias intelligence engine.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            {[
-              { name: 'Figma', desc: 'Extract tokens, frames, and brand system components', status: 'Ready to connect' },
-              { name: 'Slack', desc: 'Ingest client channels for background communication notes', status: 'Ready to connect' },
-              { name: 'Linear', desc: 'Synchronize agent tasks with engineering deliverables', status: 'Ready to connect' },
-              { name: 'Google Workspace', desc: 'Ingest Docs briefs, Drive assets, and project files', status: 'Ready to connect' },
-            ].map((intg, i) => (
-              <div key={i} className="p-5 rounded-2xl border border-[#E5E5E1] bg-white flex flex-col justify-between">
-                <div>
-                  <div className="font-medium text-sm text-[#111111]">{intg.name}</div>
-                  <p className="text-[#6F6F6B] text-xs mt-1">{intg.desc}</p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-[#E5E5E1] flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-[#6F6F6B]">{intg.status}</span>
-                  <button className="px-3 py-1 rounded-lg border border-[#E5E5E1] hover:bg-[#F5F5F3] text-xs font-medium">
-                    Connect
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Tab: Billing */}
       {activeTab === 'billing' && (

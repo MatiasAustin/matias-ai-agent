@@ -177,16 +177,52 @@ const AppContent: React.FC = () => {
   const loadStudioState = async () => {
     if (!user) return;
     try {
-      const [c, p, t, a] = await Promise.all([
+      const [c, p, t, a, realApprovals] = await Promise.all([
         api.getClients(),
         api.getProjects(),
         api.getTasks(),
-        api.getActivities()
+        api.getActivities(),
+        api.getApprovals().catch(() => [])
       ]);
       setClients(c);
       setProjects(p);
       setTasks(t);
       setActivities(a);
+
+      // Map real database approvals
+      if (realApprovals && realApprovals.length > 0) {
+        const mapped: ApprovalItem[] = realApprovals.map((r: any) => {
+          const clientObj = c.find(cl => cl.id === r.client_id);
+          const clientName = clientObj ? clientObj.company_name : (r.client_id || 'Studio Workspace');
+          const projectObj = p.find(pr => pr.project_id === r.project_id);
+          const projectName = projectObj ? projectObj.project_name : 'General Initiative';
+
+          let preview = '';
+          if (r.original_input?.message) {
+            preview = r.original_input.message;
+          } else if (r.original_input?.tokens) {
+            preview = `Publishing ${Object.keys(r.original_input.tokens).length} tokens to Figma.`;
+          } else {
+            preview = JSON.stringify(r.original_input, null, 2);
+          }
+
+          return {
+            id: r.id,
+            title: `Autonomous Gate: ${r.tool_id}`,
+            proposedAction: `${r.tool_id} (${r.risk_level} Risk)`,
+            client: clientName,
+            project: projectName,
+            reason: r.reason,
+            previewContent: preview,
+            confidence: 98,
+            time: new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            status: (r.status === 'executed' || r.status === 'approved') ? 'approved' : (r.status === 'rejected' ? 'rejected' : 'pending')
+          };
+        });
+        setApprovals(mapped);
+      } else {
+        setApprovals([]);
+      }
 
       // Load client memories
       if (c.length > 0) {
@@ -224,12 +260,37 @@ const AppContent: React.FC = () => {
     setAiStatusIndex((prev) => (prev + 1) % aiStatusStates.length);
   };
 
-  const handleApprove = (id: string) => {
-    setApprovals(prev => prev.map(a => a.id === id ? { ...a, status: 'approved' } : a));
+  const handleApprove = async (id: string) => {
+    try {
+      await api.approveAction(id);
+      await loadStudioState();
+    } catch (err: any) {
+      alert(`Approval execution failed: ${err.message}`);
+    }
   };
 
-  const handleReject = (id: string) => {
-    setApprovals(prev => prev.map(a => a.id === id ? { ...a, status: 'rejected' } : a));
+  const handleReject = async (id: string) => {
+    try {
+      await api.rejectAction(id, 'Rejected by studio operator');
+      await loadStudioState();
+    } catch (err: any) {
+      alert(`Rejection failed: ${err.message}`);
+    }
+  };
+
+  const handleSaveAndApprove = async (id: string, newContent: string) => {
+    try {
+      let editedPayload: any = { message: newContent };
+      try {
+        if (newContent.trim().startsWith('{') || newContent.trim().startsWith('[')) {
+          editedPayload = JSON.parse(newContent);
+        }
+      } catch {}
+      await api.approveAction(id, editedPayload);
+      await loadStudioState();
+    } catch (err: any) {
+      alert(`Edited approval execution failed: ${err.message}`);
+    }
   };
 
   const handleNavigate = (tab: NavigationTab) => {
@@ -495,9 +556,7 @@ const AppContent: React.FC = () => {
         onClose={() => setActiveApprovalModalItem(null)}
         onApprove={handleApprove}
         onReject={handleReject}
-        onSaveAndApprove={(id, content) => {
-          setApprovals(prev => prev.map(a => a.id === id ? { ...a, previewContent: content, status: 'approved' } : a));
-        }}
+        onSaveAndApprove={handleSaveAndApprove}
       />
 
       {/* Global Command Palette / Search Modal */}

@@ -17,7 +17,11 @@ import {
   OrganizationRecord,
   OrganizationMemberRecord,
   InvitationRecord,
-  FeatureFlagRecord
+  FeatureFlagRecord,
+  ToolDefinition,
+  ApprovalRecord,
+  ToolExecutionRecord,
+  OrgGovernancePolicy
 } from '../../server/db/types';
 import { CreateClientPayload } from '../../server/services/clientService';
 import { ClientContextPayload } from '../../server/services/contextService';
@@ -278,6 +282,70 @@ export const api = {
   // Activities
   getActivities: (clientId?: string) => 
     request<ActivityRecord[]>(`/activities${clientId ? `?clientId=${clientId}` : ''}`),
+
+  // Tools & Execution Registry
+  getTools: () => request<ToolDefinition[]>('/tools'),
+  executeTool: (payload: {
+    toolId: string;
+    clientId?: string;
+    projectId?: string;
+    agentId?: string;
+    input?: Record<string, any>;
+    idempotencyKey?: string;
+  }) => request<{
+    success: boolean;
+    toolId: string;
+    executionId: string;
+    status: string;
+    data?: any;
+    approvalId?: string;
+    errorCode?: string;
+    message?: string;
+  }>('/tools/execute', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  }),
+
+  // Agents
+  getAgents: () => request<any[]>('/agents'),
+  updateAgentTools: (agentId: string, toolId: string, enabled: boolean) =>
+    request<{ success: boolean; agentId: string; toolId: string; enabled: boolean }>(`/agents/${agentId}/tools`, {
+      method: 'PATCH',
+      body: JSON.stringify({ toolId, enabled })
+    }),
+
+  // Approvals
+  getApprovals: (status?: string) => 
+    request<ApprovalRecord[]>(`/approvals${status ? `?status=${status}` : ''}`),
+  approveAction: (approvalId: string, editedInput?: Record<string, any>) =>
+    request<{ approval: ApprovalRecord; execution: any }>(`/approvals/${approvalId}/approve`, {
+      method: 'POST',
+      body: JSON.stringify({ editedInput })
+    }),
+  rejectAction: (approvalId: string, reason?: string) =>
+    request<{ success: boolean; approval: ApprovalRecord }>(`/approvals/${approvalId}/reject`, {
+      method: 'POST',
+      body: JSON.stringify({ reason })
+    }),
+
+  // Tool Executions
+  getToolExecutions: (params?: { agentId?: string; toolId?: string; status?: string; limit?: number }) => {
+    const sp = new URLSearchParams();
+    if (params?.agentId) sp.set('agentId', params.agentId);
+    if (params?.toolId) sp.set('toolId', params.toolId);
+    if (params?.status) sp.set('status', params.status);
+    if (params?.limit) sp.set('limit', params.limit.toString());
+    const qs = sp.toString();
+    return request<ToolExecutionRecord[]>(`/tool-executions${qs ? `?${qs}` : ''}`);
+  },
+
+  // AI Governance
+  getGovernance: () => request<OrgGovernancePolicy>('/governance'),
+  updateGovernance: (updates: Partial<OrgGovernancePolicy>) =>
+    request<OrgGovernancePolicy>('/governance', {
+      method: 'PATCH',
+      body: JSON.stringify(updates)
+    }),
 
   // Reset seed (dev only)
   resetSeed: () => request<{ status: string }>('/seed/reset', { method: 'POST' })

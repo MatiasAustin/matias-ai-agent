@@ -274,6 +274,138 @@ export interface ActivityRecord {
   created_at: string;
 }
 
+// ==========================================
+// TOOL REGISTRY & EXECUTION TYPES
+// ==========================================
+
+export type ToolCategory =
+  | 'communication'
+  | 'design'
+  | 'project_management'
+  | 'documents'
+  | 'research'
+  | 'storage'
+  | 'system'
+  | 'business';
+
+export type ToolRiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+export interface ToolDefinition {
+  id: string;
+  name: string;
+  provider: string; // e.g. 'core'
+  description: string;
+  category: ToolCategory;
+  version: string;
+  risk_level: ToolRiskLevel;
+  requires_approval: boolean;
+  enabled: boolean;
+  input_schema: Record<string, any>;
+  output_schema: Record<string, any>;
+  required_permissions: string[];
+}
+
+export interface AgentRecord {
+  id: string;
+  organization_id: string;
+  name: string;
+  role: string;
+  description: string;
+  status: 'Active' | 'Standby' | 'Processing';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AgentToolRecord {
+  id: string;
+  organization_id: string;
+  agent_id: string;
+  tool_id: string;
+  enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AgentPermissionRecord {
+  id: string;
+  organization_id: string;
+  agent_id: string;
+  permission: string;
+  enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type ApprovalStatus = 
+  | 'pending' 
+  | 'approved' 
+  | 'rejected' 
+  | 'expired' 
+  | 'cancelled' 
+  | 'executed' 
+  | 'failed';
+
+export interface ApprovalRecord {
+  id: string;
+  organization_id: string;
+  client_id?: string;
+  project_id?: string;
+  requested_by_type: 'user' | 'agent';
+  requested_by_id: string;
+  tool_id: string;
+  risk_level: ToolRiskLevel;
+  status: ApprovalStatus;
+  original_input: Record<string, any>;
+  approved_input?: Record<string, any>;
+  reason: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type ToolExecutionStatus = 
+  | 'queued' 
+  | 'running' 
+  | 'waiting_approval' 
+  | 'completed' 
+  | 'failed' 
+  | 'cancelled';
+
+export interface ToolExecutionRecord {
+  id: string;
+  organization_id: string;
+  tool_id: string;
+  agent_id?: string;
+  user_id: string;
+  client_id?: string;
+  project_id?: string;
+  approval_id?: string;
+  risk_level: ToolRiskLevel;
+  status: ToolExecutionStatus;
+  input: Record<string, any>;
+  output?: Record<string, any>;
+  error?: {
+    code: string;
+    message: string;
+  };
+  idempotency_key?: string;
+  started_at?: string;
+  completed_at?: string;
+  created_at: string;
+}
+
+export interface OrgGovernancePolicy {
+  id: string;
+  organization_id: string;
+  official_truth_gate: boolean;
+  external_communication_gate: boolean;
+  design_publishing_gate: boolean;
+  commercial_budget_enforcement: boolean;
+  updated_at: string;
+}
+
 export interface DatabaseSchema {
   users: UserRecord[];
   organizations: OrganizationRecord[];
@@ -289,4 +421,12 @@ export interface DatabaseSchema {
   documents: DocumentRecord[];
   client_permissions: ClientPermissionsRecord[];
   activities: ActivityRecord[];
+  tools: ToolDefinition[];
+  agents: AgentRecord[];
+  agent_tools: AgentToolRecord[];
+  agent_permissions: AgentPermissionRecord[];
+  approvals: ApprovalRecord[];
+  tool_executions: ToolExecutionRecord[];
+  governance_policies: OrgGovernancePolicy[];
 }
+

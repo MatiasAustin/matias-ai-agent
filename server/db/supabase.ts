@@ -34,7 +34,14 @@ const TABLE_MAP: Record<keyof DatabaseSchema, string> = {
   client_memory: 'client_memory',
   documents: 'documents',
   client_permissions: 'client_permissions',
-  activities: 'activities'
+  activities: 'activities',
+  tools: 'tools',
+  agents: 'agents',
+  agent_tools: 'agent_tools',
+  agent_permissions: 'agent_permissions',
+  approvals: 'approvals',
+  tool_executions: 'tool_executions',
+  governance_policies: 'governance_policies'
 };
 
 /**
@@ -54,7 +61,14 @@ const PK_MAP: Record<keyof DatabaseSchema, string> = {
   client_memory: 'id',
   documents: 'file_id',
   client_permissions: 'id',
-  activities: 'id'
+  activities: 'id',
+  tools: 'id',
+  agents: 'id',
+  agent_tools: 'id',
+  agent_permissions: 'id',
+  approvals: 'id',
+  tool_executions: 'id',
+  governance_policies: 'id'
 };
 
 /**

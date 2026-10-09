@@ -107,7 +107,14 @@ class Database {
       client_memory: existing.client_memory || [],
       documents: existing.documents || [],
       client_permissions: existing.client_permissions || [],
-      activities: existing.activities || []
+      activities: existing.activities || [],
+      tools: existing.tools || [],
+      agents: existing.agents && existing.agents.length > 0 ? existing.agents : initialDevelopmentSeed.agents,
+      agent_tools: existing.agent_tools && existing.agent_tools.length > 0 ? existing.agent_tools : initialDevelopmentSeed.agent_tools,
+      agent_permissions: existing.agent_permissions && existing.agent_permissions.length > 0 ? existing.agent_permissions : initialDevelopmentSeed.agent_permissions,
+      approvals: existing.approvals || initialDevelopmentSeed.approvals,
+      tool_executions: existing.tool_executions || [],
+      governance_policies: existing.governance_policies && existing.governance_policies.length > 0 ? existing.governance_policies : initialDevelopmentSeed.governance_policies
     };
 
     const defaultOrgId = schema.organizations[0]?.id || 'org_matias_studio';
@@ -136,6 +143,24 @@ class Database {
     });
     schema.activities.forEach(a => {
       if (!a.organization_id) a.organization_id = defaultOrgId;
+    });
+    schema.agents.forEach(ag => {
+      if (!ag.organization_id) ag.organization_id = defaultOrgId;
+    });
+    schema.agent_tools.forEach(at => {
+      if (!at.organization_id) at.organization_id = defaultOrgId;
+    });
+    schema.agent_permissions.forEach(ap => {
+      if (!ap.organization_id) ap.organization_id = defaultOrgId;
+    });
+    schema.approvals.forEach(appr => {
+      if (!appr.organization_id) appr.organization_id = defaultOrgId;
+    });
+    schema.tool_executions.forEach(te => {
+      if (!te.organization_id) te.organization_id = defaultOrgId;
+    });
+    schema.governance_policies.forEach(gp => {
+      if (!gp.organization_id) gp.organization_id = defaultOrgId;
     });
 
     // If users table was empty or missing admin
