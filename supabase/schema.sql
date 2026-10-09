@@ -473,6 +473,7 @@ ALTER TABLE approvals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tool_executions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE governance_policies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can access their organization agent_tools" ON agent_tools;
 CREATE POLICY "Users can access their organization agent_tools" ON agent_tools
     FOR ALL USING (
         organization_id IN (
@@ -480,6 +481,7 @@ CREATE POLICY "Users can access their organization agent_tools" ON agent_tools
         )
     );
 
+DROP POLICY IF EXISTS "Users can access their organization agent_permissions" ON agent_permissions;
 CREATE POLICY "Users can access their organization agent_permissions" ON agent_permissions
     FOR ALL USING (
         organization_id IN (
@@ -487,6 +489,7 @@ CREATE POLICY "Users can access their organization agent_permissions" ON agent_p
         )
     );
 
+DROP POLICY IF EXISTS "Users can access their organization approvals" ON approvals;
 CREATE POLICY "Users can access their organization approvals" ON approvals
     FOR ALL USING (
         organization_id IN (
@@ -494,6 +497,7 @@ CREATE POLICY "Users can access their organization approvals" ON approvals
         )
     );
 
+DROP POLICY IF EXISTS "Users can access their organization tool_executions" ON tool_executions;
 CREATE POLICY "Users can access their organization tool_executions" ON tool_executions
     FOR ALL USING (
         organization_id IN (
@@ -501,6 +505,7 @@ CREATE POLICY "Users can access their organization tool_executions" ON tool_exec
         )
     );
 
+DROP POLICY IF EXISTS "Users can access their organization governance_policies" ON governance_policies;
 CREATE POLICY "Users can access their organization governance_policies" ON governance_policies
     FOR ALL USING (
         organization_id IN (
@@ -637,24 +642,31 @@ ALTER TABLE slack_channel_mappings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE client_communication_links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE project_communication_links ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can access their organization integrations" ON integrations;
 CREATE POLICY "Users can access their organization integrations" ON integrations
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 
+DROP POLICY IF EXISTS "Users can access their organization conversations" ON conversations;
 CREATE POLICY "Users can access their organization conversations" ON conversations
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 
+DROP POLICY IF EXISTS "Users can access their organization conversation_messages" ON conversation_messages;
 CREATE POLICY "Users can access their organization conversation_messages" ON conversation_messages
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 
+DROP POLICY IF EXISTS "Users can access their organization integration_events" ON integration_events;
 CREATE POLICY "Users can access their organization integration_events" ON integration_events
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 
+DROP POLICY IF EXISTS "Users can access their organization slack_channel_mappings" ON slack_channel_mappings;
 CREATE POLICY "Users can access their organization slack_channel_mappings" ON slack_channel_mappings
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 
+DROP POLICY IF EXISTS "Users can access their organization client_communication_links" ON client_communication_links;
 CREATE POLICY "Users can access their organization client_communication_links" ON client_communication_links
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 
+DROP POLICY IF EXISTS "Users can access their organization project_communication_links" ON project_communication_links;
 CREATE POLICY "Users can access their organization project_communication_links" ON project_communication_links
     FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()::text));
 

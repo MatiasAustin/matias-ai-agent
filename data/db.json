@@ -3,74 +3,50 @@
     {
       "id": "user_admin",
       "email": "admin@example.com",
-      "password_hash": "e2b1c45d665dd4373434b4a994b42a2ba857237ce0b850536e4e46261030c7dfbbb59f8604b217cd20f2e98758ded42f7c7dc75a9c08f0cfd7303b761b9f579a",
-      "password_salt": "687b9df8aae0e33efdc19d5459a32384",
+      "password_hash": "cb7fce1af41552957114587a6a2f32b7533982d9eb6ab1e5a35448bad4df3a617ad9964eeb365f79f00e5e78487b5f1bfc732d105917ebc13b86dff663a4769f",
+      "password_salt": "851bbee40c1444bb30ef05060073b0cf",
       "name": "System Super Admin",
       "platform_role": "SUPER_ADMIN",
       "status": "active",
-      "last_active_at": "2026-10-09T12:46:26.234Z",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "last_active_at": "2026-10-09T16:26:55.321Z",
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "user_owner",
       "email": "owner@example.com",
-      "password_hash": "bafdca2fdf457982c7a570f960275d2e3fa840573f37d6589fab8e7a764dfb04d2d3bc67de62a796960208f8d6c014cdfdd064e6f07c41ef3cfa6173d3e7a961",
-      "password_salt": "70a7ee823913c41255b4b16bbd0ce874",
+      "password_hash": "58a212b8933f9399c38f2cd6123aebacbb5e48407acc5e8544bf759974fcfe547630d245b5ea2ff27b78e56e800cd4e678dc6d6697227f9edab562f44b5074be",
+      "password_salt": "93aa1d76b83ce41deb11390b55fa4e56",
       "name": "Matias Austin",
       "platform_role": "USER",
       "status": "active",
-      "last_active_at": "2026-10-09T12:46:26.235Z",
-      "created_at": "2026-10-04T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "last_active_at": "2026-10-09T16:26:55.322Z",
+      "created_at": "2026-10-04T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "user_member",
       "email": "member@example.com",
-      "password_hash": "993fd0db421036358d66f49289d46dded183230397e4e6bd337ebdbd246cb070e473376b183e1d920758c438281da662ef35a0e4638250f89daa2cab2beece84",
-      "password_salt": "6df8a3b4ec5ba144c29c42b93314edf4",
+      "password_hash": "a437671af3d20f72fc51f6402ef4bb78292d9cc19b84e1c280089962558104ebd3d4d1b18e304b8668337e05acec0f4c41876f060f989f188ec0cab9258eaf1e",
+      "password_salt": "e11335c530c29ca4f1c07d193c82b08b",
       "name": "Elena Rostova",
       "platform_role": "USER",
       "status": "active",
-      "last_active_at": "2026-10-09T12:46:26.235Z",
-      "created_at": "2026-10-07T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "last_active_at": "2026-10-09T16:26:55.322Z",
+      "created_at": "2026-10-07T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
-      "id": "user_test_owner",
-      "email": "owner-test@tenant-a.com",
-      "password_hash": "hash",
-      "password_salt": "salt",
-      "name": "Owner Tester",
+      "id": "user-admin-1",
+      "email": "admin@studio-alpha.io",
+      "name": "Admin Alpha",
       "platform_role": "USER",
       "status": "active",
-      "last_active_at": "2026-10-09T12:46:26.296Z",
-      "created_at": "2026-10-09T12:46:26.296Z",
-      "updated_at": "2026-10-09T12:46:26.296Z"
-    },
-    {
-      "id": "user_test_member",
-      "email": "member-test@tenant-a.com",
-      "password_hash": "hash",
-      "password_salt": "salt",
-      "name": "Member Tester",
-      "platform_role": "USER",
-      "status": "active",
-      "last_active_at": "2026-10-09T12:46:26.296Z",
-      "created_at": "2026-10-09T12:46:26.296Z",
-      "updated_at": "2026-10-09T12:46:26.296Z"
-    },
-    {
-      "id": "user_test_viewer",
-      "email": "viewer-test@tenant-a.com",
-      "password_hash": "hash",
-      "password_salt": "salt",
-      "name": "Viewer Tester",
-      "platform_role": "USER",
-      "status": "active",
-      "last_active_at": "2026-10-09T12:46:26.296Z",
-      "created_at": "2026-10-09T12:46:26.296Z",
-      "updated_at": "2026-10-09T12:46:26.296Z"
+      "password_hash": "",
+      "password_salt": "",
+      "created_at": "2026-10-09T16:26:55.605Z",
+      "updated_at": "2026-10-09T16:26:55.605Z",
+      "last_active_at": "2026-10-09T16:26:55.605Z"
     }
   ],
   "organizations": [
@@ -81,26 +57,26 @@
       "status": "active",
       "plan": "Studio",
       "subscription_status": "active",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
-      "id": "org_test_tenant_a",
-      "name": "Tenant Studio A",
-      "slug": "tenant-a",
-      "status": "active",
+      "id": "org_test_slack_a",
+      "name": "Studio Alpha",
+      "slug": "studio-alpha",
       "plan": "Studio",
-      "created_at": "2026-10-09T12:46:26.295Z",
-      "updated_at": "2026-10-09T12:46:26.295Z"
+      "status": "active",
+      "created_at": "2026-10-09T16:26:55.604Z",
+      "updated_at": "2026-10-09T16:26:55.604Z"
     },
     {
-      "id": "org_test_tenant_b",
-      "name": "Tenant Studio B",
-      "slug": "tenant-b",
+      "id": "org_test_slack_b",
+      "name": "Studio Beta",
+      "slug": "studio-beta",
+      "plan": "Enterprise",
       "status": "active",
-      "plan": "Studio",
-      "created_at": "2026-10-09T12:46:26.295Z",
-      "updated_at": "2026-10-09T12:46:26.295Z"
+      "created_at": "2026-10-09T16:26:55.604Z",
+      "updated_at": "2026-10-09T16:26:55.604Z"
     }
   ],
   "organization_members": [
@@ -109,48 +85,32 @@
       "organization_id": "org_matias_studio",
       "user_id": "user_admin",
       "role": "OWNER",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "member_owner_studio",
       "organization_id": "org_matias_studio",
       "user_id": "user_owner",
       "role": "OWNER",
-      "created_at": "2026-10-04T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-04T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "member_elena_studio",
       "organization_id": "org_matias_studio",
       "user_id": "user_member",
       "role": "MEMBER",
-      "created_at": "2026-10-07T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-07T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
-      "id": "mem_a_owner",
-      "organization_id": "org_test_tenant_a",
-      "user_id": "user_test_owner",
+      "id": "mem_a_1",
+      "organization_id": "org_test_slack_a",
+      "user_id": "user-admin-1",
       "role": "OWNER",
-      "created_at": "2026-10-09T12:46:26.297Z",
-      "updated_at": "2026-10-09T12:46:26.297Z"
-    },
-    {
-      "id": "mem_a_member",
-      "organization_id": "org_test_tenant_a",
-      "user_id": "user_test_member",
-      "role": "MEMBER",
-      "created_at": "2026-10-09T12:46:26.297Z",
-      "updated_at": "2026-10-09T12:46:26.297Z"
-    },
-    {
-      "id": "mem_a_viewer",
-      "organization_id": "org_test_tenant_a",
-      "user_id": "user_test_viewer",
-      "role": "VIEWER",
-      "created_at": "2026-10-09T12:46:26.297Z",
-      "updated_at": "2026-10-09T12:46:26.297Z"
+      "created_at": "2026-10-09T16:26:55.606Z",
+      "updated_at": "2026-10-09T16:26:55.606Z"
     }
   ],
   "sessions": [],
@@ -162,7 +122,7 @@
       "key": "slack_integration",
       "enabled": false,
       "description": "Client Slack workspace synchronization",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "flag_figma",
@@ -170,7 +130,7 @@
       "key": "figma_integration",
       "enabled": false,
       "description": "Figma token and vector layout pipeline",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "flag_browser",
@@ -178,31 +138,23 @@
       "key": "browser_agent",
       "enabled": false,
       "description": "Autonomous web research worker",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
   "clients": [
     {
-      "id": "client_studio-alpha-client-2_j801",
-      "organization_id": "org_test_tenant_a",
-      "company_name": "Studio Alpha Client 2",
-      "industry": "Design",
+      "id": "client_acme-robotics_kst9",
+      "organization_id": "org_test_slack_a",
+      "company_name": "Acme Robotics",
+      "industry": "Robotics",
+      "timezone": "UTC",
       "status": "active",
+      "communication_tone": "Technical, concise",
+      "response_style": "Brief bullet points",
       "currency": "USD",
       "payment_terms": "Net 30",
-      "created_at": "2026-10-09T12:46:26.305Z",
-      "updated_at": "2026-10-09T12:46:26.305Z"
-    },
-    {
-      "id": "client_studio-alpha-partner_ox61",
-      "organization_id": "org_test_tenant_a",
-      "company_name": "Studio Alpha Partner",
-      "industry": "Design",
-      "status": "active",
-      "currency": "USD",
-      "payment_terms": "Net 30",
-      "created_at": "2026-10-09T12:46:26.302Z",
-      "updated_at": "2026-10-09T12:46:26.302Z"
+      "created_at": "2026-10-09T16:26:55.607Z",
+      "updated_at": "2026-10-09T16:26:55.607Z"
     },
     {
       "id": "demo-xyz-ai",
@@ -237,26 +189,8 @@
       "payment_terms": "Net 30",
       "invoice_notes": "Reference PO-XYZ-2026 on all billing vouchers",
       "contract_notes": "Retainer Active: Tier 1 Autonomous Studio Collaboration",
-      "created_at": "2026-10-06T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
-    },
-    {
-      "id": "client_tenant_a_1",
-      "organization_id": "org_test_tenant_a",
-      "company_name": "Client Alpha",
-      "industry": "Design",
-      "status": "active",
-      "created_at": "2026-10-09T12:46:26.297Z",
-      "updated_at": "2026-10-09T12:46:26.297Z"
-    },
-    {
-      "id": "client_tenant_b_1",
-      "organization_id": "org_test_tenant_b",
-      "company_name": "Client Beta",
-      "industry": "Robotics",
-      "status": "active",
-      "created_at": "2026-10-09T12:46:26.297Z",
-      "updated_at": "2026-10-09T12:46:26.297Z"
+      "created_at": "2026-10-06T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
   "contacts": [
@@ -270,7 +204,7 @@
       "phone": "+41 44 123 4567",
       "preferred_channel": "Slack",
       "is_primary_contact": true,
-      "created_at": "2026-10-06T12:46:26.235Z"
+      "created_at": "2026-10-06T16:26:55.322Z"
     },
     {
       "id": "contact-demo-2",
@@ -282,29 +216,18 @@
       "phone": "+41 44 987 6543",
       "preferred_channel": "Email",
       "is_primary_contact": false,
-      "created_at": "2026-10-06T12:46:26.235Z"
+      "created_at": "2026-10-06T16:26:55.322Z"
     },
     {
-      "id": "contact_1791549986303_0",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_studio-alpha-partner_ox61",
-      "name": "Primary Contact",
-      "role": "Executive",
-      "email": "client@example.com",
+      "id": "contact_1791563215608_0",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "name": "Elena Rostova",
+      "role": "Head of Product",
+      "email": "elena@acme-robotics.io",
       "preferred_channel": "Slack",
       "is_primary_contact": true,
-      "created_at": "2026-10-09T12:46:26.303Z"
-    },
-    {
-      "id": "contact_1791549986305_0",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_studio-alpha-client-2_j801",
-      "name": "Primary Contact",
-      "role": "Executive",
-      "email": "client@example.com",
-      "preferred_channel": "Slack",
-      "is_primary_contact": true,
-      "created_at": "2026-10-09T12:46:26.305Z"
+      "created_at": "2026-10-09T16:26:55.608Z"
     }
   ],
   "projects": [
@@ -325,66 +248,66 @@
         "Creative Director Agent",
         "Design Automation Agent"
       ],
-      "created_at": "2026-10-07T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-07T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
-      "project_id": "proj_tenant_a_1",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_name": "Alpha Brand Initiative",
-      "project_type": "Design",
-      "description": "Alpha",
+      "project_id": "proj_1791563215614_od83",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_name": "Autonomous Navigation UI",
+      "project_type": "Design System",
+      "description": "Spatial token design for autonomous units",
       "status": "in_progress",
-      "deadline": "2026-12-01",
+      "deadline": "2026-11-01",
       "priority": "high",
-      "progress": 50,
-      "assigned_agents": [],
-      "created_at": "2026-10-09T12:46:26.299Z",
-      "updated_at": "2026-10-09T12:46:26.299Z"
-    },
-    {
-      "project_id": "proj_tenant_b_1",
-      "organization_id": "org_test_tenant_b",
-      "client_id": "client_tenant_b_1",
-      "project_name": "Beta Robotics Identity",
-      "project_type": "Identity",
-      "description": "Beta",
-      "status": "in_progress",
-      "deadline": "2026-12-01",
-      "priority": "normal",
-      "progress": 30,
-      "assigned_agents": [],
-      "created_at": "2026-10-09T12:46:26.299Z",
-      "updated_at": "2026-10-09T12:46:26.299Z"
+      "progress": 0,
+      "assigned_agents": [
+        "ag-cd",
+        "ag-design"
+      ],
+      "created_at": "2026-10-09T16:26:55.614Z",
+      "updated_at": "2026-10-09T16:26:55.614Z"
     }
   ],
   "tasks": [
     {
-      "id": "task_1791549986315_w0ei",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
-      "title": "Idempotent Task A",
-      "description": "",
+      "id": "task_1791563215682_mqqk",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "title": "Also adjust the header typography to bold",
+      "description": "Generated from Slack message (#C_ROBOTICS_UI):\n\n\"Please also adjust the header typography to bold.\"",
       "assigned_agent": "Creative Director Agent",
       "status": "queued",
-      "priority": "normal",
-      "created_at": "2026-10-09T12:46:26.315Z",
-      "updated_at": "2026-10-09T12:46:26.315Z"
+      "priority": "Normal",
+      "created_at": "2026-10-09T16:26:55.682Z",
+      "updated_at": "2026-10-09T16:26:55.682Z"
     },
     {
-      "id": "task_1791549986308_r77h",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
-      "title": "Design Agent Task Approved By Boundary",
-      "description": "",
+      "id": "task_1791563215657_16xx",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "title": "General inquiry on invoice schedule",
+      "description": "Generated from Slack message (#C_GENERAL_UNLINKED):\n\n\"General inquiry on invoice schedule.\"",
       "assigned_agent": "Creative Director Agent",
       "status": "queued",
-      "priority": "normal",
-      "created_at": "2026-10-09T12:46:26.308Z",
-      "updated_at": "2026-10-09T12:46:26.308Z"
+      "priority": "Normal",
+      "created_at": "2026-10-09T16:26:55.657Z",
+      "updated_at": "2026-10-09T16:26:55.657Z"
+    },
+    {
+      "id": "task_1791563215634_r7fn",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "title": "Explore 3 variations of the hero dashboard section",
+      "description": "Generated from Slack message (#C_ROBOTICS_UI):\n\n\"Can you explore 3 variations of the hero dashboard section?\"",
+      "assigned_agent": "Creative Director Agent",
+      "status": "queued",
+      "priority": "Normal",
+      "created_at": "2026-10-09T16:26:55.634Z",
+      "updated_at": "2026-10-09T16:26:55.634Z"
     },
     {
       "id": "task-demo-1",
@@ -397,8 +320,8 @@
       "status": "running",
       "priority": "high",
       "deadline": "2026-10-12",
-      "created_at": "2026-10-08T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-08T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "task-demo-2",
@@ -411,8 +334,8 @@
       "status": "waiting_approval",
       "priority": "normal",
       "deadline": "2026-10-15",
-      "created_at": "2026-10-08T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-08T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
   "client_memory": [
@@ -427,8 +350,8 @@
       "source_type": "Document",
       "source_id": "XYZ_Brand_Guidelines_v1.pdf",
       "reason_context": "Extracted from official executive onboarding workshop.",
-      "created_at": "2026-10-07T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-07T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "mem-demo-2",
@@ -441,8 +364,8 @@
       "source_type": "Onboarding",
       "source_id": "Client Onboarding Form",
       "reason_context": "Explicitly indicated by VP Product Sarah Lin during kick-off.",
-      "created_at": "2026-10-07T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-07T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "mem-demo-3",
@@ -455,8 +378,8 @@
       "source_type": "Document",
       "source_id": "Design_System_Spec.pdf",
       "reason_context": "Official typography & color specifications approved by creative direction.",
-      "created_at": "2026-10-08T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-08T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "mem-demo-4",
@@ -469,34 +392,23 @@
       "source_type": "Activity",
       "source_id": "Design Review Meeting #01",
       "reason_context": "Noted during initial layout presentation feedback round.",
-      "created_at": "2026-10-08T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-08T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
-      "id": "mem_a",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "category": "Brand",
-      "key": "Primary Tone",
-      "value": "Restrained elegance",
-      "status": "OFFICIAL",
-      "source_type": "Doc",
-      "source_id": "doc_1",
-      "created_at": "2026-10-09T12:46:26.299Z",
-      "updated_at": "2026-10-09T12:46:26.299Z"
-    },
-    {
-      "id": "mem_b",
-      "organization_id": "org_test_tenant_b",
-      "client_id": "client_tenant_b_1",
-      "category": "Brand",
-      "key": "Confidential Beta Strategy",
-      "value": "Top secret robotics launch",
-      "status": "OFFICIAL",
-      "source_type": "Brief",
-      "source_id": "doc_2",
-      "created_at": "2026-10-09T12:46:26.299Z",
-      "updated_at": "2026-10-09T12:46:26.299Z"
+      "id": "mem_1791563215610_ijihl",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "category": "Communication",
+      "key": "Communication Protocols",
+      "value": "Tone: Technical, concise",
+      "status": "APPROVED",
+      "source_type": "Onboarding",
+      "source_id": "Client Onboarding Form",
+      "reason_context": "Communication preferences collected from onboarding.",
+      "created_at": "2026-10-09T16:26:55.610Z",
+      "updated_at": "2026-10-09T16:26:55.610Z",
+      "archived": false
     }
   ],
   "documents": [
@@ -508,7 +420,7 @@
       "category": "Brand",
       "filename": "XYZ_Brand_Guidelines_v1.pdf",
       "file_size": "3.4 MB",
-      "uploaded_at": "2026-10-07T12:46:26.235Z",
+      "uploaded_at": "2026-10-07T16:26:55.322Z",
       "uploaded_by": "Matias Austin",
       "status": "uploaded",
       "notes": "Authoritative brand manual defining typography hierarchy and color standards."
@@ -521,30 +433,10 @@
       "category": "Contract",
       "filename": "Master_Services_Agreement_2026.pdf",
       "file_size": "1.2 MB",
-      "uploaded_at": "2026-10-06T12:46:26.235Z",
+      "uploaded_at": "2026-10-06T16:26:55.322Z",
       "uploaded_by": "Matias Austin",
       "status": "uploaded",
       "notes": "Executed MSA governing studio deliverables and commercial rates."
-    },
-    {
-      "file_id": "doc_a",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "category": "Brand",
-      "filename": "Alpha_Guidelines.pdf",
-      "uploaded_at": "2026-10-09T12:46:26.299Z",
-      "uploaded_by": "Owner Tester",
-      "status": "uploaded"
-    },
-    {
-      "file_id": "doc_b",
-      "organization_id": "org_test_tenant_b",
-      "client_id": "client_tenant_b_1",
-      "category": "Brief",
-      "filename": "Beta_Confidential_Specs.pdf",
-      "uploaded_at": "2026-10-09T12:46:26.299Z",
-      "uploaded_by": "Other User",
-      "status": "uploaded"
     }
   ],
   "client_permissions": [
@@ -566,12 +458,12 @@
         "send_invoice": "approval_required",
         "send_quotation": "approval_required"
       },
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
-      "id": "perm_1791549986303",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_studio-alpha-partner_ox61",
+      "id": "perm_1791563215612",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
       "permissions": {
         "read_client_messages": "allowed",
         "read_project_files": "allowed",
@@ -586,256 +478,557 @@
         "send_invoice": "approval_required",
         "send_quotation": "approval_required"
       },
-      "updated_at": "2026-10-09T12:46:26.303Z"
-    },
-    {
-      "id": "perm_1791549986305",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_studio-alpha-client-2_j801",
-      "permissions": {
-        "read_client_messages": "allowed",
-        "read_project_files": "allowed",
-        "read_brand_guidelines": "allowed",
-        "create_tasks": "allowed",
-        "update_tasks": "allowed",
-        "create_documents": "allowed",
-        "draft_client_messages": "allowed",
-        "send_client_messages": "approval_required",
-        "modify_client_memory": "approval_required",
-        "publish_design": "approval_required",
-        "send_invoice": "approval_required",
-        "send_quotation": "approval_required"
-      },
-      "updated_at": "2026-10-09T12:46:26.305Z"
-    },
-    {
-      "id": "perm_1791549986307",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "permissions": {
-        "read_client_messages": "allowed",
-        "read_project_files": "allowed",
-        "read_brand_guidelines": "allowed",
-        "create_tasks": "allowed",
-        "update_tasks": "allowed",
-        "create_documents": "allowed",
-        "draft_client_messages": "allowed",
-        "send_client_messages": "approval_required",
-        "modify_client_memory": "approval_required",
-        "publish_design": "approval_required",
-        "send_invoice": "approval_required",
-        "send_quotation": "approval_required"
-      },
-      "updated_at": "2026-10-09T12:46:26.307Z"
+      "updated_at": "2026-10-09T16:26:55.612Z"
     }
   ],
   "activities": [
     {
-      "id": "act_1791549986315_dw86h",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
+      "id": "act_1791563215711_ume5c",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "user",
-      "actor_id": "Owner Tester",
+      "actor_id": "Admin Alpha",
       "action": "TOOL_COMPLETED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986313_2oukj",
-      "result": "Successfully completed Create Task",
-      "metadata": {
-        "tool_id": "tasks.create",
-        "execution_id": "exec_1791549986313_2oukj"
-      },
-      "created_at": "2026-10-09T12:46:26.316Z"
-    },
-    {
-      "id": "act_1791549986315_zgg2u",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
-      "actor_type": "user",
-      "actor_id": "User",
-      "action": "Task created: Idempotent Task A",
-      "entity_type": "task",
-      "entity_id": "task_1791549986315_w0ei",
-      "result": "Status: queued",
-      "created_at": "2026-10-09T12:46:26.315Z"
-    },
-    {
-      "id": "act_1791549986314_1n6xb",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
-      "actor_type": "user",
-      "actor_id": "Owner Tester",
-      "action": "TOOL_STARTED",
-      "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986313_2oukj",
-      "result": "Started execution for Create Task",
-      "created_at": "2026-10-09T12:46:26.314Z"
-    },
-    {
-      "id": "act_1791549986312_u2rv4",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "actor_type": "user",
-      "actor_id": "Owner Tester",
-      "action": "TOOL_COMPLETED",
-      "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986310_4ahzw",
+      "entity_id": "exec_1791563215698_006ub",
       "result": "Successfully completed Send Slack Message",
       "metadata": {
         "tool_id": "communication.send",
-        "execution_id": "exec_1791549986310_4ahzw"
+        "execution_id": "exec_1791563215698_006ub"
       },
-      "created_at": "2026-10-09T12:46:26.312Z"
+      "created_at": "2026-10-09T16:26:55.711Z"
     },
     {
-      "id": "act_1791549986311_7b27b",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
+      "id": "act_1791563215699_qdffj",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "user",
-      "actor_id": "Owner Tester",
+      "actor_id": "Admin Alpha",
       "action": "TOOL_STARTED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986310_4ahzw",
+      "entity_id": "exec_1791563215698_006ub",
       "result": "Started execution for Send Slack Message",
-      "created_at": "2026-10-09T12:46:26.311Z"
+      "created_at": "2026-10-09T16:26:55.699Z"
     },
     {
-      "id": "act_1791549986310_56na5",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
+      "id": "act_1791563215693_03tzn",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "system",
+      "actor_id": "Risk Engine",
+      "action": "COMMUNICATION_APPROVAL_REQUIRED",
+      "entity_type": "approval",
+      "entity_id": "appr_1791563215688_2btd",
+      "result": "Held outgoing Slack reply for human sign-off (Approval: appr_1791563215688_2btd)",
+      "created_at": "2026-10-09T16:26:55.693Z"
+    },
+    {
+      "id": "act_1791563215691_5kvtu",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "user",
-      "actor_id": "Owner Tester",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_APPROVAL_REQUIRED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986310_v4y4k",
+      "entity_id": "exec_1791563215688_8d94g",
       "result": "Client-specific rule enforces review before sending messages.",
       "metadata": {
         "tool_id": "communication.send",
         "risk_level": "HIGH",
-        "approval_id": "appr_1791549986310_cm8u"
+        "approval_id": "appr_1791563215688_2btd"
       },
-      "created_at": "2026-10-09T12:46:26.310Z"
+      "created_at": "2026-10-09T16:26:55.691Z"
     },
     {
-      "id": "act_1791549986309_xglsf",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
+      "id": "act_1791563215687_vz66r",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "agent",
-      "actor_id": "Design Agent Test",
+      "actor_id": "Client Liaison Agent",
+      "action": "AI_RESPONSE_DRAFTED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215673_7w8x",
+      "result": "Drafted response aligned with brand tone: \"Understood. I've noted these adjustments and am integrating them into ...\"",
+      "created_at": "2026-10-09T16:26:55.687Z"
+    },
+    {
+      "id": "act_1791563215685_ayn8t",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "agent",
+      "actor_id": "Client Liaison Agent",
+      "action": "TASK_CREATED_FROM_MESSAGE",
+      "entity_type": "task",
+      "entity_id": "task_1791563215682_mqqk",
+      "result": "Created task \"Also adjust the header typography to bold\" via Tool Registry.",
+      "created_at": "2026-10-09T16:26:55.685Z"
+    },
+    {
+      "id": "act_1791563215685_t5ifc",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "user",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_COMPLETED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986307_ykbh0",
+      "entity_id": "exec_1791563215680_gh0hj",
       "result": "Successfully completed Create Task",
       "metadata": {
         "tool_id": "tasks.create",
-        "execution_id": "exec_1791549986307_ykbh0"
+        "execution_id": "exec_1791563215680_gh0hj"
       },
-      "created_at": "2026-10-09T12:46:26.309Z"
+      "created_at": "2026-10-09T16:26:55.685Z"
     },
     {
-      "id": "act_1791549986308_0brel",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
+      "id": "act_1791563215683_9kj3r",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "user",
       "actor_id": "User",
-      "action": "Task created: Design Agent Task Approved By Boundary",
+      "action": "Task created: Also adjust the header typography to bold",
       "entity_type": "task",
-      "entity_id": "task_1791549986308_r77h",
+      "entity_id": "task_1791563215682_mqqk",
       "result": "Status: queued",
-      "created_at": "2026-10-09T12:46:26.309Z"
+      "created_at": "2026-10-09T16:26:55.683Z"
     },
     {
-      "id": "act_1791549986308_ri497",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
-      "actor_type": "agent",
-      "actor_id": "Design Agent Test",
+      "id": "act_1791563215681_64ztk",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "user",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_STARTED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986307_ykbh0",
+      "entity_id": "exec_1791563215680_gh0hj",
       "result": "Started execution for Create Task",
-      "created_at": "2026-10-09T12:46:26.308Z"
+      "created_at": "2026-10-09T16:26:55.681Z"
     },
     {
-      "id": "act_1791549986306_omgc5",
-      "organization_id": "org_test_tenant_a",
+      "id": "act_1791563215680_y53lm",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "agent",
+      "actor_id": "AI Employee Classifier",
+      "action": "MESSAGE_CLASSIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215673_7w8x",
+      "result": "Classified as revision_request (normal urgency): Client requested modifications or stylistic adjustments to existing work.",
+      "metadata": {
+        "category": "revision_request",
+        "urgency": "normal",
+        "requires_task": true,
+        "requires_response": true,
+        "requires_human": false,
+        "reason": "Client requested modifications or stylistic adjustments to existing work."
+      },
+      "created_at": "2026-10-09T16:26:55.680Z"
+    },
+    {
+      "id": "act_1791563215679_1nnd2",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "system",
+      "actor_id": "AI Routing Engine",
+      "action": "PROJECT_IDENTIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215673_7w8x",
+      "result": "Identified project \"proj_1791563215614_od83\" for conversation.",
+      "created_at": "2026-10-09T16:26:55.679Z"
+    },
+    {
+      "id": "act_1791563215678_uv4do",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "system",
+      "actor_id": "AI Routing Engine",
+      "action": "CLIENT_IDENTIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215673_7w8x",
+      "result": "Identified client \"Acme Robotics\" from communication channels.",
+      "created_at": "2026-10-09T16:26:55.678Z"
+    },
+    {
+      "id": "act_1791563215677_qwh1w",
+      "organization_id": "org_test_slack_a",
       "actor_type": "user",
-      "actor_id": "Member Tester",
+      "actor_id": "U_ELENA",
+      "action": "SLACK_MESSAGE_RECEIVED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215673_7w8x",
+      "result": "Slack message received in #C_ROBOTICS_UI: \"Please also adjust the header typography to bold....\"",
+      "metadata": {
+        "channel": "C_ROBOTICS_UI",
+        "ts": "1700000004.000400",
+        "user": "U_ELENA"
+      },
+      "created_at": "2026-10-09T16:26:55.677Z"
+    },
+    {
+      "id": "act_1791563215670_75t9e",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "system",
+      "actor_id": "Risk Engine",
+      "action": "COMMUNICATION_APPROVAL_REQUIRED",
+      "entity_type": "approval",
+      "entity_id": "appr_1791563215666_g5sy",
+      "result": "Held outgoing Slack reply for human sign-off (Approval: appr_1791563215666_g5sy)",
+      "created_at": "2026-10-09T16:26:55.670Z"
+    },
+    {
+      "id": "act_1791563215669_xwh8p",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "user",
+      "actor_id": "Matias AI Studio",
+      "action": "TOOL_APPROVAL_REQUIRED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791563215666_yxwoz",
+      "result": "Client-specific rule enforces review before sending messages.",
+      "metadata": {
+        "tool_id": "communication.send",
+        "risk_level": "HIGH",
+        "approval_id": "appr_1791563215666_g5sy"
+      },
+      "created_at": "2026-10-09T16:26:55.669Z"
+    },
+    {
+      "id": "act_1791563215662_zntz1",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "agent",
+      "actor_id": "Client Liaison Agent",
+      "action": "AI_RESPONSE_DRAFTED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215649_vig6",
+      "result": "Drafted response aligned with brand tone: \"Understood. I'm exploring variations for this while ensuring it remain...\"",
+      "created_at": "2026-10-09T16:26:55.662Z"
+    },
+    {
+      "id": "act_1791563215661_bxw5b",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "agent",
+      "actor_id": "Client Liaison Agent",
+      "action": "TASK_CREATED_FROM_MESSAGE",
+      "entity_type": "task",
+      "entity_id": "task_1791563215657_16xx",
+      "result": "Created task \"General inquiry on invoice schedule\" via Tool Registry.",
+      "created_at": "2026-10-09T16:26:55.661Z"
+    },
+    {
+      "id": "act_1791563215660_lkqzd",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "user",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_COMPLETED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986304_xh8lh",
-      "result": "Successfully completed Create Client Workspace",
+      "entity_id": "exec_1791563215654_gkdzb",
+      "result": "Successfully completed Create Task",
       "metadata": {
-        "tool_id": "clients.create",
-        "execution_id": "exec_1791549986304_xh8lh"
+        "tool_id": "tasks.create",
+        "execution_id": "exec_1791563215654_gkdzb"
       },
-      "created_at": "2026-10-09T12:46:26.306Z"
+      "created_at": "2026-10-09T16:26:55.660Z"
     },
     {
-      "id": "act_1791549986306_uftay",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_studio-alpha-client-2_j801",
+      "id": "act_1791563215658_dsbs1",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
       "actor_type": "user",
-      "actor_id": "System Tool Registry",
-      "action": "Client workspace created",
-      "entity_type": "client",
-      "entity_id": "client_studio-alpha-client-2_j801",
-      "result": "Initialized workspace with 1 contacts and 0 projects",
-      "created_at": "2026-10-09T12:46:26.306Z"
+      "actor_id": "User",
+      "action": "Task created: General inquiry on invoice schedule",
+      "entity_type": "task",
+      "entity_id": "task_1791563215657_16xx",
+      "result": "Status: queued",
+      "created_at": "2026-10-09T16:26:55.658Z"
     },
     {
-      "id": "act_1791549986305_it2d3",
-      "organization_id": "org_test_tenant_a",
+      "id": "act_1791563215655_uq542",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
       "actor_type": "user",
-      "actor_id": "Member Tester",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_STARTED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986304_xh8lh",
-      "result": "Started execution for Create Client Workspace",
-      "created_at": "2026-10-09T12:46:26.305Z"
+      "entity_id": "exec_1791563215654_gkdzb",
+      "result": "Started execution for Create Task",
+      "created_at": "2026-10-09T16:26:55.655Z"
     },
     {
-      "id": "act_1791549986304_gii3k",
-      "organization_id": "org_test_tenant_a",
+      "id": "act_1791563215653_c5hpr",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "agent",
+      "actor_id": "AI Employee Classifier",
+      "action": "MESSAGE_CLASSIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215649_vig6",
+      "result": "Classified as design_request (normal urgency): Client requested specific design deliverable explorations.",
+      "metadata": {
+        "category": "design_request",
+        "urgency": "normal",
+        "requires_task": true,
+        "requires_response": true,
+        "requires_human": false,
+        "reason": "Client requested specific design deliverable explorations."
+      },
+      "created_at": "2026-10-09T16:26:55.653Z"
+    },
+    {
+      "id": "act_1791563215652_zzarc",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "system",
+      "actor_id": "AI Routing Engine",
+      "action": "CLIENT_IDENTIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215649_vig6",
+      "result": "Identified client \"Acme Robotics\" from communication channels.",
+      "created_at": "2026-10-09T16:26:55.652Z"
+    },
+    {
+      "id": "act_1791563215651_sc2n8",
+      "organization_id": "org_test_slack_a",
       "actor_type": "user",
-      "actor_id": "Owner Tester",
+      "actor_id": "U_ELENA",
+      "action": "SLACK_MESSAGE_RECEIVED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215649_vig6",
+      "result": "Slack message received in #C_GENERAL_UNLINKED: \"General inquiry on invoice schedule....\"",
+      "metadata": {
+        "channel": "C_GENERAL_UNLINKED",
+        "ts": "1700000003.000300",
+        "user": "U_ELENA"
+      },
+      "created_at": "2026-10-09T16:26:55.651Z"
+    },
+    {
+      "id": "act_1791563215646_55c1u",
+      "organization_id": "org_test_slack_a",
+      "actor_type": "user",
+      "actor_id": "U_STRANGER_99",
+      "action": "SLACK_MESSAGE_RECEIVED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215645_mmfg",
+      "result": "Slack message received in #C_UNKNOWN_CHANNEL: \"Hello, we would like to collaborate....\"",
+      "metadata": {
+        "channel": "C_UNKNOWN_CHANNEL",
+        "ts": "1700000002.000200",
+        "user": "U_STRANGER_99"
+      },
+      "created_at": "2026-10-09T16:26:55.646Z"
+    },
+    {
+      "id": "act_1791563215642_tnbij",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "system",
+      "actor_id": "Risk Engine",
+      "action": "COMMUNICATION_APPROVAL_REQUIRED",
+      "entity_type": "approval",
+      "entity_id": "appr_1791563215639_4bf4",
+      "result": "Held outgoing Slack reply for human sign-off (Approval: appr_1791563215639_4bf4)",
+      "created_at": "2026-10-09T16:26:55.642Z"
+    },
+    {
+      "id": "act_1791563215641_tyv2s",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "user",
+      "actor_id": "Matias AI Studio",
+      "action": "TOOL_APPROVAL_REQUIRED",
+      "entity_type": "tool_execution",
+      "entity_id": "exec_1791563215639_55lxj",
+      "result": "Client-specific rule enforces review before sending messages.",
+      "metadata": {
+        "tool_id": "communication.send",
+        "risk_level": "HIGH",
+        "approval_id": "appr_1791563215639_4bf4"
+      },
+      "created_at": "2026-10-09T16:26:55.641Z"
+    },
+    {
+      "id": "act_1791563215638_kl5ed",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "agent",
+      "actor_id": "Client Liaison Agent",
+      "action": "AI_RESPONSE_DRAFTED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215623_rsdv",
+      "result": "Drafted response aligned with brand tone: \"Understood. I'm exploring variations for this while ensuring it remain...\"",
+      "created_at": "2026-10-09T16:26:55.638Z"
+    },
+    {
+      "id": "act_1791563215638_lct15",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "agent",
+      "actor_id": "Client Liaison Agent",
+      "action": "TASK_CREATED_FROM_MESSAGE",
+      "entity_type": "task",
+      "entity_id": "task_1791563215634_r7fn",
+      "result": "Created task \"Explore 3 variations of the hero dashboard section\" via Tool Registry.",
+      "created_at": "2026-10-09T16:26:55.638Z"
+    },
+    {
+      "id": "act_1791563215636_2sulb",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "user",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_COMPLETED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986301_22lo0",
-      "result": "Successfully completed Create Client Workspace",
+      "entity_id": "exec_1791563215631_eaovz",
+      "result": "Successfully completed Create Task",
       "metadata": {
-        "tool_id": "clients.create",
-        "execution_id": "exec_1791549986301_22lo0"
+        "tool_id": "tasks.create",
+        "execution_id": "exec_1791563215631_eaovz"
       },
-      "created_at": "2026-10-09T12:46:26.304Z"
+      "created_at": "2026-10-09T16:26:55.637Z"
     },
     {
-      "id": "act_1791549986303_5cyma",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_studio-alpha-partner_ox61",
+      "id": "act_1791563215634_ccqrt",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "user",
-      "actor_id": "System Tool Registry",
-      "action": "Client workspace created",
-      "entity_type": "client",
-      "entity_id": "client_studio-alpha-partner_ox61",
-      "result": "Initialized workspace with 1 contacts and 0 projects",
-      "created_at": "2026-10-09T12:46:26.303Z"
+      "actor_id": "User",
+      "action": "Task created: Explore 3 variations of the hero dashboard section",
+      "entity_type": "task",
+      "entity_id": "task_1791563215634_r7fn",
+      "result": "Status: queued",
+      "created_at": "2026-10-09T16:26:55.634Z"
     },
     {
-      "id": "act_1791549986302_qlelo",
-      "organization_id": "org_test_tenant_a",
+      "id": "act_1791563215633_8zttq",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "actor_type": "user",
-      "actor_id": "Owner Tester",
+      "actor_id": "Matias AI Studio",
       "action": "TOOL_STARTED",
       "entity_type": "tool_execution",
-      "entity_id": "exec_1791549986301_22lo0",
-      "result": "Started execution for Create Client Workspace",
-      "created_at": "2026-10-09T12:46:26.302Z"
+      "entity_id": "exec_1791563215631_eaovz",
+      "result": "Started execution for Create Task",
+      "created_at": "2026-10-09T16:26:55.633Z"
+    },
+    {
+      "id": "act_1791563215629_qogwr",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "agent",
+      "actor_id": "AI Employee Classifier",
+      "action": "MESSAGE_CLASSIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215623_rsdv",
+      "result": "Classified as design_request (normal urgency): Client requested specific design deliverable explorations.",
+      "metadata": {
+        "category": "design_request",
+        "urgency": "normal",
+        "requires_task": true,
+        "requires_response": true,
+        "requires_human": false,
+        "reason": "Client requested specific design deliverable explorations."
+      },
+      "created_at": "2026-10-09T16:26:55.629Z"
+    },
+    {
+      "id": "act_1791563215627_mf7tp",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "system",
+      "actor_id": "AI Routing Engine",
+      "action": "PROJECT_IDENTIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215623_rsdv",
+      "result": "Identified project \"proj_1791563215614_od83\" for conversation.",
+      "created_at": "2026-10-09T16:26:55.627Z"
+    },
+    {
+      "id": "act_1791563215626_1gtot",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "system",
+      "actor_id": "AI Routing Engine",
+      "action": "CLIENT_IDENTIFIED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215623_rsdv",
+      "result": "Identified client \"Acme Robotics\" from communication channels.",
+      "created_at": "2026-10-09T16:26:55.626Z"
+    },
+    {
+      "id": "act_1791563215625_ask44",
+      "organization_id": "org_test_slack_a",
+      "actor_type": "user",
+      "actor_id": "U_ELENA",
+      "action": "SLACK_MESSAGE_RECEIVED",
+      "entity_type": "conversation",
+      "entity_id": "conv_1791563215623_rsdv",
+      "result": "Slack message received in #C_ROBOTICS_UI: \"Can you explore 3 variations of the hero dashboard section?...\"",
+      "metadata": {
+        "channel": "C_ROBOTICS_UI",
+        "ts": "1700000001.000100",
+        "user": "U_ELENA"
+      },
+      "created_at": "2026-10-09T16:26:55.625Z"
+    },
+    {
+      "id": "act_1791563215615_2st9v",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "actor_type": "user",
+      "actor_id": "User",
+      "action": "Project created: Autonomous Navigation UI",
+      "entity_type": "project",
+      "entity_id": "proj_1791563215614_od83",
+      "result": "Type: Design System",
+      "created_at": "2026-10-09T16:26:55.615Z"
+    },
+    {
+      "id": "act_1791563215613_7itv4",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "user",
+      "actor_id": "Setup",
+      "action": "Client workspace created",
+      "entity_type": "client",
+      "entity_id": "client_acme-robotics_kst9",
+      "result": "Initialized workspace with 1 contacts and 0 projects",
+      "created_at": "2026-10-09T16:26:55.613Z"
+    },
+    {
+      "id": "act_1791563215611_jblka",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "actor_type": "user",
+      "actor_id": "Setup",
+      "action": "Memory added: Communication Protocols (APPROVED)",
+      "entity_type": "client_memory",
+      "entity_id": "mem_1791563215610_ijihl",
+      "result": "Stored in category Communication",
+      "created_at": "2026-10-09T16:26:55.611Z"
     },
     {
       "id": "act-demo-1",
@@ -847,7 +1040,7 @@
       "entity_type": "client",
       "entity_id": "demo-xyz-ai",
       "result": "Initialized workspace with 2 contacts and 1 project",
-      "created_at": "2026-10-06T12:46:26.235Z"
+      "created_at": "2026-10-06T16:26:55.322Z"
     },
     {
       "id": "act-demo-2",
@@ -859,7 +1052,7 @@
       "action": "Project created: Brand OS & Generative UI System",
       "entity_type": "project",
       "entity_id": "proj-demo-1",
-      "created_at": "2026-10-07T12:46:26.235Z"
+      "created_at": "2026-10-07T16:26:55.322Z"
     },
     {
       "id": "act-demo-3",
@@ -870,7 +1063,7 @@
       "action": "Document uploaded: XYZ_Brand_Guidelines_v1.pdf",
       "entity_type": "document",
       "entity_id": "doc-demo-1",
-      "created_at": "2026-10-07T12:46:26.235Z"
+      "created_at": "2026-10-07T16:26:55.322Z"
     },
     {
       "id": "act-demo-4",
@@ -881,7 +1074,7 @@
       "action": "Memory approved: Client Messaging Cadence",
       "entity_type": "client_memory",
       "entity_id": "mem-demo-2",
-      "created_at": "2026-10-08T12:46:26.235Z"
+      "created_at": "2026-10-08T16:26:55.322Z"
     }
   ],
   "tools": [],
@@ -893,8 +1086,8 @@
       "role": "Art Direction, Taste Evaluation & Synthesis",
       "description": "Supervises aesthetic consistency, brand fidelity, and creative compositions.",
       "status": "Active",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ag-design",
@@ -903,8 +1096,8 @@
       "role": "Figma Token Sync, Layout Spatialization & UI Spec",
       "description": "Automates token transformations, design systems, and export specifications.",
       "status": "Active",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ag-mem",
@@ -913,8 +1106,8 @@
       "role": "Knowledge Retrieval, Brand DNA & Client Habits",
       "description": "Continuously synthesizes and indexes long-term client context and habits.",
       "status": "Active",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ag-liaison",
@@ -923,8 +1116,8 @@
       "role": "Communications, Slack / Email Drafting, Approval Queue",
       "description": "Prepares client dispatches, summarizes communications, and routes approvals.",
       "status": "Standby",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ag-research",
@@ -933,28 +1126,8 @@
       "role": "Brief Deconstruction, Market Mapping, Technical Papers",
       "description": "Analyzes project briefs, extracts market positioning, and benchmarks competitors.",
       "status": "Active",
-      "created_at": "2026-09-29T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
-    },
-    {
-      "id": "ag_test_design",
-      "organization_id": "org_test_tenant_a",
-      "name": "Design Agent Test",
-      "role": "Design Specialist",
-      "description": "Has tasks and projects tools",
-      "status": "Active",
-      "created_at": "2026-10-09T12:46:26.300Z",
-      "updated_at": "2026-10-09T12:46:26.300Z"
-    },
-    {
-      "id": "ag_test_restricted",
-      "organization_id": "org_test_tenant_a",
-      "name": "Restricted Agent Test",
-      "role": "Read-only Assistant",
-      "description": "Lacks write tools",
-      "status": "Active",
-      "created_at": "2026-10-09T12:46:26.300Z",
-      "updated_at": "2026-10-09T12:46:26.300Z"
+      "created_at": "2026-09-29T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
   "agent_tools": [
@@ -964,8 +1137,8 @@
       "agent_id": "ag-design",
       "tool_id": "projects.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-2",
@@ -973,8 +1146,8 @@
       "agent_id": "ag-design",
       "tool_id": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-3",
@@ -982,8 +1155,8 @@
       "agent_id": "ag-design",
       "tool_id": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-4",
@@ -991,8 +1164,8 @@
       "agent_id": "ag-design",
       "tool_id": "figma.publish",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-5",
@@ -1000,8 +1173,8 @@
       "agent_id": "ag-design",
       "tool_id": "tasks.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-6",
@@ -1009,8 +1182,8 @@
       "agent_id": "ag-design",
       "tool_id": "tasks.update",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-7",
@@ -1018,8 +1191,8 @@
       "agent_id": "ag-research",
       "tool_id": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-8",
@@ -1027,8 +1200,8 @@
       "agent_id": "ag-research",
       "tool_id": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-9",
@@ -1036,8 +1209,8 @@
       "agent_id": "ag-research",
       "tool_id": "clients.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-10",
@@ -1045,8 +1218,8 @@
       "agent_id": "ag-research",
       "tool_id": "projects.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-11",
@@ -1054,8 +1227,8 @@
       "agent_id": "ag-liaison",
       "tool_id": "communication.send",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-12",
@@ -1063,8 +1236,8 @@
       "agent_id": "ag-liaison",
       "tool_id": "clients.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-13",
@@ -1072,8 +1245,8 @@
       "agent_id": "ag-liaison",
       "tool_id": "tasks.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-14",
@@ -1081,8 +1254,8 @@
       "agent_id": "ag-mem",
       "tool_id": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-15",
@@ -1090,8 +1263,8 @@
       "agent_id": "ag-mem",
       "tool_id": "memory.create",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-16",
@@ -1099,8 +1272,8 @@
       "agent_id": "ag-mem",
       "tool_id": "memory.update",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-17",
@@ -1108,8 +1281,8 @@
       "agent_id": "ag-mem",
       "tool_id": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-18",
@@ -1117,8 +1290,8 @@
       "agent_id": "ag-cd",
       "tool_id": "projects.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-19",
@@ -1126,8 +1299,8 @@
       "agent_id": "ag-cd",
       "tool_id": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "at-20",
@@ -1135,26 +1308,8 @@
       "agent_id": "ag-cd",
       "tool_id": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
-    },
-    {
-      "id": "at_test_1",
-      "organization_id": "org_test_tenant_a",
-      "agent_id": "ag_test_design",
-      "tool_id": "tasks.create",
-      "enabled": true,
-      "created_at": "2026-10-09T12:46:26.300Z",
-      "updated_at": "2026-10-09T12:46:26.300Z"
-    },
-    {
-      "id": "at_test_2",
-      "organization_id": "org_test_tenant_a",
-      "agent_id": "ag_test_design",
-      "tool_id": "tasks.read",
-      "enabled": true,
-      "created_at": "2026-10-09T12:46:26.300Z",
-      "updated_at": "2026-10-09T12:46:26.300Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
   "agent_permissions": [
@@ -1164,8 +1319,8 @@
       "agent_id": "ag-design",
       "permission": "projects.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-2",
@@ -1173,8 +1328,8 @@
       "agent_id": "ag-design",
       "permission": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-3",
@@ -1182,8 +1337,8 @@
       "agent_id": "ag-design",
       "permission": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-4",
@@ -1191,8 +1346,8 @@
       "agent_id": "ag-design",
       "permission": "design.publish",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-5",
@@ -1200,8 +1355,8 @@
       "agent_id": "ag-design",
       "permission": "tasks.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-6",
@@ -1209,8 +1364,8 @@
       "agent_id": "ag-design",
       "permission": "tasks.update",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-7",
@@ -1218,8 +1373,8 @@
       "agent_id": "ag-research",
       "permission": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-8",
@@ -1227,8 +1382,8 @@
       "agent_id": "ag-research",
       "permission": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-9",
@@ -1236,8 +1391,8 @@
       "agent_id": "ag-research",
       "permission": "clients.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-10",
@@ -1245,8 +1400,8 @@
       "agent_id": "ag-research",
       "permission": "projects.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-11",
@@ -1254,8 +1409,8 @@
       "agent_id": "ag-liaison",
       "permission": "communication.send",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-12",
@@ -1263,8 +1418,8 @@
       "agent_id": "ag-liaison",
       "permission": "clients.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-13",
@@ -1272,8 +1427,8 @@
       "agent_id": "ag-liaison",
       "permission": "tasks.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-14",
@@ -1281,8 +1436,8 @@
       "agent_id": "ag-mem",
       "permission": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-15",
@@ -1290,8 +1445,8 @@
       "agent_id": "ag-mem",
       "permission": "memory.create",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-16",
@@ -1299,8 +1454,8 @@
       "agent_id": "ag-mem",
       "permission": "memory.update",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-17",
@@ -1308,8 +1463,8 @@
       "agent_id": "ag-mem",
       "permission": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-18",
@@ -1317,8 +1472,8 @@
       "agent_id": "ag-cd",
       "permission": "projects.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-19",
@@ -1326,8 +1481,8 @@
       "agent_id": "ag-cd",
       "permission": "memory.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     },
     {
       "id": "ap-20",
@@ -1335,8 +1490,8 @@
       "agent_id": "ag-cd",
       "permission": "documents.read",
       "enabled": true,
-      "created_at": "2026-10-09T12:46:26.235Z",
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "created_at": "2026-10-09T16:26:55.322Z",
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
   "approvals": [
@@ -1356,244 +1511,287 @@
         "message": "The initial draft of the spatial design token architecture has passed internal checks and is ready for your team review."
       },
       "reason": "External Communication Gate: AI Agent requested dispatch of outbound Slack update to client stakeholder.",
-      "expires_at": "2026-10-10T12:46:26.235Z",
-      "created_at": "2026-10-09T10:46:26.235Z",
-      "updated_at": "2026-10-09T10:46:26.235Z"
+      "expires_at": "2026-10-10T16:26:55.322Z",
+      "created_at": "2026-10-09T14:26:55.322Z",
+      "updated_at": "2026-10-09T14:26:55.322Z"
     },
     {
-      "id": "appr_1791549986310_cm8u",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
+      "id": "appr_1791563215639_4bf4",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "requested_by_type": "user",
-      "requested_by_id": "user_test_owner",
+      "requested_by_id": "ai-employee",
       "tool_id": "communication.send",
       "risk_level": "HIGH",
       "status": "executed",
       "original_input": {
-        "channel": "Slack",
-        "recipient": "Lead Partner",
-        "message": "Campaign deliverables are live.",
-        "clientId": "client_tenant_a_1",
-        "client_id": "client_tenant_a_1"
+        "channel_id": "C_ROBOTICS_UI",
+        "channel": "C_ROBOTICS_UI",
+        "thread_ts": "1700000001.000100",
+        "message": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83",
+        "project_id": "proj_1791563215614_od83"
       },
       "reason": "Client-specific rule enforces review before sending messages.",
-      "expires_at": "2026-10-10T12:46:26.310Z",
-      "created_at": "2026-10-09T12:46:26.310Z",
-      "updated_at": "2026-10-09T12:46:26.312Z",
-      "reviewed_by": "Owner Tester",
-      "reviewed_at": "2026-10-09T12:46:26.312Z"
+      "expires_at": "2026-10-10T16:26:55.639Z",
+      "created_at": "2026-10-09T16:26:55.640Z",
+      "updated_at": "2026-10-09T16:26:55.709Z",
+      "reviewed_by": "Admin Alpha",
+      "reviewed_at": "2026-10-09T16:26:55.709Z"
     },
     {
-      "id": "appr_expired_test",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
+      "id": "appr_1791563215666_g5sy",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
       "requested_by_type": "user",
-      "requested_by_id": "user_test_owner",
+      "requested_by_id": "ai-employee",
       "tool_id": "communication.send",
       "risk_level": "HIGH",
-      "status": "expired",
+      "status": "pending",
       "original_input": {
-        "channel": "Email",
-        "message": "Expired"
+        "channel_id": "C_GENERAL_UNLINKED",
+        "channel": "C_GENERAL_UNLINKED",
+        "thread_ts": "1700000003.000300",
+        "message": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9"
       },
-      "reason": "Expired action",
-      "expires_at": "2026-10-09T11:46:26.312Z",
-      "created_at": "2026-10-09T10:46:26.312Z",
-      "updated_at": "2026-10-09T10:46:26.312Z"
+      "reason": "Client-specific rule enforces review before sending messages.",
+      "expires_at": "2026-10-10T16:26:55.666Z",
+      "created_at": "2026-10-09T16:26:55.666Z",
+      "updated_at": "2026-10-09T16:26:55.666Z"
     },
     {
-      "id": "appr_rejected_test",
-      "organization_id": "org_test_tenant_a",
-      "client_id": "client_tenant_a_1",
+      "id": "appr_1791563215688_2btd",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "requested_by_type": "user",
-      "requested_by_id": "user_test_owner",
+      "requested_by_id": "ai-employee",
       "tool_id": "communication.send",
       "risk_level": "HIGH",
       "status": "rejected",
       "original_input": {
-        "channel": "Slack",
-        "message": "Do not send"
+        "channel_id": "C_ROBOTICS_UI",
+        "channel": "C_ROBOTICS_UI",
+        "thread_ts": "1700000004.000400",
+        "message": "Understood. I've noted these adjustments and am integrating them into the layout. Will present the refined direction once complete.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83",
+        "project_id": "proj_1791563215614_od83"
       },
-      "reason": "Rejected action",
-      "expires_at": "2026-10-09T13:46:26.313Z",
-      "created_at": "2026-10-09T12:46:26.313Z",
-      "updated_at": "2026-10-09T12:46:26.313Z"
+      "reason": "Client-specific rule enforces review before sending messages.",
+      "expires_at": "2026-10-10T16:26:55.688Z",
+      "created_at": "2026-10-09T16:26:55.688Z",
+      "updated_at": "2026-10-09T16:26:55.688Z"
     }
   ],
   "tool_executions": [
     {
-      "id": "exec_1791549986301_22lo0",
-      "organization_id": "org_test_tenant_a",
-      "tool_id": "clients.create",
-      "user_id": "user_test_owner",
-      "risk_level": "MEDIUM",
-      "status": "completed",
-      "input": {
-        "company_name": "Studio Alpha Partner",
-        "industry": "Design"
-      },
-      "started_at": "2026-10-09T12:46:26.302Z",
-      "created_at": "2026-10-09T12:46:26.302Z",
-      "output": {
-        "client": {
-          "id": "client_studio-alpha-partner_ox61",
-          "organization_id": "org_test_tenant_a",
-          "company_name": "Studio Alpha Partner",
-          "industry": "Design",
-          "status": "active",
-          "currency": "USD",
-          "payment_terms": "Net 30",
-          "created_at": "2026-10-09T12:46:26.302Z",
-          "updated_at": "2026-10-09T12:46:26.302Z"
-        }
-      },
-      "completed_at": "2026-10-09T12:46:26.304Z"
-    },
-    {
-      "id": "exec_1791549986304_xh8lh",
-      "organization_id": "org_test_tenant_a",
-      "tool_id": "clients.create",
-      "user_id": "user_test_member",
-      "risk_level": "MEDIUM",
-      "status": "completed",
-      "input": {
-        "company_name": "Studio Alpha Client 2",
-        "industry": "Design"
-      },
-      "started_at": "2026-10-09T12:46:26.304Z",
-      "created_at": "2026-10-09T12:46:26.304Z",
-      "output": {
-        "client": {
-          "id": "client_studio-alpha-client-2_j801",
-          "organization_id": "org_test_tenant_a",
-          "company_name": "Studio Alpha Client 2",
-          "industry": "Design",
-          "status": "active",
-          "currency": "USD",
-          "payment_terms": "Net 30",
-          "created_at": "2026-10-09T12:46:26.305Z",
-          "updated_at": "2026-10-09T12:46:26.305Z"
-        }
-      },
-      "completed_at": "2026-10-09T12:46:26.306Z"
-    },
-    {
-      "id": "exec_1791549986307_ykbh0",
-      "organization_id": "org_test_tenant_a",
+      "id": "exec_1791563215631_eaovz",
+      "organization_id": "org_test_slack_a",
       "tool_id": "tasks.create",
-      "agent_id": "ag_test_design",
-      "user_id": "user_test_owner",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
+      "user_id": "ai-employee",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
       "risk_level": "MEDIUM",
       "status": "completed",
       "input": {
-        "title": "Design Agent Task Approved By Boundary",
-        "clientId": "client_tenant_a_1",
-        "client_id": "client_tenant_a_1",
-        "projectId": "proj_tenant_a_1",
-        "project_id": "proj_tenant_a_1"
+        "title": "Explore 3 variations of the hero dashboard section",
+        "description": "Generated from Slack message (#C_ROBOTICS_UI):\n\n\"Can you explore 3 variations of the hero dashboard section?\"",
+        "priority": "Normal",
+        "client_id": "client_acme-robotics_kst9",
+        "project_id": "proj_1791563215614_od83",
+        "clientId": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83"
       },
-      "started_at": "2026-10-09T12:46:26.307Z",
-      "created_at": "2026-10-09T12:46:26.307Z",
+      "started_at": "2026-10-09T16:26:55.632Z",
+      "created_at": "2026-10-09T16:26:55.632Z",
       "output": {
         "task": {
-          "id": "task_1791549986308_r77h",
-          "organization_id": "org_test_tenant_a",
-          "client_id": "client_tenant_a_1",
-          "project_id": "proj_tenant_a_1",
-          "title": "Design Agent Task Approved By Boundary",
-          "description": "",
+          "id": "task_1791563215634_r7fn",
+          "organization_id": "org_test_slack_a",
+          "client_id": "client_acme-robotics_kst9",
+          "project_id": "proj_1791563215614_od83",
+          "title": "Explore 3 variations of the hero dashboard section",
+          "description": "Generated from Slack message (#C_ROBOTICS_UI):\n\n\"Can you explore 3 variations of the hero dashboard section?\"",
           "assigned_agent": "Creative Director Agent",
           "status": "queued",
-          "priority": "normal",
-          "created_at": "2026-10-09T12:46:26.308Z",
-          "updated_at": "2026-10-09T12:46:26.308Z"
+          "priority": "Normal",
+          "created_at": "2026-10-09T16:26:55.634Z",
+          "updated_at": "2026-10-09T16:26:55.634Z"
         }
       },
-      "completed_at": "2026-10-09T12:46:26.309Z"
+      "completed_at": "2026-10-09T16:26:55.635Z"
     },
     {
-      "id": "exec_1791549986310_v4y4k",
-      "organization_id": "org_test_tenant_a",
+      "id": "exec_1791563215639_55lxj",
+      "organization_id": "org_test_slack_a",
       "tool_id": "communication.send",
-      "user_id": "user_test_owner",
-      "client_id": "client_tenant_a_1",
-      "approval_id": "appr_1791549986310_cm8u",
+      "user_id": "ai-employee",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "approval_id": "appr_1791563215639_4bf4",
       "risk_level": "HIGH",
       "status": "waiting_approval",
       "input": {
-        "channel": "Slack",
-        "recipient": "Lead Partner",
-        "message": "Campaign deliverables are live.",
-        "clientId": "client_tenant_a_1",
-        "client_id": "client_tenant_a_1"
+        "channel_id": "C_ROBOTICS_UI",
+        "channel": "C_ROBOTICS_UI",
+        "thread_ts": "1700000001.000100",
+        "message": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83",
+        "project_id": "proj_1791563215614_od83"
       },
-      "created_at": "2026-10-09T12:46:26.310Z"
+      "created_at": "2026-10-09T16:26:55.640Z"
     },
     {
-      "id": "exec_1791549986310_4ahzw",
-      "organization_id": "org_test_tenant_a",
-      "tool_id": "communication.send",
-      "user_id": "user_test_owner",
-      "client_id": "client_tenant_a_1",
-      "approval_id": "appr_1791549986310_cm8u",
-      "risk_level": "HIGH",
-      "status": "completed",
-      "input": {
-        "channel": "Slack",
-        "recipient": "Lead Partner",
-        "message": "Campaign deliverables are live.",
-        "clientId": "client_tenant_a_1",
-        "client_id": "client_tenant_a_1"
-      },
-      "started_at": "2026-10-09T12:46:26.311Z",
-      "created_at": "2026-10-09T12:46:26.311Z",
-      "output": {
-        "sent": true,
-        "external_message_id": "msg_1791549986312_ext",
-        "channel_id": "Slack",
-        "timestamp": "1791549986.312000",
-        "message": "Campaign deliverables are live.",
-        "dispatched_at": "2026-10-09T12:46:26.312Z"
-      },
-      "completed_at": "2026-10-09T12:46:26.312Z"
-    },
-    {
-      "id": "exec_1791549986313_2oukj",
-      "organization_id": "org_test_tenant_a",
+      "id": "exec_1791563215654_gkdzb",
+      "organization_id": "org_test_slack_a",
       "tool_id": "tasks.create",
-      "user_id": "user_test_owner",
-      "client_id": "client_tenant_a_1",
-      "project_id": "proj_tenant_a_1",
+      "user_id": "ai-employee",
+      "client_id": "client_acme-robotics_kst9",
       "risk_level": "MEDIUM",
       "status": "completed",
       "input": {
-        "title": "Idempotent Task A",
-        "clientId": "client_tenant_a_1",
-        "client_id": "client_tenant_a_1",
-        "projectId": "proj_tenant_a_1",
-        "project_id": "proj_tenant_a_1"
+        "title": "General inquiry on invoice schedule",
+        "description": "Generated from Slack message (#C_GENERAL_UNLINKED):\n\n\"General inquiry on invoice schedule.\"",
+        "priority": "Normal",
+        "client_id": "client_acme-robotics_kst9",
+        "clientId": "client_acme-robotics_kst9"
       },
-      "idempotency_key": "test_key_123456",
-      "started_at": "2026-10-09T12:46:26.314Z",
-      "created_at": "2026-10-09T12:46:26.314Z",
+      "started_at": "2026-10-09T16:26:55.654Z",
+      "created_at": "2026-10-09T16:26:55.654Z",
       "output": {
         "task": {
-          "id": "task_1791549986315_w0ei",
-          "organization_id": "org_test_tenant_a",
-          "client_id": "client_tenant_a_1",
-          "project_id": "proj_tenant_a_1",
-          "title": "Idempotent Task A",
-          "description": "",
+          "id": "task_1791563215657_16xx",
+          "organization_id": "org_test_slack_a",
+          "client_id": "client_acme-robotics_kst9",
+          "title": "General inquiry on invoice schedule",
+          "description": "Generated from Slack message (#C_GENERAL_UNLINKED):\n\n\"General inquiry on invoice schedule.\"",
           "assigned_agent": "Creative Director Agent",
           "status": "queued",
-          "priority": "normal",
-          "created_at": "2026-10-09T12:46:26.315Z",
-          "updated_at": "2026-10-09T12:46:26.315Z"
+          "priority": "Normal",
+          "created_at": "2026-10-09T16:26:55.657Z",
+          "updated_at": "2026-10-09T16:26:55.657Z"
         }
       },
-      "completed_at": "2026-10-09T12:46:26.315Z"
+      "completed_at": "2026-10-09T16:26:55.659Z"
+    },
+    {
+      "id": "exec_1791563215666_yxwoz",
+      "organization_id": "org_test_slack_a",
+      "tool_id": "communication.send",
+      "user_id": "ai-employee",
+      "client_id": "client_acme-robotics_kst9",
+      "approval_id": "appr_1791563215666_g5sy",
+      "risk_level": "HIGH",
+      "status": "waiting_approval",
+      "input": {
+        "channel_id": "C_GENERAL_UNLINKED",
+        "channel": "C_GENERAL_UNLINKED",
+        "thread_ts": "1700000003.000300",
+        "message": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9"
+      },
+      "created_at": "2026-10-09T16:26:55.666Z"
+    },
+    {
+      "id": "exec_1791563215680_gh0hj",
+      "organization_id": "org_test_slack_a",
+      "tool_id": "tasks.create",
+      "user_id": "ai-employee",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "risk_level": "MEDIUM",
+      "status": "completed",
+      "input": {
+        "title": "Also adjust the header typography to bold",
+        "description": "Generated from Slack message (#C_ROBOTICS_UI):\n\n\"Please also adjust the header typography to bold.\"",
+        "priority": "Normal",
+        "client_id": "client_acme-robotics_kst9",
+        "project_id": "proj_1791563215614_od83",
+        "clientId": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83"
+      },
+      "started_at": "2026-10-09T16:26:55.680Z",
+      "created_at": "2026-10-09T16:26:55.680Z",
+      "output": {
+        "task": {
+          "id": "task_1791563215682_mqqk",
+          "organization_id": "org_test_slack_a",
+          "client_id": "client_acme-robotics_kst9",
+          "project_id": "proj_1791563215614_od83",
+          "title": "Also adjust the header typography to bold",
+          "description": "Generated from Slack message (#C_ROBOTICS_UI):\n\n\"Please also adjust the header typography to bold.\"",
+          "assigned_agent": "Creative Director Agent",
+          "status": "queued",
+          "priority": "Normal",
+          "created_at": "2026-10-09T16:26:55.682Z",
+          "updated_at": "2026-10-09T16:26:55.682Z"
+        }
+      },
+      "completed_at": "2026-10-09T16:26:55.684Z"
+    },
+    {
+      "id": "exec_1791563215688_8d94g",
+      "organization_id": "org_test_slack_a",
+      "tool_id": "communication.send",
+      "user_id": "ai-employee",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "approval_id": "appr_1791563215688_2btd",
+      "risk_level": "HIGH",
+      "status": "waiting_approval",
+      "input": {
+        "channel_id": "C_ROBOTICS_UI",
+        "channel": "C_ROBOTICS_UI",
+        "thread_ts": "1700000004.000400",
+        "message": "Understood. I've noted these adjustments and am integrating them into the layout. Will present the refined direction once complete.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83",
+        "project_id": "proj_1791563215614_od83"
+      },
+      "created_at": "2026-10-09T16:26:55.688Z"
+    },
+    {
+      "id": "exec_1791563215698_006ub",
+      "organization_id": "org_test_slack_a",
+      "tool_id": "communication.send",
+      "user_id": "user-admin-1",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "approval_id": "appr_1791563215639_4bf4",
+      "risk_level": "HIGH",
+      "status": "completed",
+      "input": {
+        "channel_id": "C_ROBOTICS_UI",
+        "channel": "C_ROBOTICS_UI",
+        "thread_ts": "1700000001.000100",
+        "message": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+        "clientId": "client_acme-robotics_kst9",
+        "client_id": "client_acme-robotics_kst9",
+        "projectId": "proj_1791563215614_od83",
+        "project_id": "proj_1791563215614_od83"
+      },
+      "started_at": "2026-10-09T16:26:55.698Z",
+      "created_at": "2026-10-09T16:26:55.698Z",
+      "output": {
+        "sent": true,
+        "external_message_id": "1700000009.007257",
+        "channel_id": "C_ROBOTICS_UI",
+        "timestamp": "1791563215.705000",
+        "message": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+        "dispatched_at": "2026-10-09T16:26:55.708Z"
+      },
+      "completed_at": "2026-10-09T16:26:55.708Z"
     }
   ],
   "governance_policies": [
@@ -1604,14 +1802,232 @@
       "external_communication_gate": true,
       "design_publishing_gate": true,
       "commercial_budget_enforcement": true,
-      "updated_at": "2026-10-09T12:46:26.235Z"
+      "updated_at": "2026-10-09T16:26:55.322Z"
     }
   ],
-  "integrations": [],
-  "conversations": [],
-  "conversation_messages": [],
+  "integrations": [
+    {
+      "id": "intg_slack_a",
+      "organization_id": "org_test_slack_a",
+      "provider": "slack",
+      "status": "connected",
+      "display_name": "Slack (Acme Robotics Workspace)",
+      "external_account_id": "T_SLACK_ORG_A",
+      "encrypted_bot_token": "eyJpdiI6ImU1ZGFlNTA4NzM1MTA4OTRjMjJkNGFjZWI2N2M5ZmU1IiwidGFnIjoiNjA3NDdiZjg5YTEwYzBkNzA3NWJkNDAyMGIwYmZjZTQiLCJkYXRhIjoiMDYzMjA4ODUwZWI1MjQxYzE3N2Y2ZjM4OWQyODg3NDkyODgyMjY1Yjg2ZjA2YzA1Mjg5OCJ9",
+      "metadata": {
+        "team_id": "T_SLACK_ORG_A",
+        "team_name": "Acme Robotics Workspace",
+        "bot_user_id": "UBOT12345",
+        "scope": "channels:history,chat:write,users:read"
+      },
+      "created_at": "2026-10-09T16:26:55.617Z",
+      "updated_at": "2026-10-09T16:26:55.617Z"
+    }
+  ],
+  "conversations": [
+    {
+      "id": "conv_1791563215623_rsdv",
+      "organization_id": "org_test_slack_a",
+      "integration_id": "intg_slack_a",
+      "external_channel_id": "C_ROBOTICS_UI",
+      "external_thread_id": "1700000001.000100",
+      "title": "Acme Robotics &middot; #C_ROBOTICS_UI",
+      "status": "completed",
+      "created_at": "2026-10-09T16:26:55.623Z",
+      "updated_at": "2026-10-09T16:26:55.706Z",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "classification": {
+        "category": "design_request",
+        "urgency": "normal",
+        "requires_task": true,
+        "requires_response": true,
+        "requires_human": false,
+        "reason": "Client requested specific design deliverable explorations."
+      },
+      "task_id": "task_1791563215634_r7fn",
+      "ai_draft_response": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly."
+    },
+    {
+      "id": "conv_1791563215645_mmfg",
+      "organization_id": "org_test_slack_a",
+      "integration_id": "intg_slack_a",
+      "external_channel_id": "C_UNKNOWN_CHANNEL",
+      "external_thread_id": "1700000002.000200",
+      "title": "Slack conversation in #C_UNKNOWN_CHANNEL",
+      "status": "needs_client",
+      "created_at": "2026-10-09T16:26:55.645Z",
+      "updated_at": "2026-10-09T16:26:55.645Z"
+    },
+    {
+      "id": "conv_1791563215649_vig6",
+      "organization_id": "org_test_slack_a",
+      "integration_id": "intg_slack_a",
+      "external_channel_id": "C_GENERAL_UNLINKED",
+      "external_thread_id": "1700000003.000300",
+      "title": "Acme Robotics &middot; #C_GENERAL_UNLINKED",
+      "status": "waiting_approval",
+      "created_at": "2026-10-09T16:26:55.649Z",
+      "updated_at": "2026-10-09T16:26:55.671Z",
+      "client_id": "client_acme-robotics_kst9",
+      "classification": {
+        "category": "design_request",
+        "urgency": "normal",
+        "requires_task": true,
+        "requires_response": true,
+        "requires_human": false,
+        "reason": "Client requested specific design deliverable explorations."
+      },
+      "task_id": "task_1791563215657_16xx",
+      "ai_draft_response": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly."
+    },
+    {
+      "id": "conv_1791563215673_7w8x",
+      "organization_id": "org_test_slack_a",
+      "integration_id": "intg_slack_a",
+      "external_channel_id": "C_ROBOTICS_UI",
+      "external_thread_id": "1700000004.000400",
+      "title": "Acme Robotics &middot; #C_ROBOTICS_UI",
+      "status": "waiting_approval",
+      "created_at": "2026-10-09T16:26:55.673Z",
+      "updated_at": "2026-10-09T16:26:55.694Z",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "classification": {
+        "category": "revision_request",
+        "urgency": "normal",
+        "requires_task": true,
+        "requires_response": true,
+        "requires_human": false,
+        "reason": "Client requested modifications or stylistic adjustments to existing work."
+      },
+      "task_id": "task_1791563215682_mqqk",
+      "ai_draft_response": "Understood. I've noted these adjustments and am integrating them into the layout. Will present the refined direction once complete."
+    }
+  ],
+  "conversation_messages": [
+    {
+      "id": "msg_1791563215624_93gs",
+      "conversation_id": "conv_1791563215623_rsdv",
+      "organization_id": "org_test_slack_a",
+      "external_message_id": "1700000001.000100",
+      "sender_type": "user",
+      "external_sender_id": "U_ELENA",
+      "sender_name": "Slack User (U_ELENA)",
+      "content": "Can you explore 3 variations of the hero dashboard section?",
+      "message_type": "user",
+      "metadata": {
+        "slack_channel": "C_ROBOTICS_UI",
+        "slack_ts": "1700000001.000100",
+        "event_id": "ev_idempotency_123"
+      },
+      "created_at": "2026-10-09T16:26:55.624Z"
+    },
+    {
+      "id": "msg_1791563215645_3tb1",
+      "conversation_id": "conv_1791563215645_mmfg",
+      "organization_id": "org_test_slack_a",
+      "external_message_id": "1700000002.000200",
+      "sender_type": "user",
+      "external_sender_id": "U_STRANGER_99",
+      "sender_name": "Slack User (U_STRANGER_99)",
+      "content": "Hello, we would like to collaborate.",
+      "message_type": "user",
+      "metadata": {
+        "slack_channel": "C_UNKNOWN_CHANNEL",
+        "slack_ts": "1700000002.000200",
+        "event_id": "ev_unknown_client_001"
+      },
+      "created_at": "2026-10-09T16:26:55.645Z"
+    },
+    {
+      "id": "msg_1791563215650_xi89",
+      "conversation_id": "conv_1791563215649_vig6",
+      "organization_id": "org_test_slack_a",
+      "external_message_id": "1700000003.000300",
+      "sender_type": "user",
+      "external_sender_id": "U_ELENA",
+      "sender_name": "Slack User (U_ELENA)",
+      "content": "General inquiry on invoice schedule.",
+      "message_type": "user",
+      "metadata": {
+        "slack_channel": "C_GENERAL_UNLINKED",
+        "slack_ts": "1700000003.000300",
+        "event_id": "ev_unknown_proj_001"
+      },
+      "created_at": "2026-10-09T16:26:55.650Z"
+    },
+    {
+      "id": "msg_1791563215675_r0o1",
+      "conversation_id": "conv_1791563215673_7w8x",
+      "organization_id": "org_test_slack_a",
+      "external_message_id": "1700000004.000400",
+      "sender_type": "user",
+      "external_sender_id": "U_ELENA",
+      "sender_name": "Slack User (U_ELENA)",
+      "content": "Please also adjust the header typography to bold.",
+      "message_type": "user",
+      "metadata": {
+        "slack_channel": "C_ROBOTICS_UI",
+        "slack_ts": "1700000004.000400",
+        "event_id": "ev_rej_test_001"
+      },
+      "created_at": "2026-10-09T16:26:55.675Z"
+    },
+    {
+      "id": "msg_1791563215705_ojvd",
+      "conversation_id": "conv_1791563215623_rsdv",
+      "organization_id": "org_test_slack_a",
+      "external_message_id": "1700000009.007257",
+      "sender_type": "assistant",
+      "sender_name": "Matias AI Studio",
+      "content": "Understood. I'm exploring variations for this while ensuring it remains strictly aligned with the current brand guidelines and visual direction. I'll prepare a set for review shortly.",
+      "message_type": "assistant",
+      "metadata": {
+        "slack_channel": "C_ROBOTICS_UI",
+        "slack_ts": "1791563215.705000",
+        "slack_thread_ts": "1700000001.000100"
+      },
+      "created_at": "2026-10-09T16:26:55.705Z"
+    }
+  ],
   "integration_events": [],
-  "slack_channel_mappings": [],
-  "client_communication_links": [],
+  "slack_channel_mappings": [
+    {
+      "id": "scm_test_1",
+      "organization_id": "org_test_slack_a",
+      "integration_id": "intg_slack_a",
+      "channel_id": "C_ROBOTICS_UI",
+      "channel_name": "#robotics-ui",
+      "client_id": "client_acme-robotics_kst9",
+      "project_id": "proj_1791563215614_od83",
+      "enabled": true,
+      "created_at": "2026-10-09T16:26:55.618Z",
+      "updated_at": "2026-10-09T16:26:55.618Z"
+    },
+    {
+      "id": "scm_test_2",
+      "organization_id": "org_test_slack_a",
+      "integration_id": "intg_slack_a",
+      "channel_id": "C_GENERAL_UNLINKED",
+      "channel_name": "#general-questions",
+      "client_id": "client_acme-robotics_kst9",
+      "enabled": true,
+      "created_at": "2026-10-09T16:26:55.648Z",
+      "updated_at": "2026-10-09T16:26:55.648Z"
+    }
+  ],
+  "client_communication_links": [
+    {
+      "id": "ccl_test_1",
+      "organization_id": "org_test_slack_a",
+      "client_id": "client_acme-robotics_kst9",
+      "integration_id": "intg_slack_a",
+      "external_user_id": "U_ELENA",
+      "external_channel_id": "C_ROBOTICS_UI",
+      "confidence": 1,
+      "created_at": "2026-10-09T16:26:55.619Z"
+    }
+  ],
   "project_communication_links": []
 }
