@@ -422,10 +422,94 @@ var initialDevelopmentSeed = {
   ]
 };
 
+// server/db/supabase.ts
+import { createClient } from "@supabase/supabase-js";
+var supabaseUrl = process.env.SUPABASE_URL;
+var supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+var isSupabaseConfigured = () => {
+  return Boolean(supabaseUrl && supabaseKey);
+};
+var supabase = isSupabaseConfigured() ? createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false
+  }
+}) : null;
+var TABLE_MAP = {
+  users: "users",
+  organizations: "organizations",
+  organization_members: "organization_members",
+  sessions: "sessions",
+  invitations: "invitations",
+  feature_flags: "feature_flags",
+  clients: "clients",
+  contacts: "contacts",
+  projects: "projects",
+  tasks: "tasks",
+  client_memory: "client_memory",
+  documents: "documents",
+  client_permissions: "client_permissions",
+  activities: "activities"
+};
+var PK_MAP = {
+  users: "id",
+  organizations: "id",
+  organization_members: "id",
+  sessions: "id",
+  invitations: "id",
+  feature_flags: "id",
+  clients: "id",
+  contacts: "id",
+  projects: "project_id",
+  tasks: "id",
+  client_memory: "id",
+  documents: "file_id",
+  client_permissions: "id",
+  activities: "id"
+};
+async function loadFromSupabase() {
+  if (!supabase) return null;
+  try {
+    const results = {};
+    const tables = Object.keys(TABLE_MAP);
+    await Promise.all(
+      tables.map(async (tableKey) => {
+        const pgTable = TABLE_MAP[tableKey];
+        const { data, error } = await supabase.from(pgTable).select("*");
+        if (error) {
+          console.warn(`Supabase: failed to select from ${pgTable}:`, error.message);
+          return;
+        }
+        if (data) {
+          results[tableKey] = data;
+        }
+      })
+    );
+    return results;
+  } catch (err) {
+    console.error("Supabase loadFromSupabase unexpected error:", err);
+    return null;
+  }
+}
+async function bulkUpsertToSupabase(table, records) {
+  if (!supabase || !records || records.length === 0) return;
+  const pgTable = TABLE_MAP[table];
+  const pk = PK_MAP[table];
+  try {
+    const { error } = await supabase.from(pgTable).upsert(records, { onConflict: pk });
+    if (error) {
+      console.warn(`Supabase bulkUpsert error on ${pgTable}:`, error.message);
+    }
+  } catch (err) {
+    console.warn(`Supabase bulkUpsert exception on ${pgTable}:`, err);
+  }
+}
+
 // server/db/database.ts
 var Database = class {
   dbPath;
   memoryCache = null;
+  supabaseSyncInProgress = false;
   constructor() {
     const isServerless = process.env.VERCEL === "1" || process.env.AWS_LAMBDA_FUNCTION_NAME !== void 0;
     if (isServerless) {
@@ -448,6 +532,11 @@ var Database = class {
       this.dbPath = path.join(dataDir, "db.json");
     }
     this.init();
+    if (isSupabaseConfigured()) {
+      this.syncFromSupabase().catch((err) => {
+        console.warn("Supabase initial sync notification:", err);
+      });
+    }
   }
   init() {
     try {
@@ -462,6 +551,32 @@ var Database = class {
     } catch (err) {
       console.error("Failed to load database file, falling back to seed in memory:", err);
       this.memoryCache = JSON.parse(JSON.stringify(initialDevelopmentSeed));
+    }
+  }
+  /**
+   * Syncs latest data from Supabase PostgreSQL tables into the in-memory cache
+   */
+  async syncFromSupabase() {
+    if (!isSupabaseConfigured() || this.supabaseSyncInProgress) return;
+    this.supabaseSyncInProgress = true;
+    try {
+      const data = await loadFromSupabase();
+      if (data && this.memoryCache) {
+        let changed = false;
+        Object.keys(data).forEach((tbl) => {
+          if (data[tbl] && Array.isArray(data[tbl]) && data[tbl].length > 0) {
+            this.memoryCache[tbl] = data[tbl];
+            changed = true;
+          }
+        });
+        if (changed) {
+          this.persist();
+        }
+      }
+    } catch (err) {
+      console.warn("Sync from Supabase failed:", err);
+    } finally {
+      this.supabaseSyncInProgress = false;
     }
   }
   /**
@@ -540,6 +655,11 @@ var Database = class {
     const updated = updater(this.memoryCache[table]);
     this.memoryCache[table] = updated;
     this.persist();
+    if (isSupabaseConfigured() && Array.isArray(updated)) {
+      bulkUpsertToSupabase(table, updated).catch((err) => {
+        console.warn(`Background sync to Supabase table "${table}" failed:`, err);
+      });
+    }
     return updated;
   }
   getFullSchema() {
@@ -549,6 +669,15 @@ var Database = class {
   resetToSeed() {
     this.memoryCache = JSON.parse(JSON.stringify(initialDevelopmentSeed));
     this.persist();
+    if (isSupabaseConfigured() && this.memoryCache) {
+      Object.keys(initialDevelopmentSeed).forEach((tbl) => {
+        const records = this.memoryCache[tbl];
+        if (Array.isArray(records) && records.length > 0) {
+          bulkUpsertToSupabase(tbl, records).catch(() => {
+          });
+        }
+      });
+    }
   }
 };
 var db = new Database();
@@ -1938,7 +2067,13 @@ app.use((req, res, next) => {
   next();
 });
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", service: "Matias Studio OS API", timestamp: (/* @__PURE__ */ new Date()).toISOString() });
+  res.json({
+    status: "ok",
+    service: "Matias Studio OS API",
+    database_provider: isSupabaseConfigured() ? "Supabase PostgreSQL" : "Local Persistence Engine",
+    supabase_connected: isSupabaseConfigured(),
+    timestamp: (/* @__PURE__ */ new Date()).toISOString()
+  });
 });
 app.post("/api/auth/login", (req, res) => {
   try {

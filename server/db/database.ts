@@ -2,10 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import { DatabaseSchema } from './types';
 import { initialDevelopmentSeed } from './seed';
+import { 
+  isSupabaseConfigured, 
+  loadFromSupabase, 
+  bulkUpsertToSupabase 
+} from './supabase';
 
 class Database {
   private dbPath: string;
   private memoryCache: DatabaseSchema | null = null;
+  private supabaseSyncInProgress: boolean = false;
 
   constructor() {
     const isServerless = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined;
@@ -30,6 +36,13 @@ class Database {
     }
 
     this.init();
+
+    // Trigger Supabase sync if credentials are configured
+    if (isSupabaseConfigured()) {
+      this.syncFromSupabase().catch(err => {
+        console.warn('Supabase initial sync notification:', err);
+      });
+    }
   }
 
   private init(): void {
@@ -45,6 +58,34 @@ class Database {
     } catch (err) {
       console.error('Failed to load database file, falling back to seed in memory:', err);
       this.memoryCache = JSON.parse(JSON.stringify(initialDevelopmentSeed));
+    }
+  }
+
+  /**
+   * Syncs latest data from Supabase PostgreSQL tables into the in-memory cache
+   */
+  public async syncFromSupabase(): Promise<void> {
+    if (!isSupabaseConfigured() || this.supabaseSyncInProgress) return;
+    this.supabaseSyncInProgress = true;
+
+    try {
+      const data = await loadFromSupabase();
+      if (data && this.memoryCache) {
+        let changed = false;
+        (Object.keys(data) as (keyof DatabaseSchema)[]).forEach((tbl) => {
+          if (data[tbl] && Array.isArray(data[tbl]) && (data[tbl] as any[]).length > 0) {
+            (this.memoryCache as any)[tbl] = data[tbl];
+            changed = true;
+          }
+        });
+        if (changed) {
+          this.persist();
+        }
+      }
+    } catch (err) {
+      console.warn('Sync from Supabase failed:', err);
+    } finally {
+      this.supabaseSyncInProgress = false;
     }
   }
 
@@ -136,6 +177,14 @@ class Database {
     const updated = updater(this.memoryCache![table]);
     this.memoryCache![table] = updated;
     this.persist();
+
+    // Persist to Supabase if configured
+    if (isSupabaseConfigured() && Array.isArray(updated)) {
+      bulkUpsertToSupabase(table, updated).catch(err => {
+        console.warn(`Background sync to Supabase table "${table}" failed:`, err);
+      });
+    }
+
     return updated;
   }
 
@@ -147,6 +196,14 @@ class Database {
   public resetToSeed(): void {
     this.memoryCache = JSON.parse(JSON.stringify(initialDevelopmentSeed));
     this.persist();
+    if (isSupabaseConfigured() && this.memoryCache) {
+      (Object.keys(initialDevelopmentSeed) as (keyof DatabaseSchema)[]).forEach(tbl => {
+        const records = (this.memoryCache as any)[tbl];
+        if (Array.isArray(records) && records.length > 0) {
+          bulkUpsertToSupabase(tbl, records).catch(() => {});
+        }
+      });
+    }
   }
 }
 

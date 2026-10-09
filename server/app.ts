@@ -13,6 +13,7 @@ import { ActivityService } from './services/activityService';
 import { PermissionService } from './services/permissionService';
 import { ContextService } from './services/contextService';
 import { db } from './db/database';
+import { isSupabaseConfigured } from './db/supabase';
 import { 
   requireAuth, 
   requireSuperAdmin, 
@@ -55,7 +56,13 @@ app.use((req, res, next) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Matias Studio OS API', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'ok', 
+    service: 'Matias Studio OS API',
+    database_provider: isSupabaseConfigured() ? 'Supabase PostgreSQL' : 'Local Persistence Engine',
+    supabase_connected: isSupabaseConfigured(),
+    timestamp: new Date().toISOString() 
+  });
 });
 
 // ==========================================
